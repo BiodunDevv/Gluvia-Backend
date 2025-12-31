@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Account Created - Gluvia AI</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f7;
+        margin: 0;
+        padding: 0;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #ffffff;
+        padding: 30px 20px;
+        text-align: center;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+      }
+      .content {
+        padding: 40px 30px;
+        color: #333333;
+        line-height: 1.6;
+      }
+      .content h2 {
+        color: #667eea;
+        font-size: 22px;
+        margin-top: 0;
+      }
+      .info-box {
+        background-color: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+      .info-box p {
+        margin: 8px 0;
+      }
+      .info-box strong {
+        color: #667eea;
+      }
+      .button {
+        display: inline-block;
+        padding: 14px 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        margin: 20px 0;
+        transition: transform 0.2s;
+      }
+      .button:hover {
+        transform: translateY(-2px);
+      }
+      .security-note {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+      .security-note strong {
+        color: #856404;
+      }
+      .footer {
+        background-color: #f8f9fa;
+        padding: 20px 30px;
+        text-align: center;
+        color: #6c757d;
+        font-size: 14px;
+        border-top: 1px solid #e9ecef;
+      }
+      .footer a {
+        color: #667eea;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>🎉 Admin Account Created</h1>
+      </div>
+      <div class="content">
+        <h2>Hello {{name}},</h2>
+        <p>
+          An administrator account has been created for you on the Gluvia AI
+          platform.
+        </p>
+
+        <div class="info-box">
+          <p><strong>Email:</strong> {{email}}</p>
+          <p><strong>Role:</strong> Administrator</p>
+          <p><strong>Created By:</strong> {{createdBy}}</p>
+        </div>
+
+        <div class="security-note">
+          <strong>⚠️ Important Security Information</strong>
+          <p>
+            For security reasons, please reset your password immediately using
+            the button below. Your temporary password was provided separately by
+            the administrator who created your account.
+          </p>
+        </div>
+
+        <center>
+          <a href="{{resetUrl}}" class="button">Set Your Password</a>
+        </center>
+
+        <p><strong>What you can do as an admin:</strong></p>
+        <ul>
+          <li>Manage users and their data</li>
+          <li>Create and manage other administrators</li>
+          <li>View system audit logs</li>
+          <li>Manage food database and rules</li>
+          <li>Access analytics and reports</li>
+        </ul>
+
+        <p>
+          If you have any questions or didn't expect this account creation,
+          please contact the administrator immediately.
+        </p>
+
+        <p>
+          Best regards,<br />
+          <strong>Gluvia AI Team</strong>
+        </p>
+      </div>
+      <div class="footer">
+        <p>This is an automated message from Gluvia AI.</p>
+        <p>
+          If the button doesn't work, copy and paste this link into your
+          browser:
+        </p>
+        <p><a href="{{resetUrl}}">{{resetUrl}}</a></p>
+        <p>&copy; 2025 Gluvia AI. All rights reserved.</p>
+      </div>
+    </div>
+  </body>
+</html>

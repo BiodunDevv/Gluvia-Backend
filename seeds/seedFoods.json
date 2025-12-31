@@ -1,0 +1,1875 @@
+[
+  {
+    "localName": "Jollof Rice",
+    "canonicalName": "Nigerian Jollof Rice",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 180,
+      "carbs_g": 38,
+      "protein_g": 3.5,
+      "fat_g": 2.5,
+      "fibre_g": 1.2,
+      "gi": 72
+    },
+    "portionSizes": [
+      { "name": "Small plate", "grams": 150, "carbs_g": 57 },
+      { "name": "Medium plate", "grams": 250, "carbs_g": 95 },
+      { "name": "Large plate", "grams": 350, "carbs_g": 133 }
+    ],
+    "affordability": "medium",
+    "tags": ["rice", "Nigerian", "staple"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Eba (Cassava)",
+    "canonicalName": "Garri (Cassava Flour)",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 357,
+      "carbs_g": 84,
+      "protein_g": 1.5,
+      "fat_g": 0.5,
+      "fibre_g": 2.1,
+      "gi": 85
+    },
+    "portionSizes": [
+      { "name": "Small wrap", "grams": 100, "carbs_g": 84 },
+      { "name": "Medium wrap", "grams": 200, "carbs_g": 168 },
+      { "name": "Large wrap", "grams": 300, "carbs_g": 252 }
+    ],
+    "affordability": "low",
+    "tags": ["cassava", "staple", "Nigerian", "high-gi", "limit-portions"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Plantain (Ripe)",
+    "canonicalName": "Ripe Plantain",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 122,
+      "carbs_g": 32,
+      "protein_g": 1.3,
+      "fat_g": 0.4,
+      "fibre_g": 2.3,
+      "gi": 58
+    },
+    "portionSizes": [
+      { "name": "Small (fried)", "grams": 80, "carbs_g": 25.6 },
+      { "name": "Medium (fried)", "grams": 120, "carbs_g": 38.4 },
+      { "name": "Large (fried)", "grams": 160, "carbs_g": 51.2 }
+    ],
+    "affordability": "medium",
+    "tags": ["plantain", "fruit", "fried"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Egusi Soup",
+    "canonicalName": "Melon Seed Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 220,
+      "carbs_g": 8,
+      "protein_g": 12,
+      "fat_g": 18,
+      "fibre_g": 3.5,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 16 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 24 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 32 }
+    ],
+    "affordability": "medium",
+    "tags": ["soup", "protein", "Nigerian", "low-gi", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Moi Moi",
+    "canonicalName": "Steamed Bean Pudding",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 156,
+      "carbs_g": 16,
+      "protein_g": 10,
+      "fat_g": 6,
+      "fibre_g": 5.2,
+      "gi": 42
+    },
+    "portionSizes": [
+      { "name": "Small wrap", "grams": 100, "carbs_g": 16 },
+      { "name": "Medium wrap", "grams": 150, "carbs_g": 24 },
+      { "name": "Large wrap", "grams": 200, "carbs_g": 32 }
+    ],
+    "affordability": "medium",
+    "tags": ["beans", "protein", "steamed", "diabetes-friendly", "Nigerian"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Amala (Yam Flour)",
+    "canonicalName": "Yam Flour Swallow",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 330,
+      "carbs_g": 78,
+      "protein_g": 2.1,
+      "fat_g": 0.6,
+      "fibre_g": 3.8,
+      "gi": 77
+    },
+    "portionSizes": [
+      { "name": "Small wrap", "grams": 120, "carbs_g": 93.6 },
+      { "name": "Medium wrap", "grams": 200, "carbs_g": 156 },
+      { "name": "Large wrap", "grams": 280, "carbs_g": 218.4 }
+    ],
+    "affordability": "medium",
+    "tags": ["yam", "staple", "Yoruba", "high-gi", "limit-portions"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Chicken (Grilled)",
+    "canonicalName": "Grilled Chicken Breast",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 165,
+      "carbs_g": 0,
+      "protein_g": 31,
+      "fat_g": 3.6,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small piece", "grams": 100, "carbs_g": 0 },
+      { "name": "Medium piece", "grams": 150, "carbs_g": 0 },
+      { "name": "Large piece", "grams": 200, "carbs_g": 0 }
+    ],
+    "affordability": "medium",
+    "tags": ["chicken", "protein", "grilled"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Fish (Tilapia, Grilled)",
+    "canonicalName": "Grilled Tilapia",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 128,
+      "carbs_g": 0,
+      "protein_g": 26,
+      "fat_g": 2.7,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small fillet", "grams": 100, "carbs_g": 0 },
+      { "name": "Medium fillet", "grams": 150, "carbs_g": 0 },
+      { "name": "Whole fish", "grams": 250, "carbs_g": 0 }
+    ],
+    "affordability": "medium",
+    "tags": ["fish", "protein", "grilled"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Ugali (Maize Meal)",
+    "canonicalName": "Corn Meal Porridge",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 90,
+      "carbs_g": 20,
+      "protein_g": 1.8,
+      "fat_g": 0.5,
+      "fibre_g": 0.9,
+      "gi": 82
+    },
+    "portionSizes": [
+      { "name": "Small serving", "grams": 150, "carbs_g": 30 },
+      { "name": "Medium serving", "grams": 250, "carbs_g": 50 },
+      { "name": "Large serving", "grams": 350, "carbs_g": 70 }
+    ],
+    "affordability": "low",
+    "tags": ["maize", "staple", "East African"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Groundnut (Peanuts)",
+    "canonicalName": "Roasted Peanuts",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 567,
+      "carbs_g": 16,
+      "protein_g": 26,
+      "fat_g": 49,
+      "fibre_g": 8.5,
+      "gi": 14
+    },
+    "portionSizes": [
+      { "name": "Small handful", "grams": 30, "carbs_g": 4.8 },
+      { "name": "Medium handful", "grams": 50, "carbs_g": 8 },
+      { "name": "Large handful", "grams": 70, "carbs_g": 11.2 }
+    ],
+    "affordability": "low",
+    "tags": [
+      "nuts",
+      "snack",
+      "protein",
+      "low-gi",
+      "diabetes-friendly",
+      "Nigerian"
+    ],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Vegetable Salad",
+    "canonicalName": "Mixed Vegetable Salad",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 30,
+      "carbs_g": 6,
+      "protein_g": 1.5,
+      "fat_g": 0.3,
+      "fibre_g": 2.8,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 100, "carbs_g": 6 },
+      { "name": "Medium bowl", "grams": 150, "carbs_g": 9 },
+      { "name": "Large bowl", "grams": 200, "carbs_g": 12 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "salad", "low-carb"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Akara (Bean Cakes)",
+    "canonicalName": "Fried Bean Cakes",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 350,
+      "carbs_g": 28,
+      "protein_g": 14,
+      "fat_g": 20,
+      "fibre_g": 6.5,
+      "gi": 48
+    },
+    "portionSizes": [
+      { "name": "1 piece", "grams": 40, "carbs_g": 11.2 },
+      { "name": "2 pieces", "grams": 80, "carbs_g": 22.4 },
+      { "name": "3 pieces", "grams": 120, "carbs_g": 33.6 }
+    ],
+    "affordability": "low",
+    "tags": [
+      "beans",
+      "fried",
+      "snack",
+      "protein",
+      "Nigerian",
+      "diabetes-friendly"
+    ],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Pap (Ogi)",
+    "canonicalName": "Corn Porridge",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 68,
+      "carbs_g": 14,
+      "protein_g": 1.2,
+      "fat_g": 0.8,
+      "fibre_g": 1.5,
+      "gi": 68
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 200, "carbs_g": 28 },
+      { "name": "Medium cup", "grams": 300, "carbs_g": 42 },
+      { "name": "Large cup", "grams": 400, "carbs_g": 56 }
+    ],
+    "affordability": "low",
+    "tags": ["corn", "porridge", "breakfast"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Yam (Boiled)",
+    "canonicalName": "Boiled Yam",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 118,
+      "carbs_g": 28,
+      "protein_g": 1.5,
+      "fat_g": 0.2,
+      "fibre_g": 4.1,
+      "gi": 54
+    },
+    "portionSizes": [
+      { "name": "Small piece", "grams": 100, "carbs_g": 28 },
+      { "name": "Medium piece", "grams": 150, "carbs_g": 42 },
+      { "name": "Large piece", "grams": 200, "carbs_g": 56 }
+    ],
+    "affordability": "medium",
+    "tags": ["yam", "boiled", "staple", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Beans (Boiled)",
+    "canonicalName": "Cooked Black-Eyed Peas",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 116,
+      "carbs_g": 21,
+      "protein_g": 8,
+      "fat_g": 0.5,
+      "fibre_g": 6.5,
+      "gi": 42
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 31.5 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 52.5 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 73.5 }
+    ],
+    "affordability": "low",
+    "tags": ["beans", "protein", "boiled", "diabetes-friendly", "high-fibre"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Okra Soup",
+    "canonicalName": "Okra Vegetable Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 85,
+      "carbs_g": 12,
+      "protein_g": 4,
+      "fat_g": 3,
+      "fibre_g": 4.2,
+      "gi": 20
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 24 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 36 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 48 }
+    ],
+    "affordability": "low",
+    "tags": ["okra", "soup", "vegetables", "low-gi", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Bread (White)",
+    "canonicalName": "White Bread Sliced",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 265,
+      "carbs_g": 49,
+      "protein_g": 9,
+      "fat_g": 3.2,
+      "fibre_g": 2.7,
+      "gi": 75
+    },
+    "portionSizes": [
+      { "name": "1 slice", "grams": 30, "carbs_g": 14.7 },
+      { "name": "2 slices", "grams": 60, "carbs_g": 29.4 },
+      { "name": "3 slices", "grams": 90, "carbs_g": 44.1 }
+    ],
+    "affordability": "low",
+    "tags": ["bread", "wheat", "processed"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Egg (Boiled)",
+    "canonicalName": "Hard Boiled Egg",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 155,
+      "carbs_g": 1.1,
+      "protein_g": 13,
+      "fat_g": 11,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "1 egg", "grams": 50, "carbs_g": 0.6 },
+      { "name": "2 eggs", "grams": 100, "carbs_g": 1.1 },
+      { "name": "3 eggs", "grams": 150, "carbs_g": 1.7 }
+    ],
+    "affordability": "low",
+    "tags": ["egg", "protein", "boiled"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Groundnut Soup",
+    "canonicalName": "Peanut Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 180,
+      "carbs_g": 10,
+      "protein_g": 8,
+      "fat_g": 14,
+      "fibre_g": 3.5,
+      "gi": 25
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 20 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 30 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 40 }
+    ],
+    "affordability": "medium",
+    "tags": ["groundnut", "soup", "protein"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Fufu (Cassava & Plantain)",
+    "canonicalName": "Cassava and Plantain Fufu",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 267,
+      "carbs_g": 65,
+      "protein_g": 1.2,
+      "fat_g": 0.4,
+      "fibre_g": 2.8,
+      "gi": 80
+    },
+    "portionSizes": [
+      { "name": "Small wrap", "grams": 120, "carbs_g": 78 },
+      { "name": "Medium wrap", "grams": 200, "carbs_g": 130 },
+      { "name": "Large wrap", "grams": 280, "carbs_g": 182 }
+    ],
+    "affordability": "low",
+    "tags": ["fufu", "cassava", "plantain"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Tomato Stew",
+    "canonicalName": "Nigerian Tomato Stew",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 95,
+      "carbs_g": 8,
+      "protein_g": 3,
+      "fat_g": 6,
+      "fibre_g": 2.5,
+      "gi": 22
+    },
+    "portionSizes": [
+      { "name": "Small serving", "grams": 100, "carbs_g": 8 },
+      { "name": "Medium serving", "grams": 150, "carbs_g": 12 },
+      { "name": "Large serving", "grams": 200, "carbs_g": 16 }
+    ],
+    "affordability": "low",
+    "tags": ["tomato", "stew", "sauce"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Chin Chin",
+    "canonicalName": "Fried Dough Snack",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 480,
+      "carbs_g": 62,
+      "protein_g": 7,
+      "fat_g": 22,
+      "fibre_g": 1.8,
+      "gi": 65
+    },
+    "portionSizes": [
+      { "name": "Small handful", "grams": 30, "carbs_g": 18.6 },
+      { "name": "Medium handful", "grams": 50, "carbs_g": 31 },
+      { "name": "Large handful", "grams": 70, "carbs_g": 43.4 }
+    ],
+    "affordability": "low",
+    "tags": ["fried", "snack", "sweet"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Coconut (Fresh)",
+    "canonicalName": "Fresh Coconut Meat",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 354,
+      "carbs_g": 15,
+      "protein_g": 3.3,
+      "fat_g": 33,
+      "fibre_g": 9,
+      "gi": 45
+    },
+    "portionSizes": [
+      { "name": "Small piece", "grams": 50, "carbs_g": 7.5 },
+      { "name": "Medium piece", "grams": 80, "carbs_g": 12 },
+      { "name": "Large piece", "grams": 100, "carbs_g": 15 }
+    ],
+    "affordability": "medium",
+    "tags": ["coconut", "fruit", "fat"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Pepper Soup",
+    "canonicalName": "Nigerian Pepper Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 125,
+      "carbs_g": 5,
+      "protein_g": 18,
+      "fat_g": 4,
+      "fibre_g": 1.2,
+      "gi": 18
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 250, "carbs_g": 12.5 },
+      { "name": "Medium bowl", "grams": 350, "carbs_g": 17.5 },
+      { "name": "Large bowl", "grams": 450, "carbs_g": 22.5 }
+    ],
+    "affordability": "medium",
+    "tags": ["soup", "spicy", "protein"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Rice (White, Boiled)",
+    "canonicalName": "Boiled White Rice",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 130,
+      "carbs_g": 28,
+      "protein_g": 2.7,
+      "fat_g": 0.3,
+      "fibre_g": 0.4,
+      "gi": 73
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 150, "carbs_g": 42 },
+      { "name": "Medium cup", "grams": 200, "carbs_g": 56 },
+      { "name": "Large cup", "grams": 250, "carbs_g": 70 }
+    ],
+    "affordability": "low",
+    "tags": ["rice", "white", "boiled"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Suya (Grilled Meat)",
+    "canonicalName": "Spiced Grilled Beef",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 250,
+      "carbs_g": 4,
+      "protein_g": 26,
+      "fat_g": 15,
+      "fibre_g": 0.8,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small stick", "grams": 80, "carbs_g": 3.2 },
+      { "name": "Medium stick", "grams": 120, "carbs_g": 4.8 },
+      { "name": "Large stick", "grams": 160, "carbs_g": 6.4 }
+    ],
+    "affordability": "medium",
+    "tags": ["beef", "grilled", "spiced"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Bitterleaf Soup",
+    "canonicalName": "Vernonia Leaf Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 140,
+      "carbs_g": 8,
+      "protein_g": 10,
+      "fat_g": 8,
+      "fibre_g": 4.5,
+      "gi": 18
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 16 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 24 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 32 }
+    ],
+    "affordability": "low",
+    "tags": ["bitterleaf", "soup", "vegetables"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Zobo Drink",
+    "canonicalName": "Hibiscus Tea",
+    "category": "Beverages",
+    "nutrients": {
+      "calories": 50,
+      "carbs_g": 12,
+      "protein_g": 0.3,
+      "fat_g": 0.1,
+      "fibre_g": 0.5,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 200, "carbs_g": 24 },
+      { "name": "Medium cup", "grams": 300, "carbs_g": 36 },
+      { "name": "Large cup", "grams": 400, "carbs_g": 48 }
+    ],
+    "affordability": "low",
+    "tags": ["drink", "hibiscus", "beverage"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Coconut Rice",
+    "canonicalName": "Rice Cooked in Coconut Milk",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 240,
+      "carbs_g": 35,
+      "protein_g": 4,
+      "fat_g": 10,
+      "fibre_g": 1.5,
+      "gi": 68
+    },
+    "portionSizes": [
+      { "name": "Small plate", "grams": 150, "carbs_g": 52.5 },
+      { "name": "Medium plate", "grams": 200, "carbs_g": 70 },
+      { "name": "Large plate", "grams": 250, "carbs_g": 87.5 }
+    ],
+    "affordability": "medium",
+    "tags": ["rice", "coconut", "staple"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Ofada Rice",
+    "canonicalName": "Local Brown Rice",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 123,
+      "carbs_g": 26,
+      "protein_g": 2.7,
+      "fat_g": 1,
+      "fibre_g": 1.8,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "Small plate", "grams": 150, "carbs_g": 39 },
+      { "name": "Medium plate", "grams": 200, "carbs_g": 52 },
+      { "name": "Large plate", "grams": 250, "carbs_g": 65 }
+    ],
+    "affordability": "medium",
+    "tags": ["rice", "brown", "local", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Edikang Ikong Soup",
+    "canonicalName": "Vegetable Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 165,
+      "carbs_g": 9,
+      "protein_g": 12,
+      "fat_g": 10,
+      "fibre_g": 5.2,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 18 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 27 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 36 }
+    ],
+    "affordability": "medium",
+    "tags": ["vegetables", "soup", "Nigerian"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Sweet Potato",
+    "canonicalName": "Boiled Sweet Potato",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 86,
+      "carbs_g": 20,
+      "protein_g": 1.6,
+      "fat_g": 0.1,
+      "fibre_g": 3,
+      "gi": 63
+    },
+    "portionSizes": [
+      { "name": "Small piece", "grams": 100, "carbs_g": 20 },
+      { "name": "Medium piece", "grams": 150, "carbs_g": 30 },
+      { "name": "Large piece", "grams": 200, "carbs_g": 40 }
+    ],
+    "affordability": "low",
+    "tags": ["sweet potato", "boiled", "staple"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Garden Egg",
+    "canonicalName": "African Eggplant",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 25,
+      "carbs_g": 6,
+      "protein_g": 1,
+      "fat_g": 0.2,
+      "fibre_g": 3,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small", "grams": 50, "carbs_g": 3 },
+      { "name": "Medium", "grams": 80, "carbs_g": 4.8 },
+      { "name": "Large", "grams": 100, "carbs_g": 6 }
+    ],
+    "affordability": "low",
+    "tags": ["eggplant", "vegetable", "African"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Pounded Yam",
+    "canonicalName": "Traditional Pounded Yam",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 118,
+      "carbs_g": 28,
+      "protein_g": 1.5,
+      "fat_g": 0.2,
+      "fibre_g": 4.1,
+      "gi": 66
+    },
+    "portionSizes": [
+      { "name": "Small wrap", "grams": 150, "carbs_g": 42 },
+      { "name": "Medium wrap", "grams": 250, "carbs_g": 70 },
+      { "name": "Large wrap", "grams": 350, "carbs_g": 98 }
+    ],
+    "affordability": "medium",
+    "tags": ["yam", "pounded", "traditional"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Watermelon",
+    "canonicalName": "Fresh Watermelon",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 30,
+      "carbs_g": 8,
+      "protein_g": 0.6,
+      "fat_g": 0.2,
+      "fibre_g": 0.4,
+      "gi": 72
+    },
+    "portionSizes": [
+      { "name": "Small slice", "grams": 150, "carbs_g": 12 },
+      { "name": "Medium slice", "grams": 250, "carbs_g": 20 },
+      { "name": "Large slice", "grams": 350, "carbs_g": 28 }
+    ],
+    "affordability": "low",
+    "tags": ["fruit", "watermelon", "fresh"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Abacha (African Salad)",
+    "canonicalName": "Cassava Salad",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 180,
+      "carbs_g": 38,
+      "protein_g": 2,
+      "fat_g": 3,
+      "fibre_g": 2.8,
+      "gi": 60
+    },
+    "portionSizes": [
+      { "name": "Small plate", "grams": 150, "carbs_g": 57 },
+      { "name": "Medium plate", "grams": 200, "carbs_g": 76 },
+      { "name": "Large plate", "grams": 250, "carbs_g": 95 }
+    ],
+    "affordability": "medium",
+    "tags": ["cassava", "salad", "snack"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Tiger Nut Milk (Kunun Aya)",
+    "canonicalName": "Tiger Nut Drink",
+    "category": "Beverages",
+    "nutrients": {
+      "calories": 120,
+      "carbs_g": 18,
+      "protein_g": 2.5,
+      "fat_g": 4.5,
+      "fibre_g": 2.2,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 200, "carbs_g": 36 },
+      { "name": "Medium cup", "grams": 300, "carbs_g": 54 },
+      { "name": "Large cup", "grams": 400, "carbs_g": 72 }
+    ],
+    "affordability": "low",
+    "tags": ["drink", "tiger nut", "beverage"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Boli (Roasted Plantain)",
+    "canonicalName": "Roasted Plantain",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 122,
+      "carbs_g": 32,
+      "protein_g": 1.3,
+      "fat_g": 0.4,
+      "fibre_g": 2.3,
+      "gi": 60
+    },
+    "portionSizes": [
+      { "name": "Small (1/2 plantain)", "grams": 80, "carbs_g": 25.6 },
+      { "name": "Medium (1 plantain)", "grams": 160, "carbs_g": 51.2 },
+      { "name": "Large (1.5 plantains)", "grams": 240, "carbs_g": 76.8 }
+    ],
+    "affordability": "low",
+    "tags": ["plantain", "roasted", "snack"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Efo Riro",
+    "canonicalName": "Vegetable Stew",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 155,
+      "carbs_g": 10,
+      "protein_g": 11,
+      "fat_g": 9,
+      "fibre_g": 4.8,
+      "gi": 20
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 20 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 30 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 40 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "stew", "Yoruba"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Goat Meat (Grilled)",
+    "canonicalName": "Grilled Goat Meat",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 143,
+      "carbs_g": 0,
+      "protein_g": 27,
+      "fat_g": 3,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small piece", "grams": 100, "carbs_g": 0 },
+      { "name": "Medium piece", "grams": 150, "carbs_g": 0 },
+      { "name": "Large piece", "grams": 200, "carbs_g": 0 }
+    ],
+    "affordability": "medium",
+    "tags": ["goat", "protein", "grilled"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Garri (Soaked)",
+    "canonicalName": "Soaked Cassava Flakes",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 357,
+      "carbs_g": 84,
+      "protein_g": 1.5,
+      "fat_g": 0.5,
+      "fibre_g": 2.1,
+      "gi": 82
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 80, "carbs_g": 67.2 },
+      { "name": "Medium cup", "grams": 120, "carbs_g": 100.8 },
+      { "name": "Large cup", "grams": 160, "carbs_g": 134.4 }
+    ],
+    "affordability": "low",
+    "tags": ["garri", "cassava", "snack"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Dodo (Fried Plantain)",
+    "canonicalName": "Fried Ripe Plantain",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 158,
+      "carbs_g": 32,
+      "protein_g": 1.3,
+      "fat_g": 3.5,
+      "fibre_g": 2.3,
+      "gi": 65
+    },
+    "portionSizes": [
+      { "name": "Small (3 pieces)", "grams": 80, "carbs_g": 25.6 },
+      { "name": "Medium (5 pieces)", "grams": 120, "carbs_g": 38.4 },
+      { "name": "Large (7 pieces)", "grams": 160, "carbs_g": 51.2 }
+    ],
+    "affordability": "low",
+    "tags": ["plantain", "fried", "snack"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Palm Oil Soup",
+    "canonicalName": "Banga Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 210,
+      "carbs_g": 7,
+      "protein_g": 14,
+      "fat_g": 16,
+      "fibre_g": 2.5,
+      "gi": 18
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 14 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 21 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 28 }
+    ],
+    "affordability": "medium",
+    "tags": ["palm oil", "soup", "Nigerian"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Irish Potato (Boiled)",
+    "canonicalName": "Boiled White Potato",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 87,
+      "carbs_g": 20,
+      "protein_g": 1.9,
+      "fat_g": 0.1,
+      "fibre_g": 1.8,
+      "gi": 78
+    },
+    "portionSizes": [
+      { "name": "Small potato", "grams": 100, "carbs_g": 20 },
+      { "name": "Medium potato", "grams": 150, "carbs_g": 30 },
+      { "name": "Large potato", "grams": 200, "carbs_g": 40 }
+    ],
+    "affordability": "low",
+    "tags": ["potato", "boiled", "staple"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Corn (Boiled)",
+    "canonicalName": "Boiled Sweet Corn",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 96,
+      "carbs_g": 21,
+      "protein_g": 3.4,
+      "fat_g": 1.5,
+      "fibre_g": 2.4,
+      "gi": 52
+    },
+    "portionSizes": [
+      { "name": "1 small cob", "grams": 100, "carbs_g": 21 },
+      { "name": "1 medium cob", "grams": 150, "carbs_g": 31.5 },
+      { "name": "1 large cob", "grams": 200, "carbs_g": 42 }
+    ],
+    "affordability": "low",
+    "tags": ["corn", "boiled", "snack"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Spaghetti (Boiled)",
+    "canonicalName": "Boiled Spaghetti Pasta",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 158,
+      "carbs_g": 31,
+      "protein_g": 5.8,
+      "fat_g": 0.9,
+      "fibre_g": 1.8,
+      "gi": 58
+    },
+    "portionSizes": [
+      { "name": "Small plate", "grams": 150, "carbs_g": 46.5 },
+      { "name": "Medium plate", "grams": 200, "carbs_g": 62 },
+      { "name": "Large plate", "grams": 250, "carbs_g": 77.5 }
+    ],
+    "affordability": "low",
+    "tags": ["pasta", "spaghetti", "boiled"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Vegetable Oil",
+    "canonicalName": "Cooking Vegetable Oil",
+    "category": "Fats & Oils",
+    "nutrients": {
+      "calories": 884,
+      "carbs_g": 0,
+      "protein_g": 0,
+      "fat_g": 100,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "1 teaspoon", "grams": 5, "carbs_g": 0 },
+      { "name": "1 tablespoon", "grams": 15, "carbs_g": 0 },
+      { "name": "1/4 cup", "grams": 60, "carbs_g": 0 }
+    ],
+    "affordability": "low",
+    "tags": ["oil", "fat", "cooking"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Orange (Fresh)",
+    "canonicalName": "Fresh Orange Fruit",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 47,
+      "carbs_g": 12,
+      "protein_g": 0.9,
+      "fat_g": 0.1,
+      "fibre_g": 2.4,
+      "gi": 43
+    },
+    "portionSizes": [
+      { "name": "Small orange", "grams": 100, "carbs_g": 12 },
+      { "name": "Medium orange", "grams": 150, "carbs_g": 18 },
+      { "name": "Large orange", "grams": 200, "carbs_g": 24 }
+    ],
+    "affordability": "low",
+    "tags": ["fruit", "orange", "citrus"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Banana (Ripe)",
+    "canonicalName": "Ripe Banana",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 89,
+      "carbs_g": 23,
+      "protein_g": 1.1,
+      "fat_g": 0.3,
+      "fibre_g": 2.6,
+      "gi": 51
+    },
+    "portionSizes": [
+      { "name": "Small banana", "grams": 100, "carbs_g": 23 },
+      { "name": "Medium banana", "grams": 120, "carbs_g": 27.6 },
+      { "name": "Large banana", "grams": 150, "carbs_g": 34.5 }
+    ],
+    "affordability": "low",
+    "tags": ["fruit", "banana", "fresh"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Cucumber",
+    "canonicalName": "Fresh Cucumber",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 15,
+      "carbs_g": 3.6,
+      "protein_g": 0.7,
+      "fat_g": 0.1,
+      "fibre_g": 0.5,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small", "grams": 100, "carbs_g": 3.6 },
+      { "name": "Medium", "grams": 150, "carbs_g": 5.4 },
+      { "name": "Large", "grams": 200, "carbs_g": 7.2 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetable", "cucumber", "salad"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Carrot",
+    "canonicalName": "Fresh Carrot",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 41,
+      "carbs_g": 10,
+      "protein_g": 0.9,
+      "fat_g": 0.2,
+      "fibre_g": 2.8,
+      "gi": 39
+    },
+    "portionSizes": [
+      { "name": "Small", "grams": 60, "carbs_g": 6 },
+      { "name": "Medium", "grams": 100, "carbs_g": 10 },
+      { "name": "Large", "grams": 150, "carbs_g": 15 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetable", "carrot", "root"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Cabbage",
+    "canonicalName": "Fresh Cabbage",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 25,
+      "carbs_g": 6,
+      "protein_g": 1.3,
+      "fat_g": 0.1,
+      "fibre_g": 2.5,
+      "gi": 10
+    },
+    "portionSizes": [
+      { "name": "Small serving", "grams": 100, "carbs_g": 6 },
+      { "name": "Medium serving", "grams": 150, "carbs_g": 9 },
+      { "name": "Large serving", "grams": 200, "carbs_g": 12 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetable", "cabbage", "salad"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Unripe Plantain (Boiled)",
+    "canonicalName": "Boiled Unripe Plantain",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 122,
+      "carbs_g": 32,
+      "protein_g": 1.3,
+      "fat_g": 0.4,
+      "fibre_g": 2.3,
+      "gi": 40
+    },
+    "portionSizes": [
+      { "name": "Small (1/2 plantain)", "grams": 80, "carbs_g": 25.6 },
+      { "name": "Medium (1 plantain)", "grams": 160, "carbs_g": 51.2 },
+      { "name": "Large (1.5 plantains)", "grams": 240, "carbs_g": 76.8 }
+    ],
+    "affordability": "low",
+    "tags": ["plantain", "boiled", "low-gi", "diabetes-friendly"],
+    "regionVariants": [
+      { "region": "Lagos", "note": "Often eaten with fish sauce" },
+      { "region": "Yoruba", "note": "Served with pepper sauce" }
+    ],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Brown Rice (Boiled)",
+    "canonicalName": "Boiled Brown Rice",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 112,
+      "carbs_g": 24,
+      "protein_g": 2.6,
+      "fat_g": 0.9,
+      "fibre_g": 1.8,
+      "gi": 50
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 150, "carbs_g": 36 },
+      { "name": "Medium cup", "grams": 200, "carbs_g": 48 },
+      { "name": "Large cup", "grams": 250, "carbs_g": 60 }
+    ],
+    "affordability": "medium",
+    "tags": ["rice", "brown", "whole-grain", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Oatmeal (Prepared)",
+    "canonicalName": "Cooked Oatmeal",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 68,
+      "carbs_g": 12,
+      "protein_g": 2.4,
+      "fat_g": 1.4,
+      "fibre_g": 1.7,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 24 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 30 },
+      { "name": "Large bowl", "grams": 300, "carbs_g": 36 }
+    ],
+    "affordability": "medium",
+    "tags": ["oats", "breakfast", "fibre", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Ogbono Soup",
+    "canonicalName": "African Mango Seed Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 195,
+      "carbs_g": 10,
+      "protein_g": 8,
+      "fat_g": 15,
+      "fibre_g": 4.2,
+      "gi": 20
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 20 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 30 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 40 }
+    ],
+    "affordability": "medium",
+    "tags": ["soup", "ogbono", "Nigerian", "low-gi"],
+    "regionVariants": [{ "region": "Yoruba", "note": "Called Draw Soup" }],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Catfish (Grilled)",
+    "canonicalName": "Grilled African Catfish",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 135,
+      "carbs_g": 0,
+      "protein_g": 18,
+      "fat_g": 6.5,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small piece", "grams": 100, "carbs_g": 0 },
+      { "name": "Medium piece", "grams": 150, "carbs_g": 0 },
+      { "name": "Large piece", "grams": 200, "carbs_g": 0 }
+    ],
+    "affordability": "medium",
+    "tags": ["fish", "catfish", "protein", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Mackerel (Tinned)",
+    "canonicalName": "Canned Mackerel Fish",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 205,
+      "carbs_g": 0,
+      "protein_g": 19,
+      "fat_g": 14,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small tin (1/2)", "grams": 75, "carbs_g": 0 },
+      { "name": "Medium tin (whole)", "grams": 150, "carbs_g": 0 },
+      { "name": "Large (1.5 tins)", "grams": 225, "carbs_g": 0 }
+    ],
+    "affordability": "low",
+    "tags": ["fish", "mackerel", "protein", "affordable"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Kpomo (Cow Skin)",
+    "canonicalName": "Processed Cow Hide",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 224,
+      "carbs_g": 0,
+      "protein_g": 46,
+      "fat_g": 5,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small piece", "grams": 50, "carbs_g": 0 },
+      { "name": "Medium piece", "grams": 80, "carbs_g": 0 },
+      { "name": "Large piece", "grams": 100, "carbs_g": 0 }
+    ],
+    "affordability": "low",
+    "tags": ["protein", "cow skin", "Nigerian", "affordable"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Snail Meat",
+    "canonicalName": "African Land Snail",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 90,
+      "carbs_g": 2,
+      "protein_g": 16,
+      "fat_g": 1.4,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small (2 pieces)", "grams": 80, "carbs_g": 1.6 },
+      { "name": "Medium (3 pieces)", "grams": 120, "carbs_g": 2.4 },
+      { "name": "Large (5 pieces)", "grams": 180, "carbs_g": 3.6 }
+    ],
+    "affordability": "medium",
+    "tags": ["snail", "protein", "Nigerian", "low-fat"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Turkey (Grilled)",
+    "canonicalName": "Grilled Turkey Breast",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 135,
+      "carbs_g": 0,
+      "protein_g": 30,
+      "fat_g": 0.7,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small piece", "grams": 100, "carbs_g": 0 },
+      { "name": "Medium piece", "grams": 150, "carbs_g": 0 },
+      { "name": "Large piece", "grams": 200, "carbs_g": 0 }
+    ],
+    "affordability": "medium",
+    "tags": ["turkey", "protein", "grilled", "lean"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Sardines (Tinned)",
+    "canonicalName": "Canned Sardines",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 208,
+      "carbs_g": 0,
+      "protein_g": 25,
+      "fat_g": 11,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Small tin (1/2)", "grams": 60, "carbs_g": 0 },
+      { "name": "Medium tin (whole)", "grams": 120, "carbs_g": 0 },
+      { "name": "Large (1.5 tins)", "grams": 180, "carbs_g": 0 }
+    ],
+    "affordability": "low",
+    "tags": ["fish", "sardines", "protein", "affordable"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Wheat (Swallow)",
+    "canonicalName": "Wheat Flour Swallow",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 340,
+      "carbs_g": 72,
+      "protein_g": 13,
+      "fat_g": 2.5,
+      "fibre_g": 12,
+      "gi": 45
+    },
+    "portionSizes": [
+      { "name": "Small wrap", "grams": 120, "carbs_g": 86.4 },
+      { "name": "Medium wrap", "grams": 200, "carbs_g": 144 },
+      { "name": "Large wrap", "grams": 280, "carbs_g": 201.6 }
+    ],
+    "affordability": "medium",
+    "tags": ["wheat", "swallow", "high-fibre", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Oat Swallow",
+    "canonicalName": "Oat Flour Swallow",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 379,
+      "carbs_g": 67,
+      "protein_g": 13,
+      "fat_g": 7,
+      "fibre_g": 10,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "Small wrap", "grams": 120, "carbs_g": 80.4 },
+      { "name": "Medium wrap", "grams": 200, "carbs_g": 134 },
+      { "name": "Large wrap", "grams": 280, "carbs_g": 187.6 }
+    ],
+    "affordability": "medium",
+    "tags": ["oats", "swallow", "high-fibre", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Unripe Plantain Porridge",
+    "canonicalName": "Unripe Plantain Pottage",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 140,
+      "carbs_g": 30,
+      "protein_g": 2.5,
+      "fat_g": 1.5,
+      "fibre_g": 3.2,
+      "gi": 42
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 60 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 90 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 120 }
+    ],
+    "affordability": "low",
+    "tags": ["plantain", "porridge", "low-gi", "Nigerian"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Vegetable Soup (Ewedu)",
+    "canonicalName": "Jute Leaf Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 45,
+      "carbs_g": 8,
+      "protein_g": 2.5,
+      "fat_g": 0.8,
+      "fibre_g": 3.5,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 16 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 24 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 32 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "soup", "Yoruba", "low-calorie"],
+    "regionVariants": [
+      { "region": "Yoruba", "note": "Often paired with Gbegiri" }
+    ],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Gbegiri Soup",
+    "canonicalName": "Bean Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 85,
+      "carbs_g": 14,
+      "protein_g": 6,
+      "fat_g": 0.8,
+      "fibre_g": 5,
+      "gi": 30
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 21 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 35 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 49 }
+    ],
+    "affordability": "low",
+    "tags": ["beans", "soup", "Yoruba", "protein"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Ugu (Pumpkin Leaves)",
+    "canonicalName": "Fluted Pumpkin Leaves",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 23,
+      "carbs_g": 4,
+      "protein_g": 2.8,
+      "fat_g": 0.3,
+      "fibre_g": 2.2,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small serving", "grams": 100, "carbs_g": 4 },
+      { "name": "Medium serving", "grams": 150, "carbs_g": 6 },
+      { "name": "Large serving", "grams": 200, "carbs_g": 8 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "ugu", "Nigerian", "low-carb"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Waterleaf Soup",
+    "canonicalName": "Talinum Leaf Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 35,
+      "carbs_g": 6,
+      "protein_g": 2,
+      "fat_g": 0.5,
+      "fibre_g": 3,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 12 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 18 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 24 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "soup", "Nigerian", "low-calorie"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Efo Tete (Amaranth)",
+    "canonicalName": "Amaranth Leaves",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 23,
+      "carbs_g": 4.6,
+      "protein_g": 2.5,
+      "fat_g": 0.3,
+      "fibre_g": 2.1,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small serving", "grams": 100, "carbs_g": 4.6 },
+      { "name": "Medium serving", "grams": 150, "carbs_g": 6.9 },
+      { "name": "Large serving", "grams": 200, "carbs_g": 9.2 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "amaranth", "Nigerian", "low-carb"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Avocado Pear",
+    "canonicalName": "Fresh Avocado",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 160,
+      "carbs_g": 9,
+      "protein_g": 2,
+      "fat_g": 15,
+      "fibre_g": 7,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small (1/2 fruit)", "grams": 75, "carbs_g": 6.75 },
+      { "name": "Medium (whole)", "grams": 150, "carbs_g": 13.5 },
+      { "name": "Large (1.5 fruits)", "grams": 225, "carbs_g": 20.25 }
+    ],
+    "affordability": "medium",
+    "tags": ["fruit", "avocado", "healthy-fat", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Papaya (Pawpaw)",
+    "canonicalName": "Fresh Papaya",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 43,
+      "carbs_g": 11,
+      "protein_g": 0.5,
+      "fat_g": 0.3,
+      "fibre_g": 1.7,
+      "gi": 60
+    },
+    "portionSizes": [
+      { "name": "Small slice", "grams": 100, "carbs_g": 11 },
+      { "name": "Medium slice", "grams": 150, "carbs_g": 16.5 },
+      { "name": "Large slice", "grams": 200, "carbs_g": 22 }
+    ],
+    "affordability": "low",
+    "tags": ["fruit", "papaya", "Nigerian"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Pineapple (Fresh)",
+    "canonicalName": "Fresh Pineapple",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 50,
+      "carbs_g": 13,
+      "protein_g": 0.5,
+      "fat_g": 0.1,
+      "fibre_g": 1.4,
+      "gi": 66
+    },
+    "portionSizes": [
+      { "name": "Small slice", "grams": 80, "carbs_g": 10.4 },
+      { "name": "Medium slice", "grams": 120, "carbs_g": 15.6 },
+      { "name": "Large slice", "grams": 160, "carbs_g": 20.8 }
+    ],
+    "affordability": "medium",
+    "tags": ["fruit", "pineapple", "tropical"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Guava",
+    "canonicalName": "Fresh Guava",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 68,
+      "carbs_g": 14,
+      "protein_g": 2.6,
+      "fat_g": 1,
+      "fibre_g": 5.4,
+      "gi": 12
+    },
+    "portionSizes": [
+      { "name": "Small fruit", "grams": 80, "carbs_g": 11.2 },
+      { "name": "Medium fruit", "grams": 120, "carbs_g": 16.8 },
+      { "name": "Large fruit", "grams": 160, "carbs_g": 22.4 }
+    ],
+    "affordability": "low",
+    "tags": ["fruit", "guava", "high-fibre", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Spinach (Nigerian)",
+    "canonicalName": "African Spinach",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 23,
+      "carbs_g": 3.6,
+      "protein_g": 2.9,
+      "fat_g": 0.4,
+      "fibre_g": 2.2,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small serving", "grams": 100, "carbs_g": 3.6 },
+      { "name": "Medium serving", "grams": 150, "carbs_g": 5.4 },
+      { "name": "Large serving", "grams": 200, "carbs_g": 7.2 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "spinach", "iron", "low-carb"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Bitter Kola",
+    "canonicalName": "Garcinia Kola Nut",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 385,
+      "carbs_g": 42,
+      "protein_g": 8,
+      "fat_g": 20,
+      "fibre_g": 15,
+      "gi": 35
+    },
+    "portionSizes": [
+      { "name": "1 piece", "grams": 5, "carbs_g": 2.1 },
+      { "name": "2 pieces", "grams": 10, "carbs_g": 4.2 },
+      { "name": "3 pieces", "grams": 15, "carbs_g": 6.3 }
+    ],
+    "affordability": "low",
+    "tags": ["kola nut", "bitter", "Nigerian", "medicinal"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Cashew Nuts",
+    "canonicalName": "Roasted Cashew Nuts",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 553,
+      "carbs_g": 30,
+      "protein_g": 18,
+      "fat_g": 44,
+      "fibre_g": 3.3,
+      "gi": 25
+    },
+    "portionSizes": [
+      { "name": "Small handful", "grams": 30, "carbs_g": 9 },
+      { "name": "Medium handful", "grams": 50, "carbs_g": 15 },
+      { "name": "Large handful", "grams": 70, "carbs_g": 21 }
+    ],
+    "affordability": "medium",
+    "tags": ["nuts", "cashew", "protein", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Walnut",
+    "canonicalName": "Walnuts",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 654,
+      "carbs_g": 14,
+      "protein_g": 15,
+      "fat_g": 65,
+      "fibre_g": 6.7,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small handful", "grams": 30, "carbs_g": 4.2 },
+      { "name": "Medium handful", "grams": 50, "carbs_g": 7 },
+      { "name": "Large handful", "grams": 70, "carbs_g": 9.8 }
+    ],
+    "affordability": "high",
+    "tags": ["nuts", "walnut", "omega-3", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Greek Yogurt (Plain)",
+    "canonicalName": "Plain Greek Yogurt",
+    "category": "Dairy",
+    "nutrients": {
+      "calories": 59,
+      "carbs_g": 3.6,
+      "protein_g": 10,
+      "fat_g": 0.4,
+      "fibre_g": 0,
+      "gi": 11
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 100, "carbs_g": 3.6 },
+      { "name": "Medium cup", "grams": 150, "carbs_g": 5.4 },
+      { "name": "Large cup", "grams": 200, "carbs_g": 7.2 }
+    ],
+    "affordability": "medium",
+    "tags": ["dairy", "yogurt", "protein", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Milk (Low-fat)",
+    "canonicalName": "Low-fat Cow's Milk",
+    "category": "Dairy",
+    "nutrients": {
+      "calories": 42,
+      "carbs_g": 5,
+      "protein_g": 3.4,
+      "fat_g": 1,
+      "fibre_g": 0,
+      "gi": 32
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 200, "carbs_g": 10 },
+      { "name": "Medium cup", "grams": 250, "carbs_g": 12.5 },
+      { "name": "Large cup", "grams": 300, "carbs_g": 15 }
+    ],
+    "affordability": "low",
+    "tags": ["dairy", "milk", "low-fat"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Fura da Nono",
+    "canonicalName": "Millet Balls with Yogurt",
+    "category": "Beverages",
+    "nutrients": {
+      "calories": 150,
+      "carbs_g": 28,
+      "protein_g": 5,
+      "fat_g": 2.5,
+      "fibre_g": 3.5,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 250, "carbs_g": 70 },
+      { "name": "Medium cup", "grams": 350, "carbs_g": 98 },
+      { "name": "Large cup", "grams": 450, "carbs_g": 126 }
+    ],
+    "affordability": "low",
+    "tags": ["millet", "yogurt", "Nigerian", "traditional"],
+    "regionVariants": [
+      { "region": "Northern", "note": "Traditional Northern Nigerian drink" }
+    ],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Tomatoes (Fresh)",
+    "canonicalName": "Fresh Tomatoes",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 18,
+      "carbs_g": 3.9,
+      "protein_g": 0.9,
+      "fat_g": 0.2,
+      "fibre_g": 1.2,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small (1 tomato)", "grams": 100, "carbs_g": 3.9 },
+      { "name": "Medium (2 tomatoes)", "grams": 200, "carbs_g": 7.8 },
+      { "name": "Large (3 tomatoes)", "grams": 300, "carbs_g": 11.7 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "tomato", "low-carb"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Onions",
+    "canonicalName": "Fresh Onions",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 40,
+      "carbs_g": 9,
+      "protein_g": 1.1,
+      "fat_g": 0.1,
+      "fibre_g": 1.7,
+      "gi": 10
+    },
+    "portionSizes": [
+      { "name": "Small (1 onion)", "grams": 80, "carbs_g": 7.2 },
+      { "name": "Medium (1 onion)", "grams": 120, "carbs_g": 10.8 },
+      { "name": "Large (1 onion)", "grams": 160, "carbs_g": 14.4 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "onion", "low-carb"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Green Pepper (Bell)",
+    "canonicalName": "Fresh Green Bell Pepper",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 20,
+      "carbs_g": 4.6,
+      "protein_g": 0.9,
+      "fat_g": 0.2,
+      "fibre_g": 1.7,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small", "grams": 80, "carbs_g": 3.7 },
+      { "name": "Medium", "grams": 120, "carbs_g": 5.5 },
+      { "name": "Large", "grams": 160, "carbs_g": 7.4 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetables", "pepper", "low-carb"],
+    "source": "validated",
+    "version": 1
+  }
+]

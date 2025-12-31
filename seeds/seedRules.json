@@ -1,0 +1,266 @@
+[
+  {
+    "slug": "max-carb-per-meal",
+    "title": "Maximum Carbohydrate Limit Per Meal",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": ["user.bmi", "user.lastGlucose", "meal.timeOfDay", "user.diabetesType"],
+      "logic": [
+        {
+          "when": "user.lastGlucose > 180",
+          "then": { "maxCarbs_g": 30, "reasonScore": 100, "severity": "high" }
+        },
+        {
+          "when": "user.bmi >= 30",
+          "then": { "maxCarbs_g": 35, "reasonScore": 80, "severity": "medium" }
+        },
+        {
+          "when": "user.diabetesType === 'type1'",
+          "then": { "maxCarbs_g": 40, "reasonScore": 70, "severity": "medium" }
+        },
+        {
+          "when": "default",
+          "then": { "maxCarbs_g": 45, "reasonScore": 50, "severity": "low" }
+        }
+      ],
+      "priority": 100
+    },
+    "nlTemplate": "Based on your last glucose reading of {{user.lastGlucose}} mg/dL, we recommend keeping total carbohydrates below {{maxCarbs_g}}g for this meal.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "high-gi-warning",
+    "title": "High Glycemic Index Food Warning",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["food.gi", "user.diabetesType"],
+      "logic": [
+        {
+          "when": "food.gi > 70",
+          "then": { "alert": "high_gi", "severity": "high", "reasonScore": 90 }
+        },
+        {
+          "when": "food.gi > 55 && food.gi <= 70",
+          "then": { "alert": "medium_gi", "severity": "medium", "reasonScore": 60 }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "low_gi", "severity": "low", "reasonScore": 30 }
+        }
+      ],
+      "priority": 90
+    },
+    "nlTemplate": "This food has a {{alert}} glycemic index ({{food.gi}}). Foods with high GI can cause rapid blood sugar spikes.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "portion-size-adjustment",
+    "title": "Portion Size Recommendation",
+    "type": "portion_adjustment",
+    "definition": {
+      "inputBindings": ["user.bmi", "user.activityLevel", "meal.timeOfDay"],
+      "logic": [
+        {
+          "when": "user.bmi >= 30",
+          "then": { "portionMultiplier": 0.75, "reasonScore": 80 }
+        },
+        {
+          "when": "user.activityLevel === 'high'",
+          "then": { "portionMultiplier": 1.2, "reasonScore": 60 }
+        },
+        {
+          "when": "meal.timeOfDay === 'dinner'",
+          "then": { "portionMultiplier": 0.85, "reasonScore": 50 }
+        },
+        {
+          "when": "default",
+          "then": { "portionMultiplier": 1.0, "reasonScore": 40 }
+        }
+      ],
+      "priority": 70
+    },
+    "nlTemplate": "For your activity level and BMI, we suggest adjusting this portion to {{adjustedPortion}}g.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "protein-emphasis",
+    "title": "Protein-Rich Food Priority",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["food.protein_g", "food.carbs_g", "user.diabetesType"],
+      "logic": [
+        {
+          "when": "food.protein_g > 15 && food.carbs_g < 10",
+          "then": { "scoreBonus": 20, "priority": "high" }
+        },
+        {
+          "when": "food.protein_g > 10",
+          "then": { "scoreBonus": 10, "priority": "medium" }
+        },
+        {
+          "when": "default",
+          "then": { "scoreBonus": 0, "priority": "low" }
+        }
+      ],
+      "priority": 80
+    },
+    "nlTemplate": "This food is a good protein source with {{food.protein_g}}g protein per serving, which helps stabilize blood sugar.",
+    "appliesTo": ["Protein Foods"],
+    "version": 1
+  },
+  {
+    "slug": "fiber-content-boost",
+    "title": "High Fiber Content Recommendation",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["food.fibre_g", "food.carbs_g"],
+      "logic": [
+        {
+          "when": "food.fibre_g > 5",
+          "then": { "scoreBonus": 15, "priority": "high" }
+        },
+        {
+          "when": "food.fibre_g > 3",
+          "then": { "scoreBonus": 8, "priority": "medium" }
+        },
+        {
+          "when": "default",
+          "then": { "scoreBonus": 0, "priority": "low" }
+        }
+      ],
+      "priority": 75
+    },
+    "nlTemplate": "This food contains {{food.fibre_g}}g of fiber, which can help slow glucose absorption.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "fried-food-warning",
+    "title": "Fried Food Caution",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["food.tags", "user.bmi"],
+      "logic": [
+        {
+          "when": "food.tags.includes('fried') && user.bmi >= 30",
+          "then": { "alert": "fried_high_bmi", "severity": "high", "reasonScore": 85 }
+        },
+        {
+          "when": "food.tags.includes('fried')",
+          "then": { "alert": "fried_food", "severity": "medium", "reasonScore": 60 }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 85
+    },
+    "nlTemplate": "This is a fried food which may increase fat intake. Consider grilled or boiled alternatives.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "affordable-option-priority",
+    "title": "Affordable Food Priority",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["food.affordability", "user.incomeBracket"],
+      "logic": [
+        {
+          "when": "user.incomeBracket === 'low' && food.affordability === 'low'",
+          "then": { "scoreBonus": 15, "priority": "high" }
+        },
+        {
+          "when": "food.affordability === 'low'",
+          "then": { "scoreBonus": 5, "priority": "medium" }
+        },
+        {
+          "when": "default",
+          "then": { "scoreBonus": 0, "priority": "low" }
+        }
+      ],
+      "priority": 60
+    },
+    "nlTemplate": "This is an affordable option that fits your budget.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "vegetable-emphasis",
+    "title": "Vegetable-Rich Food Priority",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["food.category", "food.fibre_g"],
+      "logic": [
+        {
+          "when": "food.category === 'Fruits & Vegetables' && food.fibre_g > 3",
+          "then": { "scoreBonus": 20, "priority": "high" }
+        },
+        {
+          "when": "food.category === 'Fruits & Vegetables'",
+          "then": { "scoreBonus": 12, "priority": "medium" }
+        },
+        {
+          "when": "default",
+          "then": { "scoreBonus": 0, "priority": "low" }
+        }
+      ],
+      "priority": 78
+    },
+    "nlTemplate": "Vegetables are excellent choices for diabetes management - high in nutrients and fiber, low in calories.",
+    "appliesTo": ["Fruits & Vegetables"],
+    "version": 1
+  },
+  {
+    "slug": "post-meal-timing",
+    "title": "Post-Meal Glucose Check Reminder",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["meal.totalCarbs", "meal.timeOfDay"],
+      "logic": [
+        {
+          "when": "meal.totalCarbs > 45",
+          "then": { "alert": "check_glucose_2hr", "severity": "medium", "reasonScore": 70 }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 65
+    },
+    "nlTemplate": "Remember to check your glucose 2 hours after this meal since it contains {{meal.totalCarbs}}g of carbohydrates.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "breakfast-carb-limit",
+    "title": "Breakfast Carbohydrate Guidelines",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": ["meal.timeOfDay", "user.diabetesType"],
+      "logic": [
+        {
+          "when": "meal.timeOfDay === 'breakfast' && user.diabetesType === 'type2'",
+          "then": { "maxCarbs_g": 35, "reasonScore": 75, "severity": "medium" }
+        },
+        {
+          "when": "meal.timeOfDay === 'breakfast'",
+          "then": { "maxCarbs_g": 40, "reasonScore": 60, "severity": "low" }
+        },
+        {
+          "when": "default",
+          "then": { "maxCarbs_g": 45, "reasonScore": 40, "severity": "low" }
+        }
+      ],
+      "priority": 85
+    },
+    "nlTemplate": "For breakfast with type 2 diabetes, aim to keep carbs around {{maxCarbs_g}}g to maintain stable morning glucose.",
+    "appliesTo": ["all"],
+    "version": 1
+  }
+]
