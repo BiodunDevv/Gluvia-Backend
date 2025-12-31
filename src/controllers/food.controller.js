@@ -1,4 +1,5 @@
 const foodService = require("../services/food.service");
+const imageSearchService = require("../services/imageSearch.service");
 const { asyncHandler } = require("../middlewares/error.middleware");
 
 /**
@@ -200,12 +201,13 @@ const getFoodById = asyncHandler(async (req, res) => {
  *         description: Invalid input
  */
 const createFood = asyncHandler(async (req, res) => {
-  const food = await foodService.createFood(req.body);
+  const result = await foodService.createFood(req.body, req.user?._id);
 
   res.status(201).json({
     success: true,
     message: "Food created successfully",
-    data: food,
+    data: result.food,
+    serverVersion: result.serverVersion,
   });
 });
 
@@ -266,9 +268,13 @@ const createFood = asyncHandler(async (req, res) => {
  *         description: Food not found
  */
 const updateFood = asyncHandler(async (req, res) => {
-  const food = await foodService.updateFood(req.params.id, req.body);
+  const result = await foodService.updateFood(
+    req.params.id,
+    req.body,
+    req.user?._id
+  );
 
-  if (!food) {
+  if (!result || !result.food) {
     return res.status(404).json({
       success: false,
       message: "Food not found",
@@ -278,7 +284,8 @@ const updateFood = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     message: "Food updated successfully",
-    data: food,
+    data: result.food,
+    serverVersion: result.serverVersion,
   });
 });
 
@@ -385,6 +392,94 @@ const deleteFood = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /foods/search-image:
+ *   post:
+ *     summary: Search for food image [AUTHENTICATED]
+ *     description: Search for a food image using AI-powered search. Useful when creating a new food item.
+ *     tags: [Foods]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - foodName
+ *             properties:
+ *               foodName:
+ *                 type: string
+ *                 description: Name of the food to search for
+ *                 example: "Jollof Rice"
+ *               useAI:
+ *                 type: boolean
+ *                 description: Whether to use Gemini AI for query optimization
+ *                 default: true
+ *     responses:
+ *       200:
+ *         description: Image search results
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     foodName:
+ *                       type: string
+ *                     searchQuery:
+ *                       type: string
+ *                     imageUrl:
+ *                       type: string
+ *                     source:
+ *                       type: string
+ *                       enum: [curated, google, unsplash, placeholder]
+ *                     usedAI:
+ *                       type: boolean
+ *       400:
+ *         description: Invalid input
+ */
+const searchFoodImage = asyncHandler(async (req, res) => {
+  const { foodName, useAI = true } = req.body;
+
+  if (!foodName) {
+    return res.status(400).json({
+      success: false,
+      message: "Food name is required",
+    });
+  }
+
+  const result = await imageSearchService.searchForFoodImage(foodName, useAI);
+
+  // Check if search failed (rate limit or other errors)
+  if (result.error || result.source === "none" || !result.imageUrl) {
+    return res.status(429).json({
+      success: false,
+      message:
+        result.error ||
+        "Image search failed - API rate limit may have been reached. Please try again later.",
+      data: {
+        foodName: result.foodName,
+        searchQuery: result.searchQuery,
+        usedAI: result.usedAI,
+        source: result.source,
+      },
+    });
+  }
+
+  res.json({
+    success: true,
+    message: "Image search completed",
+    data: result,
+  });
+});
+
 module.exports = {
   getAllFoods,
   getFoodById,
@@ -392,4 +487,5 @@ module.exports = {
   updateFood,
   batchUpsertFoods,
   deleteFood,
+  searchFoodImage,
 };

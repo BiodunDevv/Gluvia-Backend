@@ -1,74 +1,487 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to Gluvia AI</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Gluvia</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
+      @media (prefers-color-scheme: dark) {
+        .dark-bg {
+          background-color: #000000 !important;
         }
-        .header {
-            background-color: #4CAF50;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 5px 5px 0 0;
+        .dark-card {
+          background-color: #1a1a1a !important;
+          border-color: #333333 !important;
         }
-        .content {
-            background-color: #f9f9f9;
-            padding: 30px;
-            border-radius: 0 0 5px 5px;
+        .dark-text {
+          color: #ffffff !important;
         }
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #4CAF50;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
+        .dark-secondary {
+          color: #a0a0a0 !important;
         }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            color: #666;
-            font-size: 12px;
+        .dark-box {
+          background-color: #0a0a0a !important;
+          border-color: #2a2a2a !important;
         }
+      }
     </style>
-</head>
-<body>
-    <div class="header">
-        <h1>Welcome to Gluvia AI</h1>
-    </div>
-    <div class="content">
-        <p>Hi {{name}},</p>
-        
-        <p>Thank you for joining Gluvia AI! We're excited to have you on board.</p>
-        
-        <p>Gluvia AI is your personalized diabetic meal guidance companion that works offline. Our app helps you:</p>
-        <ul>
-            <li>Track your meals and glucose levels</li>
-            <li>Get personalized meal recommendations</li>
-            <li>Access local food nutritional data</li>
-            <li>Receive AI-powered guidance for better diabetes management</li>
-        </ul>
-        
-        <p>Your account is now ready to use. Download the app and start your journey to better health today!</p>
-        
-        <p>If you have any questions or need help getting started, please don't hesitate to reach out to our support team.</p>
-        
-        <p>Best regards,<br>
-        The Gluvia AI Team</p>
-    </div>
-    <div class="footer">
-        <p>&copy; 2025 Gluvia AI. All rights reserved.</p>
-        <p>This email was sent to {{name}} as part of your Gluvia AI registration.</p>
-    </div>
-</body>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family:
+        -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto,
+        Helvetica, Arial, sans-serif;
+      background-color: #ffffff;
+    "
+    class="dark-bg"
+  >
+    <table
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      width="100%"
+      style="background-color: #ffffff; padding: 8px"
+      class="dark-bg"
+    >
+      <tr>
+        <td align="center">
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="600"
+            style="
+              background-color: #ffffff;
+              border: 2px solid #000000;
+              border-radius: 8px;
+              overflow: hidden;
+            "
+            class="dark-card"
+          >
+            <!-- Header -->
+            <tr>
+              <td
+                style="
+                  background-color: #000000;
+                  padding: 8px;
+                  text-align: center;
+                "
+                class="dark-box"
+              >
+                <div style="margin-bottom: 4px">
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="display: inline-block"
+                  >
+                    <circle
+                      cx="50"
+                      cy="35"
+                      r="28"
+                      fill="none"
+                      stroke="#ffffff"
+                      stroke-width="6"
+                    />
+                    <path
+                      d="M 30 55 Q 50 70 70 55"
+                      stroke="#ffffff"
+                      stroke-width="6"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                    <line
+                      x1="50"
+                      y1="63"
+                      x2="50"
+                      y2="85"
+                      stroke="#ffffff"
+                      stroke-width="6"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+                <h1
+                  style="
+                    margin: 0;
+                    color: #ffffff;
+                    font-size: 24px;
+                    font-weight: 700;
+                  "
+                >
+                  Welcome to Gluvia
+                </h1>
+                <p
+                  style="
+                    margin: 4px 0 0 0;
+                    color: #ffffff;
+                    font-size: 11px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    opacity: 0.9;
+                  "
+                >
+                  Your Glucose Management Partner
+                </p>
+              </td>
+            </tr>
+
+            <!-- Content -->
+            <tr>
+              <td style="padding: 8px" class="dark-text">
+                <!-- Greeting -->
+                <div style="text-align: center; margin-bottom: 8px">
+                  <h2
+                    style="
+                      margin: 0 0 4px 0;
+                      color: #000000;
+                      font-size: 20px;
+                      font-weight: 700;
+                    "
+                    class="dark-text"
+                  >
+                    Hello, {{name}}! 🎉
+                  </h2>
+                  <p
+                    style="
+                      margin: 0;
+                      color: #666666;
+                      font-size: 13px;
+                      line-height: 1.4;
+                    "
+                    class="dark-secondary"
+                  >
+                    Welcome to your personalized diabetes management platform
+                  </p>
+                </div>
+
+                <!-- Features -->
+                <div style="margin: 8px 0">
+                  <p
+                    style="
+                      margin: 0 0 6px 0;
+                      color: #000000;
+                      font-size: 14px;
+                      font-weight: 700;
+                    "
+                    class="dark-text"
+                  >
+                    What You Can Do:
+                  </p>
+
+                  <table
+                    cellpadding="0"
+                    cellspacing="0"
+                    border="0"
+                    width="100%"
+                  >
+                    <tr>
+                      <td style="padding: 4px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="24" valign="top">
+                              <div
+                                style="
+                                  width: 20px;
+                                  height: 20px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 20px;
+                                  color: #ffffff;
+                                  font-size: 11px;
+                                  font-weight: bold;
+                                "
+                              >
+                                🍽️
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 13px;
+                                  font-weight: 600;
+                                "
+                                class="dark-text"
+                              >
+                                Smart Meal Logging
+                              </p>
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #666666;
+                                  font-size: 11px;
+                                  line-height: 1.3;
+                                "
+                                class="dark-secondary"
+                              >
+                                Track your meals and nutrition
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td style="padding: 4px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="24" valign="top">
+                              <div
+                                style="
+                                  width: 20px;
+                                  height: 20px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 20px;
+                                  color: #ffffff;
+                                  font-size: 11px;
+                                  font-weight: bold;
+                                "
+                              >
+                                📊
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 13px;
+                                  font-weight: 600;
+                                "
+                                class="dark-text"
+                              >
+                                Glucose Monitoring
+                              </p>
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #666666;
+                                  font-size: 11px;
+                                  line-height: 1.3;
+                                "
+                                class="dark-secondary"
+                              >
+                                Real-time glucose tracking
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td style="padding: 4px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="24" valign="top">
+                              <div
+                                style="
+                                  width: 20px;
+                                  height: 20px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 20px;
+                                  color: #ffffff;
+                                  font-size: 11px;
+                                  font-weight: bold;
+                                "
+                              >
+                                🥗
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 13px;
+                                  font-weight: 600;
+                                "
+                                class="dark-text"
+                              >
+                                Food Database
+                              </p>
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #666666;
+                                  font-size: 11px;
+                                  line-height: 1.3;
+                                "
+                                class="dark-secondary"
+                              >
+                                Access comprehensive nutrition info
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td style="padding: 4px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="24" valign="top">
+                              <div
+                                style="
+                                  width: 20px;
+                                  height: 20px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 20px;
+                                  color: #ffffff;
+                                  font-size: 11px;
+                                  font-weight: bold;
+                                "
+                              >
+                                🤖
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 13px;
+                                  font-weight: 600;
+                                "
+                                class="dark-text"
+                              >
+                                AI Recommendations
+                              </p>
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #666666;
+                                  font-size: 11px;
+                                  line-height: 1.3;
+                                "
+                                class="dark-secondary"
+                              >
+                                Personalized meal suggestions
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- Security Note -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #000000;
+                    border-radius: 6px;
+                    margin: 8px 0 0 0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 6px">
+                      <p
+                        style="
+                          margin: 0 0 2px 0;
+                          color: #ffffff;
+                          font-size: 12px;
+                          font-weight: 700;
+                        "
+                      >
+                        🔐 Your Privacy Matters
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          color: #ffffff;
+                          font-size: 10px;
+                          line-height: 1.4;
+                          opacity: 0.95;
+                        "
+                      >
+                        Your health data is encrypted and secure. We never share
+                        your information without permission.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td
+                style="
+                  background-color: #f8f9fa;
+                  padding: 6px;
+                  text-align: center;
+                  border-top: 2px solid #e9ecef;
+                "
+                class="dark-box"
+              >
+                <p
+                  style="
+                    margin: 0 0 2px 0;
+                    color: #000000;
+                    font-size: 14px;
+                    font-weight: 700;
+                  "
+                  class="dark-text"
+                >
+                  Gluvia
+                </p>
+                <p
+                  style="margin: 0 0 2px 0; color: #666666; font-size: 10px"
+                  class="dark-secondary"
+                >
+                  Diabetes Management Platform
+                </p>
+                <p
+                  style="margin: 0; color: #999999; font-size: 9px"
+                  class="dark-secondary"
+                >
+                  © 2025 Gluvia. All rights reserved.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

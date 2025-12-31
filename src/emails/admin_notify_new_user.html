@@ -1,56 +1,512 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New User Registration</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>New User Registration - Gluvia</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
+      @media (prefers-color-scheme: dark) {
+        .dark-bg {
+          background-color: #000000 !important;
         }
-        .header {
-            background-color: #FF9800;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 5px 5px 0 0;
+        .dark-card {
+          background-color: #1a1a1a !important;
+          border-color: #333333 !important;
         }
-        .content {
-            background-color: #f9f9f9;
-            padding: 30px;
-            border-radius: 0 0 5px 5px;
+        .dark-text {
+          color: #ffffff !important;
         }
-        .info-box {
-            background-color: #e3f2fd;
-            border-left: 4px solid #2196F3;
-            padding: 15px;
-            margin: 20px 0;
+        .dark-secondary {
+          color: #a0a0a0 !important;
         }
+        .dark-box {
+          background-color: #0a0a0a !important;
+          border-color: #2a2a2a !important;
+        }
+      }
     </style>
-</head>
-<body>
-    <div class="header">
-        <h1>📢 New User Registered</h1>
-    </div>
-    <div class="content">
-        <p>Hello Admin,</p>
-        
-        <p>A new user has registered on Gluvia AI platform.</p>
-        
-        <div class="info-box">
-            <strong>User Details:</strong><br>
-            <strong>Email:</strong> {{email}}<br>
-            <strong>Registration Date:</strong> {{createdAt}}
-        </div>
-        
-        <p>Please review the new user registration in the admin dashboard.</p>
-        
-        <p>This is an automated notification from Gluvia AI system.</p>
-    </div>
-</body>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family:
+        -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto,
+        Helvetica, Arial, sans-serif;
+      background-color: #ffffff;
+    "
+    class="dark-bg"
+  >
+    <table
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      width="100%"
+      style="background-color: #ffffff; padding: 8px"
+      class="dark-bg"
+    >
+      <tr>
+        <td align="center">
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="600"
+            style="
+              background-color: #ffffff;
+              border: 2px solid #000000;
+              border-radius: 8px;
+              overflow: hidden;
+            "
+            class="dark-card"
+          >
+            <!-- Header -->
+            <tr>
+              <td
+                style="
+                  background-color: #000000;
+                  padding: 8px;
+                  text-align: center;
+                "
+                class="dark-box"
+              >
+                <div style="margin-bottom: 4px">
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="display: inline-block"
+                  >
+                    <circle cx="45" cy="35" r="18" fill="#ffffff" />
+                    <path
+                      d="M 15 75 Q 15 55 45 55 Q 75 55 75 75 L 75 90 L 15 90 Z"
+                      fill="#ffffff"
+                    />
+                    <circle cx="75" cy="30" r="12" fill="#ffffff" />
+                    <line
+                      x1="75"
+                      y1="24"
+                      x2="75"
+                      y2="36"
+                      stroke="#000000"
+                      stroke-width="3"
+                    />
+                    <line
+                      x1="69"
+                      y1="30"
+                      x2="81"
+                      y2="30"
+                      stroke="#000000"
+                      stroke-width="3"
+                    />
+                  </svg>
+                </div>
+                <h1
+                  style="
+                    margin: 0;
+                    color: #ffffff;
+                    font-size: 24px;
+                    font-weight: 700;
+                  "
+                >
+                  New User Registration
+                </h1>
+                <p
+                  style="
+                    margin: 4px 0 0 0;
+                    color: #ffffff;
+                    font-size: 11px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    opacity: 0.9;
+                  "
+                >
+                  Admin Notification
+                </p>
+              </td>
+            </tr>
+
+            <!-- Content -->
+            <tr>
+              <td style="padding: 8px" class="dark-text">
+                <!-- Alert -->
+                <div style="text-align: center; margin-bottom: 8px">
+                  <h2
+                    style="
+                      margin: 0 0 4px 0;
+                      color: #000000;
+                      font-size: 20px;
+                      font-weight: 700;
+                    "
+                    class="dark-text"
+                  >
+                    New User Alert 🔔
+                  </h2>
+                  <p
+                    style="
+                      margin: 0;
+                      color: #666666;
+                      font-size: 13px;
+                      line-height: 1.4;
+                    "
+                    class="dark-secondary"
+                  >
+                    A new user has joined the Gluvia platform
+                  </p>
+                </div>
+
+                <!-- User Details Box -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #f8f9fa;
+                    border: 2px solid #e9ecef;
+                    border-radius: 6px;
+                    margin: 8px 0;
+                  "
+                  class="dark-box"
+                >
+                  <tr>
+                    <td style="padding: 6px">
+                      <p
+                        style="
+                          margin: 0 0 6px 0;
+                          color: #000000;
+                          font-size: 12px;
+                          font-weight: 700;
+                          text-transform: uppercase;
+                          letter-spacing: 0.5px;
+                        "
+                        class="dark-text"
+                      >
+                        👤 User Information
+                      </p>
+
+                      <table
+                        cellpadding="0"
+                        cellspacing="0"
+                        border="0"
+                        width="100%"
+                      >
+                        <tr>
+                          <td style="padding: 4px 0">
+                            <p
+                              style="
+                                margin: 0 0 2px 0;
+                                color: #666666;
+                                font-size: 10px;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                              "
+                              class="dark-secondary"
+                            >
+                              Email
+                            </p>
+                            <p
+                              style="
+                                margin: 0;
+                                color: #000000;
+                                font-size: 14px;
+                                font-weight: 700;
+                              "
+                              class="dark-text"
+                            >
+                              {{email}}
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="
+                              padding: 4px 0;
+                              border-top: 1px solid #dee2e6;
+                            "
+                          >
+                            <p
+                              style="
+                                margin: 0 0 2px 0;
+                                color: #666666;
+                                font-size: 10px;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                              "
+                              class="dark-secondary"
+                            >
+                              Registration Date
+                            </p>
+                            <p
+                              style="
+                                margin: 0;
+                                color: #000000;
+                                font-size: 14px;
+                                font-weight: 700;
+                              "
+                              class="dark-text"
+                            >
+                              {{createdAt}}
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="
+                              padding: 4px 0;
+                              border-top: 1px solid #dee2e6;
+                            "
+                          >
+                            <p
+                              style="
+                                margin: 0 0 2px 0;
+                                color: #666666;
+                                font-size: 10px;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                              "
+                              class="dark-secondary"
+                            >
+                              Status
+                            </p>
+                            <p
+                              style="
+                                margin: 0;
+                                color: #28a745;
+                                font-size: 14px;
+                                font-weight: 700;
+                              "
+                            >
+                              ✓ Active
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Recommended Actions -->
+                <div style="margin: 8px 0">
+                  <p
+                    style="
+                      margin: 0 0 6px 0;
+                      color: #000000;
+                      font-size: 14px;
+                      font-weight: 700;
+                    "
+                    class="dark-text"
+                  >
+                    Recommended Actions:
+                  </p>
+
+                  <table
+                    cellpadding="0"
+                    cellspacing="0"
+                    border="0"
+                    width="100%"
+                  >
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 9px;
+                                  font-weight: bold;
+                                "
+                              >
+                                1
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Review user profile and health data
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 9px;
+                                  font-weight: bold;
+                                "
+                              >
+                                2
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Monitor initial activity and engagement
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 9px;
+                                  font-weight: bold;
+                                "
+                              >
+                                3
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Update user analytics dashboard
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- Admin Note -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #000000;
+                    border-radius: 6px;
+                    margin: 8px 0 0 0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 6px">
+                      <p
+                        style="
+                          margin: 0;
+                          color: #ffffff;
+                          font-size: 10px;
+                          line-height: 1.4;
+                        "
+                      >
+                        📊 This is an automated notification. You can view full
+                        user details in the admin dashboard.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td
+                style="
+                  background-color: #f8f9fa;
+                  padding: 6px;
+                  text-align: center;
+                  border-top: 2px solid #e9ecef;
+                "
+                class="dark-box"
+              >
+                <p
+                  style="
+                    margin: 0 0 2px 0;
+                    color: #000000;
+                    font-size: 14px;
+                    font-weight: 700;
+                  "
+                  class="dark-text"
+                >
+                  Gluvia
+                </p>
+                <p
+                  style="margin: 0 0 2px 0; color: #666666; font-size: 10px"
+                  class="dark-secondary"
+                >
+                  Admin Notifications
+                </p>
+                <p
+                  style="margin: 0; color: #999999; font-size: 9px"
+                  class="dark-secondary"
+                >
+                  © 2025 Gluvia. All rights reserved.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

@@ -11,6 +11,7 @@ const RuleTemplate = require("../src/models/ruleTemplate.model");
 const Config = require("../src/models/config.model");
 const { hashPassword } = require("../src/utils/hash.util");
 const config = require("../src/config");
+const { batchFetchFoodImages } = require("./utils/fetchFoodImage");
 
 const foodsData = require("./seedFoods.json");
 const rulesData = require("./seedRules.json");
@@ -78,9 +79,30 @@ const seedInitial = async () => {
       console.log("ℹ️  Using existing admin user");
     }
 
-    // Seed foods
-    await FoodItem.insertMany(foodsData);
-    console.log(`✅ Seeded ${foodsData.length} food items`);
+    // Seed foods with automatic image fetching using Gemini AI
+    console.log("🖼️  Fetching images for food items using Gemini AI...");
+    console.log("   This may take a few minutes for all items...");
+    console.log("   ✨ AI will optimize search queries for better results");
+
+    // Fetch images for all foods with AI enabled
+    const foodImages = await batchFetchFoodImages(foodsData, 500, true); // 500ms delay, AI enabled
+
+    // Create a map of food names to image URLs
+    const imageMap = new Map();
+    foodImages.forEach((item) => {
+      imageMap.set(item.name, item.imageUrl);
+    });
+
+    // Merge image URLs with food data
+    const foodsWithImages = foodsData.map((food) => ({
+      ...food,
+      imageUrl:
+        imageMap.get(food.localName) ||
+        "https://via.placeholder.com/800x600/2C3E50/FFFFFF?text=Food+Image",
+    }));
+
+    await FoodItem.insertMany(foodsWithImages);
+    console.log(`✅ Seeded ${foodsWithImages.length} food items with images`);
 
     // Seed rules
     const admin = await User.findOne({ role: "admin" }).sort({ createdAt: 1 });
@@ -102,13 +124,23 @@ const seedInitial = async () => {
     console.log("\n🎉 Database reset and seed completed successfully!");
     console.log("\n📝 Summary:");
     console.log(`   - Admin: ${admin.email}`);
-    console.log(`   - Food items: ${foodsData.length}`);
-    console.log(`   - Rule templates: ${rulesData.length}`);
+    console.log(
+      `   - Food items: ${foodsWithImages.length} (with auto-fetched images)`
+    );
+    console.log(
+      `   - Rule templates: ${rulesData.length} professional diabetes management rules`
+    );
     console.log("\n📝 Next steps:");
     console.log(
       "   1. Visit: http://localhost:5000/api-docs for API documentation"
     );
     console.log("   2. Login with admin credentials");
+    console.log(
+      "   3. All foods now have images automatically fetched from Unsplash"
+    );
+    console.log(
+      "   4. Rules cover: constraints, alerts, scoring, substitutions & portion adjustments"
+    );
 
     process.exit(0);
   } catch (error) {

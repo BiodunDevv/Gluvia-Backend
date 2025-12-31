@@ -117,7 +117,7 @@ const generateAdminPasswordReset = async (adminId) => {
   admin.passwordResetExpiry = resetTokenExpiry;
   await admin.save();
 
-  return resetToken;
+  return { admin, resetToken };
 };
 
 /**
@@ -265,7 +265,7 @@ const generateUserPasswordReset = async (userId) => {
   user.passwordResetExpiry = resetTokenExpiry;
   await user.save();
 
-  return resetToken;
+  return { user, resetToken };
 };
 
 /**

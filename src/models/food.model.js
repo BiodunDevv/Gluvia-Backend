@@ -1,20 +1,21 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const portionSizeSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  grams: { type: Number, required: true },
-  carbs_g: Number,
-}, { _id: false });
+const portionSizeSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    grams: { type: Number, required: true },
+    carbs_g: Number,
+  },
+  { _id: false }
+);
 
-const imageSchema = new mongoose.Schema({
-  public_id: String,
-  secure_url: String,
-}, { _id: false });
-
-const regionVariantSchema = new mongoose.Schema({
-  region: String,
-  note: String,
-}, { _id: false });
+const regionVariantSchema = new mongoose.Schema(
+  {
+    region: String,
+    note: String,
+  },
+  { _id: false }
+);
 
 const foodItemSchema = new mongoose.Schema(
   {
@@ -43,16 +44,19 @@ const foodItemSchema = new mongoose.Schema(
     portionSizes: [portionSizeSchema],
     affordability: {
       type: String,
-      enum: ['low', 'medium', 'high'],
-      default: 'medium',
+      enum: ["low", "medium", "high"],
+      default: "medium",
     },
     tags: [String],
-    images: [imageSchema],
+    imageUrl: {
+      type: String,
+      trim: true,
+    },
     regionVariants: [regionVariantSchema],
     source: {
       type: String,
-      enum: ['manual', 'validated', 'estimated'],
-      default: 'manual',
+      enum: ["manual", "validated", "estimated"],
+      default: "manual",
     },
     version: {
       type: Number,
@@ -70,12 +74,16 @@ const foodItemSchema = new mongoose.Schema(
 );
 
 // Text index for search
-foodItemSchema.index({ localName: 'text', canonicalName: 'text', tags: 'text' });
+foodItemSchema.index({
+  localName: "text",
+  canonicalName: "text",
+  tags: "text",
+});
 
 // Compound indexes
 foodItemSchema.index({ deleted: 1, category: 1 });
 foodItemSchema.index({ version: -1 });
 
-const FoodItem = mongoose.model('FoodItem', foodItemSchema);
+const FoodItem = mongoose.model("FoodItem", foodItemSchema);
 
 module.exports = FoodItem;

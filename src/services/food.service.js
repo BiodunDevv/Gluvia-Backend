@@ -86,7 +86,7 @@ const searchFoods = async (filters, page = 1, limit = 20) => {
 
   const [items, total] = await Promise.all([
     FoodItem.find(query)
-      .select("-__v")
+      .select("-__v -images")
       .sort(sortOption)
       .skip(skip)
       .limit(limit)
@@ -110,7 +110,9 @@ const searchFoods = async (filters, page = 1, limit = 20) => {
  * Get food by ID
  */
 const getFoodById = async (id) => {
-  const food = await FoodItem.findOne({ _id: id, deleted: false });
+  const food = await FoodItem.findOne({ _id: id, deleted: false }).select(
+    "-__v -images"
+  );
   if (!food) {
     throw new Error("Food not found");
   }
@@ -121,10 +123,32 @@ const getFoodById = async (id) => {
  * Create new food (admin)
  */
 const createFood = async (foodData, userId) => {
+  // Check if food already exists by localName or canonicalName
+  const existingFood = await FoodItem.findOne({
+    $or: [
+      { localName: new RegExp(`^${foodData.localName}$`, "i") },
+      {
+        canonicalName: foodData.canonicalName
+          ? new RegExp(`^${foodData.canonicalName}$`, "i")
+          : null,
+      },
+    ].filter(Boolean),
+    deleted: false,
+  });
+
+  if (existingFood) {
+    throw new Error(`Food already exists: ${existingFood.localName}`);
+  }
+
   const food = await FoodItem.create({
     ...foodData,
     version: 1,
   });
+
+  // Convert to plain object and remove unwanted fields
+  const foodObject = food.toObject();
+  delete foodObject.__v;
+  delete foodObject.images;
 
   // Increment server version
   const serverVersion = await incrementServerVersion();
@@ -137,27 +161,40 @@ const createFood = async (foodData, userId) => {
     payload: foodData,
   });
 
-  return { food, serverVersion };
+  return { food: foodObject, serverVersion };
 };
 
 /**
  * Update food (admin)
  */
 const updateFood = async (id, foodData, userId) => {
-  const food = await FoodItem.findOne({ _id: id, deleted: false });
-  if (!food) {
+  const existingFood = await FoodItem.findOne({ _id: id, deleted: false });
+  if (!existingFood) {
     throw new Error("Food not found");
   }
 
   // Check version conflict
-  if (foodData.version && foodData.version !== food.version) {
+  if (foodData.version && foodData.version !== existingFood.version) {
     throw new Error("Version conflict - food has been modified");
   }
 
-  // Update fields
-  Object.assign(food, foodData);
-  food.version += 1;
-  await food.save();
+  // Remove _id and version from foodData to avoid conflicts
+  const { _id, version, ...updateData } = foodData;
+
+  // Use findOneAndUpdate for reliable field updates
+  const food = await FoodItem.findOneAndUpdate(
+    { _id: id, deleted: false },
+    { 
+      $set: updateData,
+      $inc: { version: 1 }
+    },
+    { new: true, runValidators: true }
+  );
+
+  // Convert to plain object and remove unwanted fields
+  const foodObject = food.toObject();
+  delete foodObject.__v;
+  delete foodObject.images;
 
   // Increment server version
   const serverVersion = await incrementServerVersion();
@@ -170,7 +207,7 @@ const updateFood = async (id, foodData, userId) => {
     payload: foodData,
   });
 
-  return { food, serverVersion };
+  return { food: foodObject, serverVersion };
 };
 
 /**
@@ -205,6 +242,7 @@ const deleteFood = async (id, userId) => {
 const batchUpsertFoods = async (items, userId) => {
   const results = [];
   let successCount = 0;
+  let skippedCount = 0;
 
   for (let i = 0; i < items.length; i++) {
     try {
@@ -213,16 +251,44 @@ const batchUpsertFoods = async (items, userId) => {
       if (item._id) {
         // Update existing
         const { food } = await updateFood(item._id, item, userId);
-        results.push({ index: i, success: true, food });
+        results.push({ index: i, success: true, food, action: "updated" });
         successCount++;
       } else {
-        // Create new
-        const { food } = await createFood(item, userId);
-        results.push({ index: i, success: true, food });
-        successCount++;
+        // Check if food already exists before creating
+        const existingFood = await FoodItem.findOne({
+          $or: [
+            { localName: new RegExp(`^${item.localName}$`, "i") },
+            {
+              canonicalName: item.canonicalName
+                ? new RegExp(`^${item.canonicalName}$`, "i")
+                : null,
+            },
+          ].filter(Boolean),
+          deleted: false,
+        });
+
+        if (existingFood) {
+          results.push({
+            index: i,
+            success: false,
+            error: `Food already exists: ${existingFood.localName}`,
+            action: "skipped",
+          });
+          skippedCount++;
+        } else {
+          // Create new
+          const { food } = await createFood(item, userId);
+          results.push({ index: i, success: true, food, action: "created" });
+          successCount++;
+        }
       }
     } catch (error) {
-      results.push({ index: i, success: false, error: error.message });
+      results.push({
+        index: i,
+        success: false,
+        error: error.message,
+        action: "failed",
+      });
     }
   }
 
@@ -232,6 +298,7 @@ const batchUpsertFoods = async (items, userId) => {
   return {
     results,
     successCount,
+    skippedCount,
     totalCount: items.length,
     serverVersion,
   };
@@ -243,7 +310,9 @@ const batchUpsertFoods = async (items, userId) => {
 const getFoodsChangedSince = async (clientVersion = 0) => {
   const foods = await FoodItem.find({
     version: { $gt: clientVersion },
-  }).lean();
+  })
+    .select("-__v -images")
+    .lean();
 
   // Include deleted items as tombstones
   const foodsWithTombstones = foods.map((food) => {

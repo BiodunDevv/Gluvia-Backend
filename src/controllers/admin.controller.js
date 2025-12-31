@@ -492,7 +492,7 @@ const activateAdmin = asyncHandler(async (req, res) => {
  * /admin/admins/{adminId}/reset-password:
  *   post:
  *     summary: Generate password reset token for an admin [ADMIN ONLY]
- *     description: Requires admin authentication. Generate a password reset token for another admin.
+ *     description: Requires admin authentication. Generate a password reset token for another admin and send reset email.
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
@@ -504,12 +504,27 @@ const activateAdmin = asyncHandler(async (req, res) => {
  *           type: string
  *     responses:
  *       200:
- *         description: Password reset initiated
+ *         description: Password reset initiated and email sent
  */
 const resetAdminPassword = asyncHandler(async (req, res) => {
-  const resetToken = await adminService.generateAdminPasswordReset(
+  const { admin, resetToken } = await adminService.generateAdminPasswordReset(
     req.params.adminId
   );
+
+  // Create reset URL
+  const resetUrl = `${config.frontendUrl || "http://localhost:3000"}/auth/reset-password?token=${resetToken}`;
+
+  // Send password reset email
+  try {
+    await emailService.sendPasswordResetEmail(
+      admin.email,
+      admin.name || admin.email.split("@")[0],
+      resetUrl
+    );
+  } catch (emailError) {
+    console.error("Failed to send password reset email:", emailError);
+    // Continue even if email fails
+  }
 
   await auditService.logAudit({
     action: "admin_password_reset_initiated",
@@ -518,12 +533,12 @@ const resetAdminPassword = asyncHandler(async (req, res) => {
       collection: "User",
       id: req.params.adminId,
     },
-    payload: { initiatedBy: req.user.email },
+    payload: { initiatedBy: req.user.email, emailSent: true },
   });
 
   res.json({
     success: true,
-    message: "Password reset token generated. Provide this token to the admin.",
+    message: "Password reset email sent to admin.",
     data: { resetToken },
   });
 });
@@ -829,7 +844,7 @@ const activateUser = asyncHandler(async (req, res) => {
  * /admin/users/{userId}/reset-password:
  *   post:
  *     summary: Generate password reset token for a user [ADMIN ONLY]
- *     description: Requires admin authentication. Generate a password reset token for a user.
+ *     description: Requires admin authentication. Generate a password reset token for a user and send reset email.
  *     tags: [Admin]
  *     security:
  *       - bearerAuth: []
@@ -841,12 +856,27 @@ const activateUser = asyncHandler(async (req, res) => {
  *           type: string
  *     responses:
  *       200:
- *         description: Password reset initiated
+ *         description: Password reset initiated and email sent
  */
 const resetUserPassword = asyncHandler(async (req, res) => {
-  const resetToken = await adminService.generateUserPasswordReset(
+  const { user, resetToken } = await adminService.generateUserPasswordReset(
     req.params.userId
   );
+
+  // Create reset URL
+  const resetUrl = `${config.frontendUrl || "http://localhost:3000"}/auth/reset-password?token=${resetToken}`;
+
+  // Send password reset email
+  try {
+    await emailService.sendPasswordResetEmail(
+      user.email,
+      user.name || user.email.split("@")[0],
+      resetUrl
+    );
+  } catch (emailError) {
+    console.error("Failed to send password reset email:", emailError);
+    // Continue even if email fails
+  }
 
   await auditService.logAudit({
     action: "user_password_reset_initiated",
@@ -855,12 +885,12 @@ const resetUserPassword = asyncHandler(async (req, res) => {
       collection: "User",
       id: req.params.userId,
     },
-    payload: { initiatedBy: req.user.email },
+    payload: { initiatedBy: req.user.email, emailSent: true },
   });
 
   res.json({
     success: true,
-    message: "Password reset token generated. Provide this token to the user.",
+    message: "Password reset email sent to user.",
     data: { resetToken },
   });
 });

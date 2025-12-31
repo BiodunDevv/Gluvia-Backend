@@ -4,7 +4,12 @@
     "title": "Maximum Carbohydrate Limit Per Meal",
     "type": "constraint",
     "definition": {
-      "inputBindings": ["user.bmi", "user.lastGlucose", "meal.timeOfDay", "user.diabetesType"],
+      "inputBindings": [
+        "user.bmi",
+        "user.lastGlucose",
+        "meal.timeOfDay",
+        "user.diabetesType"
+      ],
       "logic": [
         {
           "when": "user.lastGlucose > 180",
@@ -42,7 +47,11 @@
         },
         {
           "when": "food.gi > 55 && food.gi <= 70",
-          "then": { "alert": "medium_gi", "severity": "medium", "reasonScore": 60 }
+          "then": {
+            "alert": "medium_gi",
+            "severity": "medium",
+            "reasonScore": 60
+          }
         },
         {
           "when": "default",
@@ -146,11 +155,19 @@
       "logic": [
         {
           "when": "food.tags.includes('fried') && user.bmi >= 30",
-          "then": { "alert": "fried_high_bmi", "severity": "high", "reasonScore": 85 }
+          "then": {
+            "alert": "fried_high_bmi",
+            "severity": "high",
+            "reasonScore": 85
+          }
         },
         {
           "when": "food.tags.includes('fried')",
-          "then": { "alert": "fried_food", "severity": "medium", "reasonScore": 60 }
+          "then": {
+            "alert": "fried_food",
+            "severity": "medium",
+            "reasonScore": 60
+          }
         },
         {
           "when": "default",
@@ -224,7 +241,11 @@
       "logic": [
         {
           "when": "meal.totalCarbs > 45",
-          "then": { "alert": "check_glucose_2hr", "severity": "medium", "reasonScore": 70 }
+          "then": {
+            "alert": "check_glucose_2hr",
+            "severity": "medium",
+            "reasonScore": 70
+          }
         },
         {
           "when": "default",
@@ -260,6 +281,599 @@
       "priority": 85
     },
     "nlTemplate": "For breakfast with type 2 diabetes, aim to keep carbs around {{maxCarbs_g}}g to maintain stable morning glucose.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "hypoglycemia-prevention",
+    "title": "Low Blood Sugar Prevention",
+    "type": "alert",
+    "definition": {
+      "inputBindings": [
+        "user.lastGlucose",
+        "meal.totalCarbs",
+        "user.medicationType"
+      ],
+      "logic": [
+        {
+          "when": "user.lastGlucose < 70",
+          "then": {
+            "alert": "hypoglycemia_risk",
+            "severity": "critical",
+            "reasonScore": 95,
+            "action": "consume_fast_carbs"
+          }
+        },
+        {
+          "when": "user.lastGlucose < 90 && user.medicationType.includes('insulin')",
+          "then": {
+            "alert": "low_glucose_insulin",
+            "severity": "high",
+            "reasonScore": 80
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 100
+    },
+    "nlTemplate": "Your glucose is {{user.lastGlucose}} mg/dL. Consider consuming 15-20g of fast-acting carbs immediately and recheck in 15 minutes.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "meal-timing-optimization",
+    "title": "Meal Timing Recommendation",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["meal.timeSinceLastMeal", "user.lastGlucose"],
+      "logic": [
+        {
+          "when": "meal.timeSinceLastMeal > 6",
+          "then": {
+            "alert": "long_gap",
+            "severity": "medium",
+            "reasonScore": 65
+          }
+        },
+        {
+          "when": "meal.timeSinceLastMeal < 2",
+          "then": { "alert": "too_soon", "severity": "low", "reasonScore": 40 }
+        },
+        {
+          "when": "default",
+          "then": {
+            "alert": "good_timing",
+            "severity": "low",
+            "reasonScore": 20
+          }
+        }
+      ],
+      "priority": 55
+    },
+    "nlTemplate": "It's been {{meal.timeSinceLastMeal}} hours since your last meal. Aim for 3-5 hours between meals for optimal glucose control.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "healthy-fat-balance",
+    "title": "Healthy Fat Recommendation",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["food.fat_g", "food.tags", "food.category"],
+      "logic": [
+        {
+          "when": "food.tags.includes('omega-3') || food.tags.includes('healthy-fat')",
+          "then": { "scoreBonus": 18, "priority": "high" }
+        },
+        {
+          "when": "food.category === 'Nuts & Seeds' && food.fat_g > 10",
+          "then": { "scoreBonus": 12, "priority": "medium" }
+        },
+        {
+          "when": "food.fat_g > 20 && food.tags.includes('saturated')",
+          "then": { "scoreBonus": -15, "priority": "avoid" }
+        },
+        {
+          "when": "default",
+          "then": { "scoreBonus": 0, "priority": "neutral" }
+        }
+      ],
+      "priority": 72
+    },
+    "nlTemplate": "This food contains healthy fats that can help with satiety and don't directly raise blood sugar.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "carb-to-fiber-ratio",
+    "title": "Carbohydrate to Fiber Ratio Check",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["food.carbs_g", "food.fibre_g"],
+      "logic": [
+        {
+          "when": "food.carbs_g > 0 && (food.fibre_g / food.carbs_g) > 0.15",
+          "then": {
+            "scoreBonus": 15,
+            "priority": "excellent",
+            "carbFiberRatio": "excellent"
+          }
+        },
+        {
+          "when": "food.carbs_g > 0 && (food.fibre_g / food.carbs_g) > 0.10",
+          "then": {
+            "scoreBonus": 10,
+            "priority": "good",
+            "carbFiberRatio": "good"
+          }
+        },
+        {
+          "when": "food.carbs_g > 20 && food.fibre_g < 2",
+          "then": {
+            "scoreBonus": -5,
+            "priority": "poor",
+            "carbFiberRatio": "poor"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "scoreBonus": 0,
+            "priority": "neutral",
+            "carbFiberRatio": "neutral"
+          }
+        }
+      ],
+      "priority": 77
+    },
+    "nlTemplate": "This food has a {{carbFiberRatio}} carb-to-fiber ratio. Higher fiber helps slow carbohydrate absorption.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "insulin-medication-timing",
+    "title": "Insulin and Medication Timing Alert",
+    "type": "alert",
+    "definition": {
+      "inputBindings": [
+        "user.medicationType",
+        "meal.timeOfDay",
+        "user.lastMedicationTime"
+      ],
+      "logic": [
+        {
+          "when": "user.medicationType.includes('rapid-insulin') && meal.minutesSinceMedication > 30",
+          "then": {
+            "alert": "insulin_timing_late",
+            "severity": "medium",
+            "reasonScore": 70
+          }
+        },
+        {
+          "when": "user.medicationType.includes('sulfonylurea') && meal.minutesSinceMedication > 60",
+          "then": {
+            "alert": "medication_timing_check",
+            "severity": "low",
+            "reasonScore": 50
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 88
+    },
+    "nlTemplate": "For optimal effectiveness, rapid-acting insulin should be taken 15-30 minutes before meals.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "whole-grain-preference",
+    "title": "Whole Grain Recommendation",
+    "type": "substitution",
+    "definition": {
+      "inputBindings": ["food.tags", "food.category"],
+      "logic": [
+        {
+          "when": "food.category === 'Grains & Staples' && !food.tags.includes('whole-grain')",
+          "then": {
+            "suggestion": "whole_grain_alternative",
+            "severity": "medium",
+            "reasonScore": 75,
+            "alternatives": ["Brown rice", "Whole wheat", "Oats"]
+          }
+        },
+        {
+          "when": "food.tags.includes('white-rice') || food.tags.includes('white-bread')",
+          "then": {
+            "suggestion": "refined_grain_warning",
+            "severity": "high",
+            "reasonScore": 85,
+            "alternatives": ["Brown rice", "Whole grain bread"]
+          }
+        },
+        {
+          "when": "default",
+          "then": { "suggestion": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 82
+    },
+    "nlTemplate": "Consider swapping to whole grain options which have more fiber and nutrients, causing slower blood sugar rises.",
+    "appliesTo": ["Grains & Staples"],
+    "version": 1
+  },
+  {
+    "slug": "sodium-intake-caution",
+    "title": "Sodium Content Warning",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["food.sodium_mg", "user.hasHypertension"],
+      "logic": [
+        {
+          "when": "food.sodium_mg > 600 && user.hasHypertension",
+          "then": {
+            "alert": "high_sodium_hypertension",
+            "severity": "high",
+            "reasonScore": 80
+          }
+        },
+        {
+          "when": "food.sodium_mg > 800",
+          "then": {
+            "alert": "very_high_sodium",
+            "severity": "medium",
+            "reasonScore": 65
+          }
+        },
+        {
+          "when": "food.sodium_mg > 400",
+          "then": {
+            "alert": "moderate_sodium",
+            "severity": "low",
+            "reasonScore": 40
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 68
+    },
+    "nlTemplate": "This food contains {{food.sodium_mg}}mg of sodium. High sodium intake can affect blood pressure and diabetes management.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "pre-exercise-meal-planning",
+    "title": "Pre-Exercise Meal Guidance",
+    "type": "alert",
+    "definition": {
+      "inputBindings": [
+        "meal.minutesUntilExercise",
+        "meal.totalCarbs",
+        "user.exerciseIntensity"
+      ],
+      "logic": [
+        {
+          "when": "meal.minutesUntilExercise < 60 && user.exerciseIntensity === 'high'",
+          "then": {
+            "alert": "pre_exercise_timing",
+            "severity": "medium",
+            "reasonScore": 70
+          }
+        },
+        {
+          "when": "meal.minutesUntilExercise < 120 && meal.totalCarbs > 60",
+          "then": {
+            "alert": "heavy_meal_before_exercise",
+            "severity": "low",
+            "reasonScore": 50
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 64
+    },
+    "nlTemplate": "Exercise planned soon? Allow 2-3 hours after larger meals, or have a light snack 30-60 minutes before moderate activity.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "processed-food-warning",
+    "title": "Processed Food Alert",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["food.tags", "food.category"],
+      "logic": [
+        {
+          "when": "food.tags.includes('ultra-processed')",
+          "then": {
+            "alert": "ultra_processed",
+            "severity": "high",
+            "reasonScore": 85
+          }
+        },
+        {
+          "when": "food.tags.includes('processed')",
+          "then": {
+            "alert": "processed",
+            "severity": "medium",
+            "reasonScore": 60
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 71
+    },
+    "nlTemplate": "Processed foods often contain hidden sugars, unhealthy fats, and additives. Whole foods are preferred for diabetes management.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "dinner-lighter-portion",
+    "title": "Evening Meal Size Recommendation",
+    "type": "portion_adjustment",
+    "definition": {
+      "inputBindings": [
+        "meal.timeOfDay",
+        "user.activityLevel",
+        "user.bedtimeHours"
+      ],
+      "logic": [
+        {
+          "when": "meal.timeOfDay === 'dinner' && user.bedtimeHours < 2",
+          "then": {
+            "portionMultiplier": 0.7,
+            "reasonScore": 75,
+            "severity": "medium"
+          }
+        },
+        {
+          "when": "meal.timeOfDay === 'dinner' && user.activityLevel === 'sedentary'",
+          "then": {
+            "portionMultiplier": 0.8,
+            "reasonScore": 60,
+            "severity": "low"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "portionMultiplier": 1.0,
+            "reasonScore": 30,
+            "severity": "low"
+          }
+        }
+      ],
+      "priority": 66
+    },
+    "nlTemplate": "Evening meals should be lighter, especially if bedtime is within 2-3 hours. This helps with overnight glucose control.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "fermented-food-benefit",
+    "title": "Fermented Food Recommendation",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["food.tags", "food.category"],
+      "logic": [
+        {
+          "when": "food.tags.includes('fermented') || food.tags.includes('probiotic')",
+          "then": {
+            "scoreBonus": 12,
+            "priority": "good",
+            "benefit": "gut_health"
+          }
+        },
+        {
+          "when": "default",
+          "then": { "scoreBonus": 0, "priority": "neutral", "benefit": "none" }
+        }
+      ],
+      "priority": 58
+    },
+    "nlTemplate": "Fermented foods support gut health and may improve insulin sensitivity over time.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "hydration-reminder",
+    "title": "Hydration with Meals",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["meal.waterIntake_ml", "meal.totalCarbs"],
+      "logic": [
+        {
+          "when": "meal.waterIntake_ml < 200 && meal.totalCarbs > 40",
+          "then": {
+            "alert": "low_hydration",
+            "severity": "low",
+            "reasonScore": 50
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 45
+    },
+    "nlTemplate": "Stay hydrated! Drink water with meals to aid digestion and help regulate blood sugar.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "sugary-beverage-avoidance",
+    "title": "Sugary Beverage Warning",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["food.category", "food.carbs_g", "food.tags"],
+      "logic": [
+        {
+          "when": "food.category === 'Beverages' && food.tags.includes('sugary')",
+          "then": {
+            "alert": "sugary_beverage",
+            "severity": "critical",
+            "reasonScore": 95
+          }
+        },
+        {
+          "when": "food.category === 'Beverages' && food.carbs_g > 20",
+          "then": {
+            "alert": "high_carb_beverage",
+            "severity": "high",
+            "reasonScore": 85
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 95
+    },
+    "nlTemplate": "Sugary beverages cause rapid blood sugar spikes. Choose water, unsweetened tea, or other zero-carb drinks instead.",
+    "appliesTo": ["Beverages"],
+    "version": 1
+  },
+  {
+    "slug": "snack-frequency-management",
+    "title": "Snacking Pattern Guidance",
+    "type": "alert",
+    "definition": {
+      "inputBindings": [
+        "meal.isSnack",
+        "meal.snacksSinceLastMeal",
+        "user.lastGlucose"
+      ],
+      "logic": [
+        {
+          "when": "meal.isSnack && meal.snacksSinceLastMeal > 2",
+          "then": {
+            "alert": "frequent_snacking",
+            "severity": "medium",
+            "reasonScore": 65
+          }
+        },
+        {
+          "when": "meal.isSnack && user.lastGlucose > 150",
+          "then": {
+            "alert": "snack_high_glucose",
+            "severity": "high",
+            "reasonScore": 80
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 62
+    },
+    "nlTemplate": "Frequent snacking can make glucose control difficult. Aim for 3 main meals with 1-2 planned snacks if needed.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "alcohol-consumption-caution",
+    "title": "Alcohol Intake Guidelines",
+    "type": "alert",
+    "definition": {
+      "inputBindings": [
+        "food.category",
+        "user.medicationType",
+        "meal.alcoholContent"
+      ],
+      "logic": [
+        {
+          "when": "food.category === 'Beverages' && meal.alcoholContent > 0 && user.medicationType.includes('insulin')",
+          "then": {
+            "alert": "alcohol_insulin_risk",
+            "severity": "high",
+            "reasonScore": 90
+          }
+        },
+        {
+          "when": "food.category === 'Beverages' && meal.alcoholContent > 0",
+          "then": {
+            "alert": "alcohol_general_caution",
+            "severity": "medium",
+            "reasonScore": 70
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 92
+    },
+    "nlTemplate": "Alcohol can cause delayed hypoglycemia, especially with insulin. Always consume with food and monitor glucose closely.",
+    "appliesTo": ["Beverages"],
+    "version": 1
+  },
+  {
+    "slug": "stress-eating-awareness",
+    "title": "Mindful Eating Reminder",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["meal.eatingSpeed", "meal.environment"],
+      "logic": [
+        {
+          "when": "meal.eatingSpeed === 'very_fast' || meal.environment === 'stressed'",
+          "then": {
+            "alert": "mindful_eating",
+            "severity": "low",
+            "reasonScore": 55
+          }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "none", "severity": "low", "reasonScore": 0 }
+        }
+      ],
+      "priority": 48
+    },
+    "nlTemplate": "Eating slowly and mindfully helps with portion control and better digestion. Take time to enjoy your meal.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "local-seasonal-foods",
+    "title": "Local and Seasonal Food Priority",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["food.tags", "food.source"],
+      "logic": [
+        {
+          "when": "food.tags.includes('local') || food.tags.includes('seasonal')",
+          "then": {
+            "scoreBonus": 8,
+            "priority": "good",
+            "benefit": "fresh_nutritious"
+          }
+        },
+        {
+          "when": "default",
+          "then": { "scoreBonus": 0, "priority": "neutral", "benefit": "none" }
+        }
+      ],
+      "priority": 52
+    },
+    "nlTemplate": "Local and seasonal foods are often fresher, more affordable, and more nutritious.",
     "appliesTo": ["all"],
     "version": 1
   }

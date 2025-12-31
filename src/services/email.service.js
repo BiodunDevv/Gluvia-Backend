@@ -2,16 +2,35 @@ const axios = require("axios");
 const fs = require("fs").promises;
 const path = require("path");
 const config = require("../config");
+const https = require("https");
 
 const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
+
+// Create axios instance with SSL configuration
+const axiosInstance = axios.create({
+  httpsAgent: new https.Agent({
+    rejectUnauthorized: false, // For development - remove in production
+    minVersion: "TLSv1.2",
+  }),
+  timeout: 10000, // 10 second timeout
+});
 
 /**
  * Send email via Brevo API
  * @param {Object} params
  */
 const sendEmail = async ({ to, subject, htmlContent, textContent }) => {
+  // Validate API key
+  if (!config.brevo.apiKey) {
+    console.error("Brevo API key is not configured");
+    throw new Error("Email service not configured");
+  }
+
   try {
-    const response = await axios.post(
+    console.log("Sending email to:", to);
+    console.log("Using API key:", config.brevo.apiKey.substring(0, 10) + "...");
+
+    const response = await axiosInstance.post(
       BREVO_API_URL,
       {
         sender: {
@@ -27,14 +46,22 @@ const sendEmail = async ({ to, subject, htmlContent, textContent }) => {
         headers: {
           "api-key": config.brevo.apiKey,
           "Content-Type": "application/json",
+          Accept: "application/json",
         },
       }
     );
 
+    console.log("Email sent successfully:", response.data.messageId);
     return { ok: true, messageId: response.data.messageId };
   } catch (error) {
-    console.error("Brevo API error:", error.response?.data || error.message);
-    throw new Error("Failed to send email");
+    console.error("Brevo API error details:", {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+      code: error.code,
+    });
+    throw new Error(`Failed to send email: ${error.message}`);
   }
 };
 

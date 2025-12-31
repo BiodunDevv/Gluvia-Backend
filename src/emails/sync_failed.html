@@ -1,57 +1,531 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sync Failed Notification</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sync Failed - Gluvia</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
+      @media (prefers-color-scheme: dark) {
+        .dark-bg {
+          background-color: #000000 !important;
         }
-        .header {
-            background-color: #f44336;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            border-radius: 5px 5px 0 0;
+        .dark-card {
+          background-color: #1a1a1a !important;
+          border-color: #333333 !important;
         }
-        .content {
-            background-color: #f9f9f9;
-            padding: 30px;
-            border-radius: 0 0 5px 5px;
+        .dark-text {
+          color: #ffffff !important;
         }
-        .error-box {
-            background-color: #ffebee;
-            border-left: 4px solid #f44336;
-            padding: 15px;
-            margin: 20px 0;
-            font-family: monospace;
+        .dark-secondary {
+          color: #a0a0a0 !important;
         }
+        .dark-box {
+          background-color: #0a0a0a !important;
+          border-color: #2a2a2a !important;
+        }
+      }
     </style>
-</head>
-<body>
-    <div class="header">
-        <h1>⚠️ Sync Failed</h1>
-    </div>
-    <div class="content">
-        <p>Hello Admin,</p>
-        
-        <p>A sync operation has failed for the following user:</p>
-        
-        <div class="error-box">
-            <strong>User:</strong> {{email}}<br>
-            <strong>Error:</strong><br>
-            <pre>{{errorMessage}}</pre>
-        </div>
-        
-        <p>Please check the server logs for more details and investigate the issue.</p>
-        
-        <p>This is an automated alert from Gluvia AI system.</p>
-    </div>
-</body>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family:
+        -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto,
+        Helvetica, Arial, sans-serif;
+      background-color: #ffffff;
+    "
+    class="dark-bg"
+  >
+    <table
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      width="100%"
+      style="background-color: #ffffff; padding: 8px"
+      class="dark-bg"
+    >
+      <tr>
+        <td align="center">
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="600"
+            style="
+              background-color: #ffffff;
+              border: 2px solid #dc3545;
+              border-radius: 8px;
+              overflow: hidden;
+            "
+            class="dark-card"
+          >
+            <!-- Header -->
+            <tr>
+              <td
+                style="
+                  background-color: #dc3545;
+                  padding: 8px;
+                  text-align: center;
+                "
+              >
+                <div style="margin-bottom: 4px">
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="display: inline-block"
+                  >
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="35"
+                      fill="none"
+                      stroke="#ffffff"
+                      stroke-width="6"
+                    />
+                    <line
+                      x1="35"
+                      y1="35"
+                      x2="65"
+                      y2="65"
+                      stroke="#ffffff"
+                      stroke-width="6"
+                      stroke-linecap="round"
+                    />
+                    <line
+                      x1="65"
+                      y1="35"
+                      x2="35"
+                      y2="65"
+                      stroke="#ffffff"
+                      stroke-width="6"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+                <h1
+                  style="
+                    margin: 0;
+                    color: #ffffff;
+                    font-size: 24px;
+                    font-weight: 700;
+                  "
+                >
+                  Sync Failed
+                </h1>
+                <p
+                  style="
+                    margin: 4px 0 0 0;
+                    color: #ffffff;
+                    font-size: 11px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    opacity: 0.9;
+                  "
+                >
+                  System Alert
+                </p>
+              </td>
+            </tr>
+
+            <!-- Content -->
+            <tr>
+              <td style="padding: 8px" class="dark-text">
+                <!-- Alert -->
+                <div style="text-align: center; margin-bottom: 8px">
+                  <h2
+                    style="
+                      margin: 0 0 4px 0;
+                      color: #dc3545;
+                      font-size: 20px;
+                      font-weight: 700;
+                    "
+                  >
+                    Synchronization Error ⚠️
+                  </h2>
+                  <p
+                    style="
+                      margin: 0;
+                      color: #666666;
+                      font-size: 13px;
+                      line-height: 1.4;
+                    "
+                    class="dark-secondary"
+                  >
+                    A sync operation has failed and requires attention
+                  </p>
+                </div>
+
+                <!-- Error Details Box -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #ffebee;
+                    border: 2px solid #dc3545;
+                    border-radius: 6px;
+                    margin: 8px 0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 6px">
+                      <p
+                        style="
+                          margin: 0 0 6px 0;
+                          color: #dc3545;
+                          font-size: 12px;
+                          font-weight: 700;
+                          text-transform: uppercase;
+                          letter-spacing: 0.5px;
+                        "
+                      >
+                        🚨 Error Details
+                      </p>
+
+                      <table
+                        cellpadding="0"
+                        cellspacing="0"
+                        border="0"
+                        width="100%"
+                      >
+                        <tr>
+                          <td style="padding: 4px 0">
+                            <p
+                              style="
+                                margin: 0 0 2px 0;
+                                color: #666666;
+                                font-size: 10px;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                              "
+                            >
+                              Affected User
+                            </p>
+                            <p
+                              style="
+                                margin: 0;
+                                color: #000000;
+                                font-size: 14px;
+                                font-weight: 700;
+                              "
+                            >
+                              {{email}}
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="
+                              padding: 4px 0;
+                              border-top: 1px solid #ffcdd2;
+                            "
+                          >
+                            <p
+                              style="
+                                margin: 0 0 2px 0;
+                                color: #666666;
+                                font-size: 10px;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                              "
+                            >
+                              Error Message
+                            </p>
+                            <p
+                              style="
+                                margin: 0;
+                                color: #dc3545;
+                                font-size: 11px;
+                                font-family: &quot;Courier New&quot;, monospace;
+                                word-break: break-word;
+                              "
+                            >
+                              {{errorMessage}}
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
+
+                <!-- Troubleshooting Steps -->
+                <div style="margin: 8px 0">
+                  <p
+                    style="
+                      margin: 0 0 6px 0;
+                      color: #000000;
+                      font-size: 14px;
+                      font-weight: 700;
+                    "
+                    class="dark-text"
+                  >
+                    Troubleshooting Steps:
+                  </p>
+
+                  <table
+                    cellpadding="0"
+                    cellspacing="0"
+                    border="0"
+                    width="100%"
+                  >
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #dc3545;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 9px;
+                                  font-weight: bold;
+                                "
+                              >
+                                1
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Check system logs for detailed error trace
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #dc3545;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 9px;
+                                  font-weight: bold;
+                                "
+                              >
+                                2
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Verify database connections and API endpoints
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #dc3545;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 9px;
+                                  font-weight: bold;
+                                "
+                              >
+                                3
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Retry sync operation manually
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #dc3545;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 9px;
+                                  font-weight: bold;
+                                "
+                              >
+                                4
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Contact user if issue persists
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- Admin Action Required -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #000000;
+                    border-radius: 6px;
+                    margin: 8px 0 0 0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 6px">
+                      <p
+                        style="
+                          margin: 0 0 2px 0;
+                          color: #ffffff;
+                          font-size: 11px;
+                          font-weight: 700;
+                        "
+                      >
+                        ⚡ Action Required
+                      </p>
+                      <p
+                        style="
+                          margin: 0;
+                          color: #ffffff;
+                          font-size: 10px;
+                          line-height: 1.4;
+                          opacity: 0.95;
+                        "
+                      >
+                        This is a critical error that requires immediate admin
+                        attention. Check the dashboard for more details.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td
+                style="
+                  background-color: #f8f9fa;
+                  padding: 6px;
+                  text-align: center;
+                  border-top: 2px solid #e9ecef;
+                "
+                class="dark-box"
+              >
+                <p
+                  style="
+                    margin: 0 0 2px 0;
+                    color: #000000;
+                    font-size: 14px;
+                    font-weight: 700;
+                  "
+                  class="dark-text"
+                >
+                  Gluvia
+                </p>
+                <p
+                  style="margin: 0 0 2px 0; color: #666666; font-size: 10px"
+                  class="dark-secondary"
+                >
+                  System Alerts
+                </p>
+                <p
+                  style="margin: 0; color: #999999; font-size: 9px"
+                  class="dark-secondary"
+                >
+                  © 2025 Gluvia. All rights reserved.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

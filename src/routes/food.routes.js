@@ -13,6 +13,9 @@ const { createFoodSchema, updateFoodSchema } = require("../utils/validators");
 router.get("/", foodController.getAllFoods);
 router.get("/:id", foodController.getFoodById);
 
+// Authenticated routes
+router.post("/search-image", authenticate, foodController.searchFoodImage);
+
 // Admin routes
 router.post(
   "/",

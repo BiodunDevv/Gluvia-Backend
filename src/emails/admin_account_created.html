@@ -3,153 +3,551 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Account Created - Gluvia AI</title>
+    <title>Admin Account Created - Gluvia</title>
     <style>
-      body {
-        font-family: "Arial", sans-serif;
-        background-color: #f4f4f7;
-        margin: 0;
-        padding: 0;
-      }
-      .email-container {
-        max-width: 600px;
-        margin: 40px auto;
-        background-color: #ffffff;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-      .header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: #ffffff;
-        padding: 30px 20px;
-        text-align: center;
-      }
-      .header h1 {
-        margin: 0;
-        font-size: 28px;
-        font-weight: 600;
-      }
-      .content {
-        padding: 40px 30px;
-        color: #333333;
-        line-height: 1.6;
-      }
-      .content h2 {
-        color: #667eea;
-        font-size: 22px;
-        margin-top: 0;
-      }
-      .info-box {
-        background-color: #f8f9fa;
-        border-left: 4px solid #667eea;
-        padding: 15px 20px;
-        margin: 20px 0;
-        border-radius: 4px;
-      }
-      .info-box p {
-        margin: 8px 0;
-      }
-      .info-box strong {
-        color: #667eea;
-      }
-      .button {
-        display: inline-block;
-        padding: 14px 30px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: #ffffff;
-        text-decoration: none;
-        border-radius: 6px;
-        font-weight: 600;
-        margin: 20px 0;
-        transition: transform 0.2s;
-      }
-      .button:hover {
-        transform: translateY(-2px);
-      }
-      .security-note {
-        background-color: #fff3cd;
-        border-left: 4px solid #ffc107;
-        padding: 15px;
-        margin: 20px 0;
-        border-radius: 4px;
-      }
-      .security-note strong {
-        color: #856404;
-      }
-      .footer {
-        background-color: #f8f9fa;
-        padding: 20px 30px;
-        text-align: center;
-        color: #6c757d;
-        font-size: 14px;
-        border-top: 1px solid #e9ecef;
-      }
-      .footer a {
-        color: #667eea;
-        text-decoration: none;
+      @media (prefers-color-scheme: dark) {
+        .dark-bg {
+          background-color: #000000 !important;
+        }
+        .dark-card {
+          background-color: #1a1a1a !important;
+          border-color: #333333 !important;
+        }
+        .dark-text {
+          color: #ffffff !important;
+        }
+        .dark-secondary {
+          color: #a0a0a0 !important;
+        }
+        .dark-box {
+          background-color: #0a0a0a !important;
+          border-color: #2a2a2a !important;
+        }
       }
     </style>
   </head>
-  <body>
-    <div class="email-container">
-      <div class="header">
-        <h1>🎉 Admin Account Created</h1>
-      </div>
-      <div class="content">
-        <h2>Hello {{name}},</h2>
-        <p>
-          An administrator account has been created for you on the Gluvia AI
-          platform.
-        </p>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family:
+        -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto,
+        Helvetica, Arial, sans-serif;
+      background-color: #ffffff;
+    "
+    class="dark-bg"
+  >
+    <table
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      width="100%"
+      style="background-color: #ffffff; padding: 8px"
+      class="dark-bg"
+    >
+      <tr>
+        <td align="center">
+          <table
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            width="600"
+            style="
+              background-color: #ffffff;
+              border: 2px solid #000000;
+              border-radius: 8px;
+              overflow: hidden;
+            "
+            class="dark-card"
+          >
+            <!-- Header -->
+            <tr>
+              <td
+                style="
+                  background-color: #000000;
+                  padding: 8px;
+                  text-align: center;
+                "
+                class="dark-box"
+              >
+                <div style="margin-bottom: 4px">
+                  <svg
+                    width="48"
+                    height="48"
+                    viewBox="0 0 100 100"
+                    xmlns="http://www.w3.org/2000/svg"
+                    style="display: inline-block"
+                  >
+                    <circle cx="50" cy="35" r="20" fill="#ffffff" />
+                    <path
+                      d="M 20 75 Q 20 55 50 55 Q 80 55 80 75 L 80 90 L 20 90 Z"
+                      fill="#ffffff"
+                    />
+                    <circle
+                      cx="70"
+                      cy="70"
+                      r="15"
+                      fill="#000000"
+                      stroke="#ffffff"
+                      stroke-width="3"
+                    />
+                    <path
+                      d="M 65 70 L 68 73 L 75 66"
+                      stroke="#ffffff"
+                      stroke-width="3"
+                      fill="none"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                </div>
+                <h1
+                  style="
+                    margin: 0;
+                    color: #ffffff;
+                    font-size: 24px;
+                    font-weight: 700;
+                  "
+                >
+                  Admin Account Created
+                </h1>
+                <p
+                  style="
+                    margin: 4px 0 0 0;
+                    color: #ffffff;
+                    font-size: 11px;
+                    font-weight: 500;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    opacity: 0.9;
+                  "
+                >
+                  Gluvia Admin Portal
+                </p>
+              </td>
+            </tr>
 
-        <div class="info-box">
-          <p><strong>Email:</strong> {{email}}</p>
-          <p><strong>Role:</strong> Administrator</p>
-          <p><strong>Created By:</strong> {{createdBy}}</p>
-        </div>
+            <!-- Content -->
+            <tr>
+              <td style="padding: 8px" class="dark-text">
+                <!-- Greeting -->
+                <div style="text-align: center; margin-bottom: 8px">
+                  <h2
+                    style="
+                      margin: 0 0 4px 0;
+                      color: #000000;
+                      font-size: 20px;
+                      font-weight: 700;
+                    "
+                    class="dark-text"
+                  >
+                    Welcome, {{name}}! 👋
+                  </h2>
+                  <p
+                    style="
+                      margin: 0;
+                      color: #666666;
+                      font-size: 13px;
+                      line-height: 1.4;
+                    "
+                    class="dark-secondary"
+                  >
+                    Your admin account has been created successfully
+                  </p>
+                </div>
 
-        <div class="security-note">
-          <strong>⚠️ Important Security Information</strong>
-          <p>
-            For security reasons, please reset your password immediately using
-            the button below. Your temporary password was provided separately by
-            the administrator who created your account.
-          </p>
-        </div>
+                <!-- Credentials Box -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #f8f9fa;
+                    border: 2px solid #e9ecef;
+                    border-radius: 6px;
+                    margin: 8px 0;
+                  "
+                  class="dark-box"
+                >
+                  <tr>
+                    <td style="padding: 6px">
+                      <p
+                        style="
+                          margin: 0 0 6px 0;
+                          color: #000000;
+                          font-size: 12px;
+                          font-weight: 700;
+                          text-transform: uppercase;
+                          letter-spacing: 0.5px;
+                        "
+                        class="dark-text"
+                      >
+                        📋 Login Credentials
+                      </p>
 
-        <center>
-          <a href="{{resetUrl}}" class="button">Set Your Password</a>
-        </center>
+                      <table
+                        cellpadding="0"
+                        cellspacing="0"
+                        border="0"
+                        width="100%"
+                      >
+                        <tr>
+                          <td style="padding: 4px 0">
+                            <p
+                              style="
+                                margin: 0 0 2px 0;
+                                color: #666666;
+                                font-size: 10px;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                              "
+                              class="dark-secondary"
+                            >
+                              Email
+                            </p>
+                            <p
+                              style="
+                                margin: 0;
+                                color: #000000;
+                                font-size: 14px;
+                                font-weight: 700;
+                              "
+                              class="dark-text"
+                            >
+                              {{email}}
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td
+                            style="
+                              padding: 4px 0;
+                              border-top: 1px solid #dee2e6;
+                            "
+                          >
+                            <p
+                              style="
+                                margin: 0 0 2px 0;
+                                color: #666666;
+                                font-size: 10px;
+                                font-weight: 600;
+                                text-transform: uppercase;
+                              "
+                              class="dark-secondary"
+                            >
+                              Temporary Password
+                            </p>
+                            <p
+                              style="
+                                margin: 0;
+                                color: #000000;
+                                font-size: 14px;
+                                font-weight: 700;
+                                font-family: &quot;Courier New&quot;, monospace;
+                              "
+                              class="dark-text"
+                            >
+                              {{tempPassword}}
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                </table>
 
-        <p><strong>What you can do as an admin:</strong></p>
-        <ul>
-          <li>Manage users and their data</li>
-          <li>Create and manage other administrators</li>
-          <li>View system audit logs</li>
-          <li>Manage food database and rules</li>
-          <li>Access analytics and reports</li>
-        </ul>
+                <!-- Warning -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #fff3cd;
+                    border: 1px solid #ffc107;
+                    border-radius: 6px;
+                    margin: 8px 0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 6px">
+                      <p
+                        style="
+                          margin: 0;
+                          color: #000000;
+                          font-size: 11px;
+                          line-height: 1.4;
+                        "
+                      >
+                        <span style="font-size: 14px">⚠️</span>
+                        <strong>Security:</strong> Please change your password
+                        immediately after first login.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
 
-        <p>
-          If you have any questions or didn't expect this account creation,
-          please contact the administrator immediately.
-        </p>
+                <!-- Admin Capabilities -->
+                <div style="margin: 8px 0">
+                  <p
+                    style="
+                      margin: 0 0 6px 0;
+                      color: #000000;
+                      font-size: 14px;
+                      font-weight: 700;
+                    "
+                    class="dark-text"
+                  >
+                    Admin Capabilities:
+                  </p>
 
-        <p>
-          Best regards,<br />
-          <strong>Gluvia AI Team</strong>
-        </p>
-      </div>
-      <div class="footer">
-        <p>This is an automated message from Gluvia AI.</p>
-        <p>
-          If the button doesn't work, copy and paste this link into your
-          browser:
-        </p>
-        <p><a href="{{resetUrl}}">{{resetUrl}}</a></p>
-        <p>&copy; 2025 Gluvia AI. All rights reserved.</p>
-      </div>
-    </div>
+                  <table
+                    cellpadding="0"
+                    cellspacing="0"
+                    border="0"
+                    width="100%"
+                  >
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 10px;
+                                  font-weight: bold;
+                                "
+                              >
+                                ✓
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Manage users and permissions
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 10px;
+                                  font-weight: bold;
+                                "
+                              >
+                                ✓
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Monitor system health
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 10px;
+                                  font-weight: bold;
+                                "
+                              >
+                                ✓
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Configure AI recommendations
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 3px 0">
+                        <table
+                          cellpadding="0"
+                          cellspacing="0"
+                          border="0"
+                          width="100%"
+                        >
+                          <tr>
+                            <td width="20" valign="top">
+                              <div
+                                style="
+                                  width: 16px;
+                                  height: 16px;
+                                  background-color: #000000;
+                                  border-radius: 50%;
+                                  text-align: center;
+                                  line-height: 16px;
+                                  color: #ffffff;
+                                  font-size: 10px;
+                                  font-weight: bold;
+                                "
+                              >
+                                ✓
+                              </div>
+                            </td>
+                            <td style="padding-left: 6px">
+                              <p
+                                style="
+                                  margin: 0;
+                                  color: #000000;
+                                  font-size: 12px;
+                                "
+                                class="dark-text"
+                              >
+                                Manage food database
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- Security Reminder -->
+                <table
+                  cellpadding="0"
+                  cellspacing="0"
+                  border="0"
+                  width="100%"
+                  style="
+                    background-color: #000000;
+                    border-radius: 6px;
+                    margin: 8px 0 0 0;
+                  "
+                >
+                  <tr>
+                    <td style="padding: 6px">
+                      <p
+                        style="
+                          margin: 0;
+                          color: #ffffff;
+                          font-size: 10px;
+                          line-height: 1.4;
+                        "
+                      >
+                        🔐 Never share your admin credentials. Enable 2FA for
+                        enhanced security.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td
+                style="
+                  background-color: #f8f9fa;
+                  padding: 6px;
+                  text-align: center;
+                  border-top: 2px solid #e9ecef;
+                "
+                class="dark-box"
+              >
+                <p
+                  style="
+                    margin: 0 0 2px 0;
+                    color: #000000;
+                    font-size: 14px;
+                    font-weight: 700;
+                  "
+                  class="dark-text"
+                >
+                  Gluvia
+                </p>
+                <p
+                  style="margin: 0 0 2px 0; color: #666666; font-size: 10px"
+                  class="dark-secondary"
+                >
+                  Admin Portal
+                </p>
+                <p
+                  style="margin: 0; color: #999999; font-size: 9px"
+                  class="dark-secondary"
+                >
+                  © 2025 Gluvia. All rights reserved.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
