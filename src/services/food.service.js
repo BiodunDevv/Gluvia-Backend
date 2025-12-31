@@ -184,9 +184,9 @@ const updateFood = async (id, foodData, userId) => {
   // Use findOneAndUpdate for reliable field updates
   const food = await FoodItem.findOneAndUpdate(
     { _id: id, deleted: false },
-    { 
+    {
       $set: updateData,
-      $inc: { version: 1 }
+      $inc: { version: 1 },
     },
     { new: true, runValidators: true }
   );
