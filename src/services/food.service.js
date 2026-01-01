@@ -146,9 +146,12 @@ const createFood = async (foodData, userId) => {
   });
 
   // Convert to plain object and remove unwanted fields
-  const foodObject = food.toObject();
+  const foodObject = food.toObject({ getters: true, virtuals: false });
+
   delete foodObject.__v;
-  delete foodObject.images;
+  if (foodObject.images !== undefined) {
+    delete foodObject.images;
+  }
 
   // Increment server version
   const serverVersion = await incrementServerVersion();

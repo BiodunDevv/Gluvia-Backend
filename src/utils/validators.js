@@ -123,6 +123,47 @@ const foodItemSchema = z.object({
     .optional(),
   affordability: z.enum(["low", "medium", "high"]).optional(),
   tags: z.array(z.string()).optional(),
+  imageUrl: z.string().url().optional().or(z.literal("")),
+  regionVariants: z
+    .array(
+      z.object({
+        region: z.string(),
+        note: z.string(),
+      })
+    )
+    .optional(),
+  source: z.string().optional(),
+});
+
+/**
+ * Food item update validation schema (all fields optional)
+ */
+const foodItemUpdateSchema = z.object({
+  localName: z.string().min(1).optional(),
+  canonicalName: z.string().optional(),
+  category: z.string().optional(),
+  nutrients: z
+    .object({
+      calories: z.number().min(0).optional(),
+      carbs_g: z.number().min(0).optional(),
+      protein_g: z.number().min(0).optional(),
+      fat_g: z.number().min(0).optional(),
+      fibre_g: z.number().min(0).optional(),
+      gi: z.number().min(0).max(100).nullable().optional(),
+    })
+    .optional(),
+  portionSizes: z
+    .array(
+      z.object({
+        name: z.string(),
+        grams: z.number().min(0),
+        carbs_g: z.number().min(0).optional(),
+      })
+    )
+    .optional(),
+  affordability: z.enum(["low", "medium", "high"]).optional(),
+  tags: z.array(z.string()).optional(),
+  imageUrl: z.string().url().optional().or(z.literal("")),
   regionVariants: z
     .array(
       z.object({
@@ -221,12 +262,13 @@ module.exports = {
   passwordResetSchema,
   updateProfileSchema,
   foodItemSchema,
+  foodItemUpdateSchema,
   ruleTemplateSchema,
   updateRuleTemplateSchema,
   syncUploadSchema,
   uploadLogsSchema: syncUploadSchema, // Alias
   createFoodSchema: foodItemSchema,
-  updateFoodSchema: foodItemSchema,
+  updateFoodSchema: foodItemUpdateSchema,
   createRuleSchema: ruleTemplateSchema,
   updateRuleSchema: updateRuleTemplateSchema,
 };

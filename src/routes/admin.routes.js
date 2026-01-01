@@ -101,4 +101,60 @@ router.post(
   adminController.resetUserPassword
 );
 
+// Dashboard routes
+router.get(
+  "/dashboard/overview",
+  authenticate,
+  requireAdmin,
+  adminController.getDashboardOverview
+);
+router.get(
+  "/dashboard/charts/user-growth",
+  authenticate,
+  requireAdmin,
+  adminController.getUserGrowthChart
+);
+router.get(
+  "/dashboard/charts/meal-logs",
+  authenticate,
+  requireAdmin,
+  adminController.getMealLogsChart
+);
+router.get(
+  "/dashboard/charts/glucose-logs",
+  authenticate,
+  requireAdmin,
+  adminController.getGlucoseLogsChart
+);
+router.get(
+  "/dashboard/top-foods",
+  authenticate,
+  requireAdmin,
+  adminController.getTopFoods
+);
+router.get(
+  "/dashboard/system-health",
+  authenticate,
+  requireAdmin,
+  adminController.getSystemHealth
+);
+router.get(
+  "/dashboard/user-engagement",
+  authenticate,
+  requireAdmin,
+  adminController.getUserEngagement
+);
+router.get(
+  "/dashboard/recent-users",
+  authenticate,
+  requireAdmin,
+  adminController.getRecentUsers
+);
+router.get(
+  "/dashboard/activity-heatmap",
+  authenticate,
+  requireAdmin,
+  adminController.getActivityHeatmap
+);
+
 module.exports = router;

@@ -918,6 +918,283 @@ const getUserStats = asyncHandler(async (req, res) => {
   });
 });
 
+// ==========================================
+// DASHBOARD ENDPOINTS
+// ==========================================
+
+/**
+ * @swagger
+ * /admin/dashboard/overview:
+ *   get:
+ *     summary: Get comprehensive dashboard overview [ADMIN ONLY]
+ *     description: Requires admin authentication. Get overall system statistics including users, foods, activity, and recent events.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dashboard overview retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     users:
+ *                       type: object
+ *                     foods:
+ *                       type: object
+ *                     activity:
+ *                       type: object
+ *                     recentActivity:
+ *                       type: array
+ */
+const getDashboardOverview = asyncHandler(async (req, res) => {
+  const overview = await adminService.getDashboardOverview();
+
+  res.json({
+    success: true,
+    message: "Dashboard overview retrieved successfully",
+    data: overview,
+  });
+});
+
+/**
+ * @swagger
+ * /admin/dashboard/charts/user-growth:
+ *   get:
+ *     summary: Get user growth chart data [ADMIN ONLY]
+ *     description: Requires admin authentication. Get daily user registration data for charts.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: days
+ *         schema:
+ *           type: integer
+ *           default: 30
+ *         description: Number of days to fetch
+ *     responses:
+ *       200:
+ *         description: User growth data retrieved successfully
+ */
+const getUserGrowthChart = asyncHandler(async (req, res) => {
+  const days = parseInt(req.query.days) || 30;
+  const chartData = await adminService.getUserGrowthChart(days);
+
+  res.json({
+    success: true,
+    message: "User growth chart data retrieved successfully",
+    data: chartData,
+  });
+});
+
+/**
+ * @swagger
+ * /admin/dashboard/charts/meal-logs:
+ *   get:
+ *     summary: Get meal logs chart data [ADMIN ONLY]
+ *     description: Requires admin authentication. Get daily meal log counts for charts.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: days
+ *         schema:
+ *           type: integer
+ *           default: 30
+ *         description: Number of days to fetch
+ *     responses:
+ *       200:
+ *         description: Meal logs chart data retrieved successfully
+ */
+const getMealLogsChart = asyncHandler(async (req, res) => {
+  const days = parseInt(req.query.days) || 30;
+  const chartData = await adminService.getMealLogsChart(days);
+
+  res.json({
+    success: true,
+    message: "Meal logs chart data retrieved successfully",
+    data: chartData,
+  });
+});
+
+/**
+ * @swagger
+ * /admin/dashboard/charts/glucose-logs:
+ *   get:
+ *     summary: Get glucose logs chart data [ADMIN ONLY]
+ *     description: Requires admin authentication. Get daily glucose log counts and averages for charts.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: days
+ *         schema:
+ *           type: integer
+ *           default: 30
+ *         description: Number of days to fetch
+ *     responses:
+ *       200:
+ *         description: Glucose logs chart data retrieved successfully
+ */
+const getGlucoseLogsChart = asyncHandler(async (req, res) => {
+  const days = parseInt(req.query.days) || 30;
+  const chartData = await adminService.getGlucoseLogsChart(days);
+
+  res.json({
+    success: true,
+    message: "Glucose logs chart data retrieved successfully",
+    data: chartData,
+  });
+});
+
+/**
+ * @swagger
+ * /admin/dashboard/top-foods:
+ *   get:
+ *     summary: Get top foods by usage [ADMIN ONLY]
+ *     description: Requires admin authentication. Get most frequently logged foods.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *         description: Number of top foods to return
+ *     responses:
+ *       200:
+ *         description: Top foods retrieved successfully
+ */
+const getTopFoods = asyncHandler(async (req, res) => {
+  const limit = parseInt(req.query.limit) || 20;
+  const topFoods = await adminService.getTopFoods(limit);
+
+  res.json({
+    success: true,
+    message: "Top foods retrieved successfully",
+    data: topFoods,
+  });
+});
+
+/**
+ * @swagger
+ * /admin/dashboard/system-health:
+ *   get:
+ *     summary: Get system health metrics [ADMIN ONLY]
+ *     description: Requires admin authentication. Get real-time system health indicators.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: System health metrics retrieved successfully
+ */
+const getSystemHealth = asyncHandler(async (req, res) => {
+  const health = await adminService.getSystemHealth();
+
+  res.json({
+    success: true,
+    message: "System health retrieved successfully",
+    data: health,
+  });
+});
+
+/**
+ * @swagger
+ * /admin/dashboard/user-engagement:
+ *   get:
+ *     summary: Get user engagement metrics [ADMIN ONLY]
+ *     description: Requires admin authentication. Get detailed user engagement and feature adoption metrics.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User engagement metrics retrieved successfully
+ */
+const getUserEngagement = asyncHandler(async (req, res) => {
+  const engagement = await adminService.getUserEngagement();
+
+  res.json({
+    success: true,
+    message: "User engagement metrics retrieved successfully",
+    data: engagement,
+  });
+});
+
+/**
+ * @swagger
+ * /admin/dashboard/recent-users:
+ *   get:
+ *     summary: Get recent user registrations [ADMIN ONLY]
+ *     description: Requires admin authentication. Get list of recently registered users.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of recent users to return
+ *     responses:
+ *       200:
+ *         description: Recent users retrieved successfully
+ */
+const getRecentUsers = asyncHandler(async (req, res) => {
+  const limit = parseInt(req.query.limit) || 10;
+  const users = await adminService.getRecentUsers(limit);
+
+  res.json({
+    success: true,
+    message: "Recent users retrieved successfully",
+    data: users,
+  });
+});
+
+/**
+ * @swagger
+ * /admin/dashboard/activity-heatmap:
+ *   get:
+ *     summary: Get activity heatmap data [ADMIN ONLY]
+ *     description: Requires admin authentication. Get hourly activity distribution for heatmap visualization.
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: days
+ *         schema:
+ *           type: integer
+ *           default: 7
+ *         description: Number of days to analyze
+ *     responses:
+ *       200:
+ *         description: Activity heatmap data retrieved successfully
+ */
+const getActivityHeatmap = asyncHandler(async (req, res) => {
+  const days = parseInt(req.query.days) || 7;
+  const heatmap = await adminService.getActivityHeatmap(days);
+
+  res.json({
+    success: true,
+    message: "Activity heatmap data retrieved successfully",
+    data: heatmap,
+  });
+});
+
 module.exports = {
   runInitialSeed,
   revokeUserTokens,
@@ -938,4 +1215,13 @@ module.exports = {
   activateUser,
   resetUserPassword,
   getUserStats,
+  getDashboardOverview,
+  getUserGrowthChart,
+  getMealLogsChart,
+  getGlucoseLogsChart,
+  getTopFoods,
+  getSystemHealth,
+  getUserEngagement,
+  getRecentUsers,
+  getActivityHeatmap,
 };
