@@ -12,8 +12,14 @@ const Config = require("../src/models/config.model");
 const { hashPassword } = require("../src/utils/hash.util");
 const config = require("../src/config");
 
-const foodsData = require("./seedFoods.json");
-const rulesData = require("./seedRules.json");
+const foodsData = [
+  ...require("./seedFoods.json"),
+  ...require("./seedFoodsTwo.json"),
+];
+const rulesData = [
+  ...require("./seedRules.json"),
+  ...require("./seedRulesTwo.json"),
+];
 
 const seedInitial = async () => {
   try {

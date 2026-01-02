@@ -438,7 +438,7 @@ MIT
 
 For issues or questions:
 - Email: support@gluvia.ai
-- Documentation: http://localhost:3000/api-docs
+- Documentation: http://localhost:5000/api-docs
 
 ## 🙏 Acknowledgments
 

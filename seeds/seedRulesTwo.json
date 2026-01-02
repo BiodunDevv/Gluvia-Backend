@@ -1,0 +1,736 @@
+[
+  {
+    "slug": "ramadan-fasting-sahur",
+    "title": "Ramadan Sahur (Pre-Dawn) Meal Guidelines",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": [
+        "user.diabetesType",
+        "meal.timeOfDay",
+        "context.specialEvent"
+      ],
+      "logic": [
+        {
+          "when": "context.specialEvent === 'ramadan' && meal.timeOfDay === 'sahur'",
+          "then": {
+            "minCarbs_g": 40,
+            "maxCarbs_g": 60,
+            "minProtein_g": 20,
+            "minFiber_g": 8,
+            "preferLowGI": true,
+            "reasonScore": 100,
+            "severity": "high",
+            "recommendation": "Focus on complex carbs (oats, brown rice, dates) and protein to sustain energy during fast"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 95
+    },
+    "nlTemplate": "During Ramadan Sahur, aim for {{minCarbs_g}}-{{maxCarbs_g}}g of slow-release carbs with at least {{minProtein_g}}g protein. This will help maintain stable glucose throughout the day.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "ramadan-iftar-guideline",
+    "title": "Ramadan Iftar (Fast-Breaking) Guidelines",
+    "type": "portion_adjustment",
+    "definition": {
+      "inputBindings": [
+        "user.lastGlucose",
+        "meal.timeOfDay",
+        "context.specialEvent"
+      ],
+      "logic": [
+        {
+          "when": "context.specialEvent === 'ramadan' && meal.timeOfDay === 'iftar'",
+          "then": {
+            "portionMultiplier": 0.7,
+            "startWithDates": true,
+            "startWithWater": true,
+            "waitBeforeMainMeal": 15,
+            "reasonScore": 90,
+            "severity": "medium",
+            "recommendation": "Break fast with 1-3 dates and water. Wait 15 minutes before main meal to prevent glucose spike"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "portionMultiplier": 1.0,
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 95
+    },
+    "nlTemplate": "Break your fast gradually: Start with {{startWithDates ? '1-3 dates' : 'water'}}, wait {{waitBeforeMainMeal}} minutes, then have your main meal at {{portionMultiplier * 100}}% normal portion.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "pregnancy-diabetes-constraint",
+    "title": "Gestational Diabetes Requirements",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": ["user.diabetesType", "user.bmi", "meal.timeOfDay"],
+      "logic": [
+        {
+          "when": "user.diabetesType === 'gestational'",
+          "then": {
+            "maxCarbs_g": 40,
+            "minProtein_g": 25,
+            "minFolicAcid_mcg": 600,
+            "minIron_mg": 27,
+            "avoidHighGI": true,
+            "reasonScore": 100,
+            "severity": "critical",
+            "recommendation": "Prioritize protein, iron-rich foods (beans, fish, spinach), and folic acid sources"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 100
+    },
+    "nlTemplate": "With gestational diabetes, keep carbs below {{maxCarbs_g}}g per meal and ensure {{minProtein_g}}g protein. Include iron-rich foods like {{recommendedFoods}}.",
+    "appliesTo": ["gestational"],
+    "version": 1
+  },
+  {
+    "slug": "kidney-disease-protein-limit",
+    "title": "Chronic Kidney Disease Protein Restriction",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": [
+        "user.hasKidneyDisease",
+        "user.weightKg",
+        "meal.timeOfDay"
+      ],
+      "logic": [
+        {
+          "when": "user.hasKidneyDisease === true",
+          "then": {
+            "maxProtein_g": 15,
+            "maxPotassium_mg": 600,
+            "maxPhosphorus_mg": 250,
+            "limitSalt": true,
+            "reasonScore": 100,
+            "severity": "critical",
+            "recommendation": "Limit protein to 0.6-0.8g per kg body weight. Avoid high-potassium foods like bananas, oranges"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 100
+    },
+    "nlTemplate": "With kidney disease, limit protein to {{maxProtein_g}}g per meal and avoid high-potassium foods. Stay hydrated but monitor fluid intake.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "metformin-alcohol-interaction",
+    "title": "Metformin and Alcohol Interaction Warning",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["user.medications", "meal.containsAlcohol"],
+      "logic": [
+        {
+          "when": "user.medications.includes('metformin') && meal.containsAlcohol === true",
+          "then": {
+            "severity": "critical",
+            "reasonScore": 100,
+            "warningMessage": "AVOID ALCOHOL with Metformin. Risk of lactic acidosis, a life-threatening condition.",
+            "recommendation": "Choose non-alcoholic options like zobo, kunun, or water"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 100
+    },
+    "nlTemplate": "⚠️ WARNING: {{warningMessage}} {{recommendation}}",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "sulfonylurea-hypoglycemia-warning",
+    "title": "Sulfonylurea Low Blood Sugar Warning",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["user.medications", "user.lastGlucose", "meal.carbs_g"],
+      "logic": [
+        {
+          "when": "user.medications.includes('glibenclamide') || user.medications.includes('gliclazide') && meal.carbs_g < 30",
+          "then": {
+            "severity": "high",
+            "reasonScore": 90,
+            "warningMessage": "Low-carb meal + Sulfonylurea = Hypoglycemia risk",
+            "recommendation": "Include at least 30-40g carbs to prevent dangerous blood sugar drop"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 95
+    },
+    "nlTemplate": "⚠️ {{warningMessage}}. {{recommendation}}",
+    "appliesTo": ["type2"],
+    "version": 1
+  },
+  {
+    "slug": "rice-beans-protein-complementarity",
+    "title": "Complete Protein Combination Rule",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["meal.foods"],
+      "logic": [
+        {
+          "when": "meal.foods.includes('rice') && meal.foods.includes('beans')",
+          "then": {
+            "scoreBoost": 15,
+            "reasonScore": 80,
+            "severity": "low",
+            "explanation": "Rice + Beans = Complete protein (all 9 essential amino acids)"
+          }
+        },
+        {
+          "when": "meal.foods.includes('garri') && meal.foods.includes('groundnut')",
+          "then": {
+            "scoreBoost": 12,
+            "reasonScore": 75,
+            "severity": "low",
+            "explanation": "Garri + Groundnut = Complete protein combination"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "scoreBoost": 0,
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 60
+    },
+    "nlTemplate": "✅ Great combination! {{explanation}}. This provides better nutrition than either food alone.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "palm-oil-vitamin-a-boost",
+    "title": "Palm Oil Enhances Vitamin A Absorption",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["meal.foods"],
+      "logic": [
+        {
+          "when": "meal.foods.includes('palm oil') && (meal.foods.includes('carrot') || meal.foods.includes('ugu') || meal.foods.includes('spinach'))",
+          "then": {
+            "scoreBoost": 10,
+            "reasonScore": 70,
+            "severity": "low",
+            "explanation": "Palm oil enhances vitamin A absorption from vegetables by up to 50%"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "scoreBoost": 0,
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 55
+    },
+    "nlTemplate": "✅ Nutrient boost: {{explanation}}",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "harmattan-hydration-rule",
+    "title": "Harmattan Season Hydration Increase",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": ["context.season", "user.activityLevel"],
+      "logic": [
+        {
+          "when": "context.season === 'harmattan'",
+          "then": {
+            "minWater_ml": 2500,
+            "extraHydration": true,
+            "reasonScore": 70,
+            "severity": "medium",
+            "recommendation": "Drink extra water during dry Harmattan season. Aim for 2.5-3L daily"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "minWater_ml": 2000,
+            "reasonScore": 50,
+            "severity": "low"
+          }
+        }
+      ],
+      "priority": 60
+    },
+    "nlTemplate": "During {{context.season}}, increase water intake to {{minWater_ml}}ml daily. Include hydrating foods like watermelon, cucumber.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "lagos-affordability-adjustment",
+    "title": "Regional Affordability Adjustment (Lagos)",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": [
+        "user.location",
+        "user.incomeBracket",
+        "meal.affordability"
+      ],
+      "logic": [
+        {
+          "when": "user.location === 'Lagos' && user.incomeBracket === 'low' && meal.affordability === 'high'",
+          "then": {
+            "scorePenalty": 20,
+            "reasonScore": 80,
+            "severity": "medium",
+            "recommendation": "This meal is expensive in Lagos. Consider more affordable alternatives"
+          }
+        },
+        {
+          "when": "user.location !== 'Lagos' && user.incomeBracket === 'low' && meal.affordability === 'high'",
+          "then": {
+            "scorePenalty": 10,
+            "reasonScore": 60,
+            "severity": "low",
+            "recommendation": "This meal may be pricey. Look for local alternatives"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "scorePenalty": 0,
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 50
+    },
+    "nlTemplate": "{{recommendation}}. Alternative: {{alternativeFoods}}",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "no-heavy-carbs-evening",
+    "title": "Limit Evening Carbohydrate Intake",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": ["meal.timeOfDay", "meal.carbs_g", "user.diabetesType"],
+      "logic": [
+        {
+          "when": "meal.timeOfDay === 'dinner' && meal.hour >= 20",
+          "then": {
+            "maxCarbs_g": 35,
+            "reasonScore": 75,
+            "severity": "medium",
+            "recommendation": "After 8pm, keep carbs low. Your body is less efficient at processing carbs in evening"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "maxCarbs_g": 45,
+            "reasonScore": 50,
+            "severity": "low"
+          }
+        }
+      ],
+      "priority": 70
+    },
+    "nlTemplate": "Evening meal: Limit carbs to {{maxCarbs_g}}g. {{recommendation}}",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "pre-workout-carb-timing",
+    "title": "Pre-Exercise Carbohydrate Timing",
+    "type": "portion_adjustment",
+    "definition": {
+      "inputBindings": [
+        "context.exercisePlanned",
+        "context.minutesUntilExercise",
+        "meal.carbs_g"
+      ],
+      "logic": [
+        {
+          "when": "context.exercisePlanned === true && context.minutesUntilExercise <= 60",
+          "then": {
+            "portionMultiplier": 1.2,
+            "preferQuickCarbs": true,
+            "reasonScore": 85,
+            "severity": "medium",
+            "recommendation": "Exercise in 1 hour: Include 20-30g quick carbs (ripe plantain, dates) to fuel workout"
+          }
+        },
+        {
+          "when": "context.exercisePlanned === true && context.minutesUntilExercise > 60 && context.minutesUntilExercise <= 180",
+          "then": {
+            "portionMultiplier": 1.1,
+            "preferSlowCarbs": true,
+            "reasonScore": 75,
+            "severity": "low",
+            "recommendation": "Exercise in 1-3 hours: Choose complex carbs (brown rice, oats, yam) for sustained energy"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "portionMultiplier": 1.0,
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 80
+    },
+    "nlTemplate": "{{recommendation}}. Recommended foods: {{recommendedFoods}}",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "post-workout-protein-window",
+    "title": "Post-Exercise Protein Recovery",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": [
+        "context.recentExercise",
+        "context.minutesSinceExercise",
+        "meal.protein_g"
+      ],
+      "logic": [
+        {
+          "when": "context.recentExercise === true && context.minutesSinceExercise <= 60",
+          "then": {
+            "minProtein_g": 20,
+            "minCarbs_g": 30,
+            "reasonScore": 90,
+            "severity": "high",
+            "recommendation": "Post-workout: Need 20-25g protein + carbs to recover. Try chicken + rice, fish + yam"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "minProtein_g": 15,
+            "reasonScore": 50,
+            "severity": "low"
+          }
+        }
+      ],
+      "priority": 85
+    },
+    "nlTemplate": "{{recommendation}}. Aim for {{minProtein_g}}g protein + {{minCarbs_g}}g carbs within 1 hour of exercise.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "fiber-hypoglycemia-prevention",
+    "title": "High Fiber for Hypoglycemia Prevention",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": [
+        "user.frequentHypoglycemia",
+        "meal.fiber_g",
+        "meal.carbs_g"
+      ],
+      "logic": [
+        {
+          "when": "user.frequentHypoglycemia === true",
+          "then": {
+            "minFiber_g": 8,
+            "preferLowGI": true,
+            "reasonScore": 85,
+            "severity": "high",
+            "recommendation": "High fiber slows glucose absorption, preventing sudden drops. Choose beans, oats, vegetables"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "minFiber_g": 5,
+            "reasonScore": 50,
+            "severity": "low"
+          }
+        }
+      ],
+      "priority": 80
+    },
+    "nlTemplate": "To prevent low blood sugar episodes, aim for {{minFiber_g}}g fiber per meal. {{recommendation}}",
+    "appliesTo": ["type1", "type2"],
+    "version": 1
+  },
+  {
+    "slug": "cultural-event-flexibility",
+    "title": "Special Occasion Meal Flexibility",
+    "type": "portion_adjustment",
+    "definition": {
+      "inputBindings": [
+        "context.specialEvent",
+        "user.diabetesType",
+        "meal.carbs_g"
+      ],
+      "logic": [
+        {
+          "when": "context.specialEvent === 'wedding' || context.specialEvent === 'ileya' || context.specialEvent === 'christmas'",
+          "then": {
+            "portionMultiplier": 0.8,
+            "allowFlexibility": true,
+            "reasonScore": 70,
+            "severity": "low",
+            "recommendation": "Special occasion: Enjoy the meal but reduce portion sizes. Monitor glucose closely"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "portionMultiplier": 1.0,
+            "allowFlexibility": false,
+            "reasonScore": 50,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 60
+    },
+    "nlTemplate": "{{context.specialEvent}} celebration: You can enjoy traditional foods at {{portionMultiplier * 100}}% portion. {{recommendation}}",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "dawn-phenomenon-breakfast",
+    "title": "Dawn Phenomenon Breakfast Strategy",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": [
+        "user.hasDawnPhenomenon",
+        "meal.timeOfDay",
+        "meal.carbs_g"
+      ],
+      "logic": [
+        {
+          "when": "user.hasDawnPhenomenon === true && meal.timeOfDay === 'breakfast'",
+          "then": {
+            "maxCarbs_g": 30,
+            "minProtein_g": 20,
+            "reasonScore": 90,
+            "severity": "high",
+            "recommendation": "Dawn phenomenon detected: Keep breakfast carbs low, protein high. Try eggs + vegetables"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "maxCarbs_g": 45,
+            "reasonScore": 50,
+            "severity": "low"
+          }
+        }
+      ],
+      "priority": 85
+    },
+    "nlTemplate": "Morning glucose high? {{recommendation}}. Limit carbs to {{maxCarbs_g}}g, include {{minProtein_g}}g protein.",
+    "appliesTo": ["type1", "type2"],
+    "version": 1
+  },
+  {
+    "slug": "stress-glucose-management",
+    "title": "Stress-Related Glucose Management",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": ["context.stressLevel", "meal.gi", "meal.comfortFood"],
+      "logic": [
+        {
+          "when": "context.stressLevel === 'high' && meal.comfortFood === true",
+          "then": {
+            "scorePenalty": 15,
+            "reasonScore": 75,
+            "severity": "medium",
+            "recommendation": "Stress raises glucose. Avoid comfort foods (high GI). Try nuts, yogurt, or herbal tea instead"
+          }
+        },
+        {
+          "when": "context.stressLevel === 'high' && meal.gi < 55",
+          "then": {
+            "scoreBoost": 10,
+            "reasonScore": 80,
+            "severity": "low",
+            "explanation": "Good choice during stress - low GI food helps stabilize mood and glucose"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "scoreBoost": 0,
+            "scorePenalty": 0,
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 65
+    },
+    "nlTemplate": "Stress level: {{context.stressLevel}}. {{recommendation || explanation}}",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "menstruation-iron-boost",
+    "title": "Menstruation Iron Requirements",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": ["user.sex", "context.menstruating", "meal.iron_mg"],
+      "logic": [
+        {
+          "when": "user.sex === 'female' && context.menstruating === true",
+          "then": {
+            "minIron_mg": 18,
+            "reasonScore": 80,
+            "severity": "medium",
+            "recommendation": "During menstruation: Increase iron-rich foods (beans, spinach, liver, fish)"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "minIron_mg": 8,
+            "reasonScore": 50,
+            "severity": "low"
+          }
+        }
+      ],
+      "priority": 70
+    },
+    "nlTemplate": "{{recommendation}}. Pair with vitamin C (oranges, tomatoes) for better iron absorption.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "budget-meal-planning",
+    "title": "Low Budget Meal Optimization",
+    "type": "scoring",
+    "definition": {
+      "inputBindings": [
+        "user.incomeBracket",
+        "meal.affordability",
+        "meal.nutritionScore"
+      ],
+      "logic": [
+        {
+          "when": "user.incomeBracket === 'low' && meal.affordability === 'low' && meal.nutritionScore >= 70",
+          "then": {
+            "scoreBoost": 20,
+            "reasonScore": 90,
+            "severity": "low",
+            "explanation": "Excellent choice! High nutrition + low cost = best value"
+          }
+        },
+        {
+          "when": "user.incomeBracket === 'low' && meal.affordability === 'high'",
+          "then": {
+            "scorePenalty": 25,
+            "reasonScore": 80,
+            "severity": "medium",
+            "recommendation": "This meal is expensive. Budget-friendly alternatives: {{affordableAlternatives}}"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "scoreBoost": 0,
+            "scorePenalty": 0,
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 70
+    },
+    "nlTemplate": "Budget: {{user.incomeBracket}}. {{explanation || recommendation}}",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
+    "slug": "sick-day-rule",
+    "title": "Sick Day Management Rule",
+    "type": "constraint",
+    "definition": {
+      "inputBindings": ["context.userSick", "user.lastGlucose", "meal.carbs_g"],
+      "logic": [
+        {
+          "when": "context.userSick === true && user.lastGlucose > 200",
+          "then": {
+            "maxCarbs_g": 25,
+            "minWater_ml": 3000,
+            "reasonScore": 95,
+            "severity": "critical",
+            "recommendation": "SICK + High glucose: Keep carbs very low, drink lots of water. Monitor glucose every 2 hours. Seek medical help if worsening"
+          }
+        },
+        {
+          "when": "context.userSick === true",
+          "then": {
+            "maxCarbs_g": 35,
+            "minWater_ml": 2500,
+            "reasonScore": 80,
+            "severity": "high",
+            "recommendation": "Sick day: Light meals, plenty of fluids. Continue medications unless instructed otherwise"
+          }
+        },
+        {
+          "when": "default",
+          "then": {
+            "reasonScore": 0,
+            "severity": "none"
+          }
+        }
+      ],
+      "priority": 100
+    },
+    "nlTemplate": "⚠️ Sick Day Protocol: {{recommendation}}. Carb limit: {{maxCarbs_g}}g. Water: {{minWater_ml}}ml daily.",
+    "appliesTo": ["all"],
+    "version": 1
+  }
+]

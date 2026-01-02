@@ -1,0 +1,684 @@
+[
+  {
+    "localName": "Tuwo Shinkafa",
+    "canonicalName": "Rice Swallow (Northern Nigeria)",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 165,
+      "carbs_g": 37,
+      "protein_g": 3,
+      "fat_g": 0.3,
+      "fibre_g": 0.5,
+      "gi": 78
+    },
+    "portionSizes": [
+      { "name": "Small ball", "grams": 120, "carbs_g": 44 },
+      { "name": "Medium ball", "grams": 200, "carbs_g": 74 },
+      { "name": "Large ball", "grams": 280, "carbs_g": 104 }
+    ],
+    "affordability": "low",
+    "tags": ["rice", "Northern Nigeria", "staple", "high-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Miyan Kuka",
+    "canonicalName": "Baobab Leaf Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 85,
+      "carbs_g": 8,
+      "protein_g": 6,
+      "fat_g": 3.5,
+      "fibre_g": 4,
+      "gi": 35
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 12 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 20 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 28 }
+    ],
+    "affordability": "medium",
+    "tags": ["soup", "Northern Nigeria", "low-gi", "high-fiber"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Masa (Rice Cake)",
+    "canonicalName": "Northern Nigerian Rice Cake",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 140,
+      "carbs_g": 28,
+      "protein_g": 2.5,
+      "fat_g": 1.8,
+      "fibre_g": 0.8,
+      "gi": 68
+    },
+    "portionSizes": [
+      { "name": "1 piece", "grams": 50, "carbs_g": 14 },
+      { "name": "2 pieces", "grams": 100, "carbs_g": 28 },
+      { "name": "3 pieces", "grams": 150, "carbs_g": 42 }
+    ],
+    "affordability": "low",
+    "tags": ["snack", "rice", "Northern Nigeria"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Ayamase (Ofada Stew)",
+    "canonicalName": "Green Pepper Stew",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 180,
+      "carbs_g": 6,
+      "protein_g": 12,
+      "fat_g": 14,
+      "fibre_g": 2.5,
+      "gi": 30
+    },
+    "portionSizes": [
+      { "name": "Small serving", "grams": 100, "carbs_g": 6 },
+      { "name": "Medium serving", "grams": 150, "carbs_g": 9 },
+      { "name": "Large serving", "grams": 200, "carbs_g": 12 }
+    ],
+    "affordability": "high",
+    "tags": ["stew", "Yoruba", "protein-rich", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Nkwobi",
+    "canonicalName": "Spicy Cow Foot",
+    "category": "Proteins",
+    "nutrients": {
+      "calories": 220,
+      "carbs_g": 3,
+      "protein_g": 28,
+      "fat_g": 11,
+      "fibre_g": 0.5,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small portion", "grams": 100, "carbs_g": 3 },
+      { "name": "Medium portion", "grams": 150, "carbs_g": 4.5 },
+      { "name": "Large portion", "grams": 200, "carbs_g": 6 }
+    ],
+    "affordability": "medium",
+    "tags": ["protein", "Igbo", "low-carb", "special-occasion"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Abacha & Ugba",
+    "canonicalName": "African Salad with Oil Bean",
+    "category": "Salads",
+    "nutrients": {
+      "calories": 195,
+      "carbs_g": 22,
+      "protein_g": 8,
+      "fat_g": 9,
+      "fibre_g": 5,
+      "gi": 42
+    },
+    "portionSizes": [
+      { "name": "Small plate", "grams": 150, "carbs_g": 33 },
+      { "name": "Medium plate", "grams": 250, "carbs_g": 55 },
+      { "name": "Large plate", "grams": 350, "carbs_g": 77 }
+    ],
+    "affordability": "medium",
+    "tags": ["salad", "Igbo", "cassava", "moderate-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Banga Soup",
+    "canonicalName": "Palm Nut Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 240,
+      "carbs_g": 12,
+      "protein_g": 10,
+      "fat_g": 18,
+      "fibre_g": 3,
+      "gi": 38
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 18 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 30 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 42 }
+    ],
+    "affordability": "medium",
+    "tags": ["soup", "Delta", "palm-nut", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Nsala Soup",
+    "canonicalName": "White Soup (Ofe Nsala)",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 165,
+      "carbs_g": 9,
+      "protein_g": 14,
+      "fat_g": 8,
+      "fibre_g": 2,
+      "gi": 32
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 13.5 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 22.5 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 31.5 }
+    ],
+    "affordability": "high",
+    "tags": ["soup", "Igbo", "yam-based", "protein-rich"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Ewa Agoyin",
+    "canonicalName": "Mashed Beans with Spicy Sauce",
+    "category": "Proteins",
+    "nutrients": {
+      "calories": 185,
+      "carbs_g": 28,
+      "protein_g": 11,
+      "fat_g": 3.5,
+      "fibre_g": 9,
+      "gi": 45
+    },
+    "portionSizes": [
+      { "name": "Small portion", "grams": 150, "carbs_g": 42 },
+      { "name": "Medium portion", "grams": 250, "carbs_g": 70 },
+      { "name": "Large portion", "grams": 350, "carbs_g": 98 }
+    ],
+    "affordability": "low",
+    "tags": ["beans", "Yoruba", "high-fiber", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Ukodo (Yam Pepper Soup)",
+    "canonicalName": "Unripe Plantain and Yam Pepper Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 175,
+      "carbs_g": 32,
+      "protein_g": 8,
+      "fat_g": 2.5,
+      "fibre_g": 4,
+      "gi": 52
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 64 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 96 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 128 }
+    ],
+    "affordability": "low",
+    "tags": ["soup", "Delta", "yam", "traditional"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Gizdodo",
+    "canonicalName": "Gizzard and Plantain",
+    "category": "Proteins",
+    "nutrients": {
+      "calories": 210,
+      "carbs_g": 18,
+      "protein_g": 16,
+      "fat_g": 9,
+      "fibre_g": 2,
+      "gi": 48
+    },
+    "portionSizes": [
+      { "name": "Small plate", "grams": 120, "carbs_g": 22 },
+      { "name": "Medium plate", "grams": 200, "carbs_g": 36 },
+      { "name": "Large plate", "grams": 280, "carbs_g": 50 }
+    ],
+    "affordability": "medium",
+    "tags": ["protein", "modern Nigerian", "plantain"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Afang Soup",
+    "canonicalName": "Afang Vegetable Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 195,
+      "carbs_g": 10,
+      "protein_g": 12,
+      "fat_g": 12,
+      "fibre_g": 5,
+      "gi": 30
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 15 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 25 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 35 }
+    ],
+    "affordability": "high",
+    "tags": ["soup", "Calabar", "vegetable", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Coconut Candy",
+    "canonicalName": "Nigerian Coconut Candy",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 445,
+      "carbs_g": 42,
+      "protein_g": 3.5,
+      "fat_g": 30,
+      "fibre_g": 9,
+      "gi": 35
+    },
+    "portionSizes": [
+      { "name": "1 piece", "grams": 30, "carbs_g": 13 },
+      { "name": "2 pieces", "grams": 60, "carbs_g": 25 },
+      { "name": "3 pieces", "grams": 90, "carbs_g": 38 }
+    ],
+    "affordability": "medium",
+    "tags": ["snack", "coconut", "high-fat", "limit-portions"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Nkwobi Sauce",
+    "canonicalName": "Spicy Palm Oil Sauce",
+    "category": "Condiments",
+    "nutrients": {
+      "calories": 280,
+      "carbs_g": 5,
+      "protein_g": 2,
+      "fat_g": 28,
+      "fibre_g": 1,
+      "gi": 20
+    },
+    "portionSizes": [
+      { "name": "1 tablespoon", "grams": 15, "carbs_g": 0.8 },
+      { "name": "2 tablespoons", "grams": 30, "carbs_g": 1.5 },
+      { "name": "1/4 cup", "grams": 60, "carbs_g": 3 }
+    ],
+    "affordability": "medium",
+    "tags": ["condiment", "palm-oil", "high-fat"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Kwose (Millet Pancake)",
+    "canonicalName": "Millet Pancake",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 155,
+      "carbs_g": 31,
+      "protein_g": 4,
+      "fat_g": 1.5,
+      "fibre_g": 3,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "1 piece", "grams": 60, "carbs_g": 19 },
+      { "name": "2 pieces", "grams": 120, "carbs_g": 37 },
+      { "name": "3 pieces", "grams": 180, "carbs_g": 56 }
+    ],
+    "affordability": "low",
+    "tags": ["snack", "millet", "Northern Nigeria", "whole-grain"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Miyan Taushe",
+    "canonicalName": "Pumpkin Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 95,
+      "carbs_g": 12,
+      "protein_g": 5,
+      "fat_g": 3,
+      "fibre_g": 3.5,
+      "gi": 40
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 18 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 30 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 42 }
+    ],
+    "affordability": "low",
+    "tags": ["soup", "Northern Nigeria", "pumpkin", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Yam Porridge (Asaro)",
+    "canonicalName": "Yam Pottage",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 145,
+      "carbs_g": 32,
+      "protein_g": 3,
+      "fat_g": 1.5,
+      "fibre_g": 4,
+      "gi": 58
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 200, "carbs_g": 64 },
+      { "name": "Medium bowl", "grams": 300, "carbs_g": 96 },
+      { "name": "Large bowl", "grams": 400, "carbs_g": 128 }
+    ],
+    "affordability": "low",
+    "tags": ["yam", "porridge", "Yoruba", "comfort-food"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Oha Soup",
+    "canonicalName": "Ora Leaf Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 175,
+      "carbs_g": 11,
+      "protein_g": 13,
+      "fat_g": 9,
+      "fibre_g": 4,
+      "gi": 35
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 16.5 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 27.5 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 38.5 }
+    ],
+    "affordability": "high",
+    "tags": ["soup", "Igbo", "vegetable", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Kuli Kuli",
+    "canonicalName": "Groundnut Cake",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 540,
+      "carbs_g": 18,
+      "protein_g": 28,
+      "fat_g": 42,
+      "fibre_g": 7,
+      "gi": 25
+    },
+    "portionSizes": [
+      { "name": "1 piece", "grams": 20, "carbs_g": 3.6 },
+      { "name": "2 pieces", "grams": 40, "carbs_g": 7.2 },
+      { "name": "3 pieces", "grams": 60, "carbs_g": 11 }
+    ],
+    "affordability": "low",
+    "tags": ["snack", "groundnut", "protein-rich", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Danwake",
+    "canonicalName": "Bean Flour Dumpling",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 165,
+      "carbs_g": 30,
+      "protein_g": 8,
+      "fat_g": 1.5,
+      "fibre_g": 6,
+      "gi": 42
+    },
+    "portionSizes": [
+      { "name": "Small portion", "grams": 100, "carbs_g": 30 },
+      { "name": "Medium portion", "grams": 150, "carbs_g": 45 },
+      { "name": "Large portion", "grams": 200, "carbs_g": 60 }
+    ],
+    "affordability": "low",
+    "tags": ["snack", "Northern Nigeria", "bean", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Dambu Nama",
+    "canonicalName": "Shredded Beef (Northern Style)",
+    "category": "Proteins",
+    "nutrients": {
+      "calories": 280,
+      "carbs_g": 2,
+      "protein_g": 32,
+      "fat_g": 16,
+      "fibre_g": 0,
+      "gi": 10
+    },
+    "portionSizes": [
+      { "name": "Small portion", "grams": 50, "carbs_g": 1 },
+      { "name": "Medium portion", "grams": 100, "carbs_g": 2 },
+      { "name": "Large portion", "grams": 150, "carbs_g": 3 }
+    ],
+    "affordability": "high",
+    "tags": ["protein", "Northern Nigeria", "beef", "low-carb"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Kunun Zaki",
+    "canonicalName": "Spiced Millet Drink",
+    "category": "Beverages",
+    "nutrients": {
+      "calories": 75,
+      "carbs_g": 17,
+      "protein_g": 1.5,
+      "fat_g": 0.5,
+      "fibre_g": 1,
+      "gi": 65
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 200, "carbs_g": 34 },
+      { "name": "Medium cup", "grams": 300, "carbs_g": 51 },
+      { "name": "Large cup", "grams": 400, "carbs_g": 68 }
+    ],
+    "affordability": "low",
+    "tags": ["drink", "Northern Nigeria", "millet", "traditional"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Guguru (Popcorn)",
+    "canonicalName": "Nigerian Popcorn",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 385,
+      "carbs_g": 77,
+      "protein_g": 12,
+      "fat_g": 4.5,
+      "fibre_g": 15,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 30, "carbs_g": 23 },
+      { "name": "Medium cup", "grams": 50, "carbs_g": 39 },
+      { "name": "Large cup", "grams": 70, "carbs_g": 54 }
+    ],
+    "affordability": "low",
+    "tags": ["snack", "corn", "high-fiber", "whole-grain"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Acha (Fonio)",
+    "canonicalName": "Fonio Grain",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 340,
+      "carbs_g": 70,
+      "protein_g": 8,
+      "fat_g": 2,
+      "fibre_g": 3,
+      "gi": 50
+    },
+    "portionSizes": [
+      { "name": "Small portion", "grams": 100, "carbs_g": 70 },
+      { "name": "Medium portion", "grams": 150, "carbs_g": 105 },
+      { "name": "Large portion", "grams": 200, "carbs_g": 140 }
+    ],
+    "affordability": "medium",
+    "tags": ["grain", "Northern Nigeria", "gluten-free", "ancient-grain"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Konkonte (Cocoyam Fufu)",
+    "canonicalName": "Cocoyam Powder Swallow",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 340,
+      "carbs_g": 80,
+      "protein_g": 2,
+      "fat_g": 0.5,
+      "fibre_g": 4,
+      "gi": 68
+    },
+    "portionSizes": [
+      { "name": "Small wrap", "grams": 120, "carbs_g": 96 },
+      { "name": "Medium wrap", "grams": 200, "carbs_g": 160 },
+      { "name": "Large wrap", "grams": 280, "carbs_g": 224 }
+    ],
+    "affordability": "medium",
+    "tags": ["swallow", "cocoyam", "Ghanaian-Nigerian", "high-fiber"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Fisherman Soup",
+    "canonicalName": "Banga with Fresh Fish",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 210,
+      "carbs_g": 8,
+      "protein_g": 18,
+      "fat_g": 13,
+      "fibre_g": 2,
+      "gi": 32
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 12 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 20 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 28 }
+    ],
+    "affordability": "medium",
+    "tags": ["soup", "Delta", "fish", "protein-rich", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Zobo (Hibiscus)",
+    "canonicalName": "Hibiscus Tea (Unsweetened)",
+    "category": "Beverages",
+    "nutrients": {
+      "calories": 5,
+      "carbs_g": 1,
+      "protein_g": 0,
+      "fat_g": 0,
+      "fibre_g": 0,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 200, "carbs_g": 2 },
+      { "name": "Medium cup", "grams": 300, "carbs_g": 3 },
+      { "name": "Large cup", "grams": 400, "carbs_g": 4 }
+    ],
+    "affordability": "low",
+    "tags": ["drink", "hibiscus", "no-sugar", "antioxidant", "recommended"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Bitter Leaf Soup",
+    "canonicalName": "Onugbu Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 155,
+      "carbs_g": 9,
+      "protein_g": 11,
+      "fat_g": 8,
+      "fibre_g": 5,
+      "gi": 30
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 13.5 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 22.5 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 31.5 }
+    ],
+    "affordability": "medium",
+    "tags": ["soup", "Igbo", "vegetable", "low-gi", "medicinal"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Boli & Groundnut",
+    "canonicalName": "Roasted Plantain with Peanuts",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 245,
+      "carbs_g": 42,
+      "protein_g": 8,
+      "fat_g": 7,
+      "fibre_g": 5,
+      "gi": 52
+    },
+    "portionSizes": [
+      { "name": "1 plantain + small nuts", "grams": 150, "carbs_g": 63 },
+      { "name": "2 plantains + medium nuts", "grams": 250, "carbs_g": 105 },
+      { "name": "3 plantains + large nuts", "grams": 350, "carbs_g": 147 }
+    ],
+    "affordability": "low",
+    "tags": ["snack", "street-food", "plantain", "protein"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Ekpang Nkukwo",
+    "canonicalName": "Wrapped Cocoyam & Water Yam",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 185,
+      "carbs_g": 38,
+      "protein_g": 4,
+      "fat_g": 2.5,
+      "fibre_g": 6,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "Small portion", "grams": 150, "carbs_g": 57 },
+      { "name": "Medium portion", "grams": 250, "carbs_g": 95 },
+      { "name": "Large portion", "grams": 350, "carbs_g": 133 }
+    ],
+    "affordability": "low",
+    "tags": ["Calabar", "cocoyam", "traditional", "high-fiber"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Peppered Snail",
+    "canonicalName": "Spicy Snail Meat",
+    "category": "Proteins",
+    "nutrients": {
+      "calories": 90,
+      "carbs_g": 2,
+      "protein_g": 16,
+      "fat_g": 1.5,
+      "fibre_g": 0,
+      "gi": 10
+    },
+    "portionSizes": [
+      { "name": "Small portion", "grams": 100, "carbs_g": 2 },
+      { "name": "Medium portion", "grams": 150, "carbs_g": 3 },
+      { "name": "Large portion", "grams": 200, "carbs_g": 4 }
+    ],
+    "affordability": "high",
+    "tags": ["protein", "snail", "low-carb", "high-protein"],
+    "source": "validated",
+    "version": 1
+  }
+]
