@@ -2,6 +2,21 @@ const mongoose = require("mongoose");
 const app = require("./app");
 const config = require("./config");
 const { logger } = require("./middlewares/error.middleware");
+const os = require("os");
+
+// Get local IP address
+const getLocalIPAddress = () => {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      // Skip internal (i.e. 127.0.0.1) and non-IPv4 addresses
+      if (iface.family === "IPv4" && !iface.internal) {
+        return iface.address;
+      }
+    }
+  }
+  return "localhost";
+};
 
 // MongoDB connection
 const connectDB = async () => {
@@ -19,8 +34,33 @@ const startServer = async () => {
   await connectDB();
 
   const server = app.listen(config.port, () => {
-    logger.info(`Server running on port ${config.port} in ${config.env} mode`);
-    logger.info(`API Documentation: http://localhost:${config.port}/api-docs`);
+    const localIP = getLocalIPAddress();
+
+    console.log("\n" + "=".repeat(70));
+    console.log("🚀 GLUVIA BACKEND SERVER STARTED");
+    console.log("=".repeat(70));
+
+    logger.info(`Environment: ${config.env}`);
+    logger.info(`Port: ${config.port}`);
+
+    console.log("\n📱 REACT NATIVE / EXPO DEVELOPMENT:");
+    console.log(`   Use this URL in your mobile app:`);
+    console.log(`   → http://${localIP}:${config.port}`);
+    console.log(`\n   Example API configuration:`);
+    console.log(`   const API_BASE_URL = "http://${localIP}:${config.port}";`);
+
+    console.log("\n🌐 WEB DEVELOPMENT:");
+    console.log(`   → http://localhost:${config.port}`);
+
+    console.log("\n📚 API DOCUMENTATION:");
+    console.log(`   → http://localhost:${config.port}/api-docs`);
+    console.log(`   → http://${localIP}:${config.port}/api-docs (mobile)`);
+
+    console.log("\n✅ HEALTH CHECK:");
+    console.log(`   → http://localhost:${config.port}/health`);
+    console.log(`   → http://${localIP}:${config.port}/health (mobile)`);
+
+    console.log("\n" + "=".repeat(70) + "\n");
   });
 
   // Graceful shutdown

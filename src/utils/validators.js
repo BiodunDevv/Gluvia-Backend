@@ -18,11 +18,15 @@ const passwordSchema = z
   );
 
 /**
- * Phone validation schema (optional, E.164 format)
+ * Phone validation schema (optional, supports Nigerian and international formats)
+ * Accepts formats: +2348012345678, 08012345678, 8012345678, +1234567890
  */
 const phoneSchema = z
   .string()
-  .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number format")
+  .regex(
+    /^(\+?\d{1,4}[-.\s]?)?(\(?\d{1,4}\)?[-.\s]?)?\d{7,15}$/,
+    "Invalid phone number format"
+  )
   .optional();
 
 /**

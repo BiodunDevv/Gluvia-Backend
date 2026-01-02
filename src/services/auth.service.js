@@ -68,13 +68,21 @@ const login = async ({ email, password, deviceId }) => {
   // Find user
   const user = await User.findOne({ email, deleted: false });
   if (!user) {
-    throw new Error("Invalid credentials");
+    const error = new Error(
+      "Account not found. Please check your email or register a new account."
+    );
+    error.code = "ACCOUNT_NOT_FOUND";
+    throw error;
   }
 
   // Compare password
   const isValid = await comparePassword(password, user.passwordHash);
   if (!isValid) {
-    throw new Error("Invalid credentials");
+    const error = new Error(
+      "Invalid password. Please check your password and try again."
+    );
+    error.code = "INVALID_PASSWORD";
+    throw error;
   }
 
   // Generate token
@@ -236,9 +244,7 @@ const updateUserProfile = async (userId, updateData) => {
     "email",
     "password",
     "phone",
-    "age",
-    "diabetesType",
-    "preferences",
+    "profile", // Allow updating the profile object
   ];
   const updates = {};
 
@@ -248,6 +254,29 @@ const updateUserProfile = async (userId, updateData) => {
       updates[key] = updateData[key];
     }
   });
+
+  // Handle nested profile updates
+  if (updates.profile && typeof updates.profile === "object") {
+    // If profile is being updated, merge with existing profile
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Merge profile fields
+    updates.profile = {
+      ...user.profile,
+      ...updates.profile,
+    };
+
+    // Calculate BMI if height and weight are provided
+    if (updates.profile.heightCm && updates.profile.weightKg) {
+      const heightM = updates.profile.heightCm / 100;
+      updates.profile.bmi = parseFloat(
+        (updates.profile.weightKg / (heightM * heightM)).toFixed(2)
+      );
+    }
+  }
 
   // Check if email is being updated and validate uniqueness
   if (updates.email) {
