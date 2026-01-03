@@ -248,10 +248,156 @@ const getUserGlucoseLogs = async (
   };
 };
 
+/**
+ * Upload meal logs only
+ */
+const uploadMealLogs = async (userId, mealLogs) => {
+  const results = {
+    added: 0,
+    duplicates: 0,
+    errors: [],
+  };
+
+  if (!mealLogs || mealLogs.length === 0) {
+    return results;
+  }
+
+  for (const meal of mealLogs) {
+    // Check idempotency
+    if (meal.clientGeneratedId) {
+      const existing = await MealLog.findOne({
+        clientGeneratedId: meal.clientGeneratedId,
+      });
+      if (existing) {
+        results.duplicates++;
+        continue;
+      }
+    }
+
+    try {
+      // Calculate totals from foods
+      const totals = { calories: 0, carbs: 0, protein: 0, fibre: 0 };
+      const entries = [];
+
+      if (meal.foods && meal.foods.length > 0) {
+        for (const foodEntry of meal.foods) {
+          const food = await FoodItem.findById(foodEntry.foodId);
+          if (food) {
+            // Find portion size or use default
+            let grams = 100;
+            const portion = food.portionSizes?.find(
+              (p) => p.name === foodEntry.portionSize
+            );
+            if (portion) {
+              grams = portion.grams * (foodEntry.quantity || 1);
+            }
+
+            const multiplier = grams / 100;
+            totals.calories += (food.nutrients?.calories || 0) * multiplier;
+            totals.carbs += (food.nutrients?.carbs_g || 0) * multiplier;
+            totals.protein += (food.nutrients?.protein_g || 0) * multiplier;
+            totals.fibre += (food.nutrients?.fibre_g || 0) * multiplier;
+
+            entries.push({
+              foodId: food._id,
+              portionName: foodEntry.portionSize,
+              portionSize: foodEntry.portionSize,
+              grams,
+              quantity: foodEntry.quantity || 1,
+              carbs_g: (food.nutrients?.carbs_g || 0) * multiplier,
+            });
+          }
+        }
+      }
+
+      await MealLog.create({
+        userId,
+        mealType: meal.mealType || "snack",
+        entries,
+        calculatedTotals: totals,
+        notes: meal.notes,
+        timestamp: meal.timestamp || new Date(),
+        clientGeneratedId: meal.clientGeneratedId,
+      });
+
+      results.added++;
+    } catch (error) {
+      console.error("Error saving meal log:", error.message);
+      results.errors.push({
+        clientGeneratedId: meal.clientGeneratedId,
+        error: error.message,
+      });
+    }
+  }
+
+  return results;
+};
+
+/**
+ * Upload glucose logs only
+ */
+const uploadGlucoseLogs = async (userId, glucoseLogs) => {
+  const results = {
+    added: 0,
+    duplicates: 0,
+    errors: [],
+  };
+
+  if (!glucoseLogs || glucoseLogs.length === 0) {
+    return results;
+  }
+
+  for (const glucose of glucoseLogs) {
+    // Check idempotency
+    if (glucose.clientGeneratedId) {
+      const existing = await GlucoseLog.findOne({
+        clientGeneratedId: glucose.clientGeneratedId,
+      });
+      if (existing) {
+        results.duplicates++;
+        continue;
+      }
+    }
+
+    try {
+      // Convert value if needed (mmol/L to mg/dL)
+      let valueMgDl = glucose.value;
+      if (glucose.unit === "mmol/L") {
+        valueMgDl = Math.round(glucose.value * 18);
+      }
+
+      await GlucoseLog.create({
+        userId,
+        valueMgDl,
+        unit: glucose.unit || "mg/dL",
+        type: glucose.type,
+        timestamp: glucose.timestamp || new Date(),
+        notes: glucose.notes,
+        mealRelated: glucose.mealRelated || false,
+        mealLogId: glucose.mealLogId,
+        symptoms: glucose.symptoms || [],
+        clientGeneratedId: glucose.clientGeneratedId,
+      });
+
+      results.added++;
+    } catch (error) {
+      console.error("Error saving glucose log:", error.message);
+      results.errors.push({
+        clientGeneratedId: glucose.clientGeneratedId,
+        error: error.message,
+      });
+    }
+  }
+
+  return results;
+};
+
 module.exports = {
   uploadLogs,
   getUpdates,
   getFullSync,
   getUserMealLogs,
   getUserGlucoseLogs,
+  uploadMealLogs,
+  uploadGlucoseLogs,
 };

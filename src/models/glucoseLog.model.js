@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const glucoseLogSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       index: true,
     },
@@ -12,9 +12,22 @@ const glucoseLogSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    unit: {
+      type: String,
+      enum: ["mg/dL", "mmol/L"],
+      default: "mg/dL",
+    },
     type: {
       type: String,
-      enum: ['fasting', 'postprandial', 'random'],
+      enum: [
+        "fasting",
+        "before_meal",
+        "after_meal",
+        "bedtime",
+        "random",
+        "2hr_post_meal",
+        "postprandial",
+      ],
       required: true,
     },
     clientGeneratedId: {
@@ -29,6 +42,28 @@ const glucoseLogSchema = new mongoose.Schema(
       index: true,
     },
     notes: String,
+    mealRelated: {
+      type: Boolean,
+      default: false,
+    },
+    mealLogId: {
+      type: String,
+    },
+    symptoms: [
+      {
+        type: String,
+        enum: [
+          "dizzy",
+          "shaky",
+          "sweaty",
+          "tired",
+          "hungry",
+          "thirsty",
+          "blurred_vision",
+          "none",
+        ],
+      },
+    ],
   },
   {
     timestamps: true,
@@ -38,6 +73,6 @@ const glucoseLogSchema = new mongoose.Schema(
 // Compound index for efficient queries
 glucoseLogSchema.index({ userId: 1, timestamp: -1 });
 
-const GlucoseLog = mongoose.model('GlucoseLog', glucoseLogSchema);
+const GlucoseLog = mongoose.model("GlucoseLog", glucoseLogSchema);
 
 module.exports = GlucoseLog;
