@@ -25,7 +25,7 @@ Gluvia AI Backend is a secure, scalable REST API that powers an offline-first mo
 ## ✨ Features
 
 - **JWT Authentication** with single-token session model and token revocation
-- **Role-Based Access Control** (user, admin, health_worker)
+- **Role-Based Access Control** (user, admin)
 - **Food Database** with 50+ Nigerian/African foods, nutritional data, and GI values
 - **Rule Engine Templates** for client-side reasoning (carb limits, GI warnings, portion adjustments)
 - **Offline-First Sync** with delta updates and version control
