@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const app = require("./app");
 const config = require("./config");
 const { logger } = require("./middlewares/error.middleware");
+const { startHeartbeat, stopHeartbeat } = require("./services/heartbeat.service");
 const os = require("os");
 
 // Get local IP address
@@ -32,6 +33,7 @@ const connectDB = async () => {
 // Start server
 const startServer = async () => {
   await connectDB();
+  startHeartbeat();
 
   const server = app.listen(config.port, () => {
     const localIP = getLocalIPAddress();
@@ -69,6 +71,7 @@ const startServer = async () => {
 
     server.close(async () => {
       logger.info("HTTP server closed");
+      stopHeartbeat();
 
       try {
         await mongoose.connection.close();

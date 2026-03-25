@@ -69,6 +69,12 @@ const config = {
     max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
   },
 
+  heartbeat: {
+    enabled:
+      String(process.env.HEARTBEAT_ENABLED || "true").toLowerCase() !== "false",
+    intervalMs: parseInt(process.env.HEARTBEAT_INTERVAL_MS, 10) || 5 * 60 * 1000,
+  },
+
   maintenanceMode: process.env.MAINTENANCE_MODE || "false",
 
   // Frontend URL
