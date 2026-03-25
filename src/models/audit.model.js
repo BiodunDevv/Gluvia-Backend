@@ -28,6 +28,8 @@ const auditSchema = new mongoose.Schema(
 
 // Index for efficient queries
 auditSchema.index({ createdAt: -1 });
+auditSchema.index({ action: 1, createdAt: -1 });
+auditSchema.index({ who: 1, createdAt: -1 });
 auditSchema.index({ 'target.collection': 1, 'target.id': 1 });
 
 const Audit = mongoose.model('Audit', auditSchema);

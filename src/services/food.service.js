@@ -6,7 +6,9 @@ const auditService = require("./audit.service");
  * Get server version from config
  */
 const getServerVersion = async () => {
-  const config = await Config.findOne({ key: "serverVersion" });
+  const config = await Config.findOne({ key: "serverVersion" })
+    .select("value")
+    .lean();
   return config ? config.value : 0;
 };
 
@@ -110,9 +112,9 @@ const searchFoods = async (filters, page = 1, limit = 20) => {
  * Get food by ID
  */
 const getFoodById = async (id) => {
-  const food = await FoodItem.findOne({ _id: id, deleted: false }).select(
-    "-__v -images"
-  );
+  const food = await FoodItem.findOne({ _id: id, deleted: false })
+    .select("-__v -images")
+    .lean();
   if (!food) {
     throw new Error("Food not found");
   }

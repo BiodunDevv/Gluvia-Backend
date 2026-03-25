@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin", "health_worker"],
+      enum: ["user", "admin"],
       default: "user",
     },
     profile: {
@@ -49,7 +49,10 @@ const userSchema = new mongoose.Schema(
         type: String,
         enum: ["low", "middle", "high"],
       },
-      language: String,
+      language: {
+        type: String,
+        default: "english",
+      },
       profileImage: {
         public_id: String,
         secure_url: String,
@@ -68,6 +71,7 @@ const userSchema = new mongoose.Schema(
     },
     passwordResetToken: String,
     passwordResetExpires: Date,
+    lastLoginAt: Date,
     deleted: {
       type: Boolean,
       default: false,
@@ -80,6 +84,11 @@ const userSchema = new mongoose.Schema(
 
 // Index for faster queries
 userSchema.index({ createdAt: -1 });
+userSchema.index({ lastLoginAt: -1 });
+userSchema.index({ role: 1, deleted: 1, email: 1 });
+userSchema.index({ role: 1, deleted: 1, name: 1 });
+userSchema.index({ role: 1, deleted: 1, createdAt: -1 });
+userSchema.index({ role: 1, deleted: 1, lastLoginAt: -1 });
 
 // Method to calculate BMI
 userSchema.methods.calculateBMI = function () {

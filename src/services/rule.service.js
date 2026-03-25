@@ -3,6 +3,26 @@ const Config = require('../models/config.model');
 const auditService = require('./audit.service');
 const { incrementServerVersion, getServerVersion } = require('./food.service');
 
+const validateRuleDefinition = (definition) => {
+  if (!definition || typeof definition !== "object" || Array.isArray(definition)) {
+    throw new Error("Rule definition must be a JSON object");
+  }
+
+  const stack = [definition];
+  while (stack.length > 0) {
+    const current = stack.pop();
+    for (const value of Object.values(current)) {
+      if (typeof value === "number" && !Number.isFinite(value)) {
+        throw new Error("Rule definition contains an invalid numeric value");
+      }
+
+      if (value && typeof value === "object" && !Array.isArray(value)) {
+        stack.push(value);
+      }
+    }
+  }
+};
+
 /**
  * Get all rules
  */
@@ -11,7 +31,7 @@ const getAllRules = async () => {
   const serverVersion = await getServerVersion();
   
   return {
-    rules,
+    items: rules,
     serverVersion,
   };
 };
@@ -36,6 +56,8 @@ const createRule = async (ruleData, userId) => {
   if (existing) {
     throw new Error('Rule with this slug already exists');
   }
+
+  validateRuleDefinition(ruleData.definition);
 
   const rule = await RuleTemplate.create({
     ...ruleData,
@@ -69,6 +91,10 @@ const updateRule = async (slug, ruleData, userId) => {
   // Check version conflict
   if (ruleData.version && ruleData.version !== rule.version) {
     throw new Error('Version conflict - rule has been modified');
+  }
+
+  if (ruleData.definition !== undefined) {
+    validateRuleDefinition(ruleData.definition);
   }
 
   // Update fields
@@ -148,4 +174,5 @@ module.exports = {
   updateRule,
   deleteRule,
   getRulesChangedSince,
+  validateRuleDefinition,
 };

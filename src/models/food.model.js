@@ -82,6 +82,8 @@ foodItemSchema.index({
 
 // Compound indexes
 foodItemSchema.index({ deleted: 1, category: 1 });
+foodItemSchema.index({ deleted: 1, localName: 1 });
+foodItemSchema.index({ deleted: 1, version: -1 });
 foodItemSchema.index({ version: -1 });
 
 const FoodItem = mongoose.model("FoodItem", foodItemSchema);

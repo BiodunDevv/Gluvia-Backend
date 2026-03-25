@@ -32,9 +32,8 @@ const glucoseLogSchema = new mongoose.Schema(
     },
     clientGeneratedId: {
       type: String,
-      unique: true,
-      sparse: true,
-      index: true,
+      required: true,
+      trim: true,
     },
     timestamp: {
       type: Date,
@@ -72,6 +71,11 @@ const glucoseLogSchema = new mongoose.Schema(
 
 // Compound index for efficient queries
 glucoseLogSchema.index({ userId: 1, timestamp: -1 });
+glucoseLogSchema.index({ userId: 1, createdAt: -1 });
+glucoseLogSchema.index(
+  { userId: 1, clientGeneratedId: 1 },
+  { unique: true, sparse: false }
+);
 
 const GlucoseLog = mongoose.model("GlucoseLog", glucoseLogSchema);
 

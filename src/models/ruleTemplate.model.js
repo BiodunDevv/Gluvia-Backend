@@ -50,6 +50,8 @@ const ruleTemplateSchema = new mongoose.Schema(
 
 // Compound index
 ruleTemplateSchema.index({ slug: 1, version: -1 });
+ruleTemplateSchema.index({ deleted: 1, updatedAt: -1 });
+ruleTemplateSchema.index({ deleted: 1, version: -1 });
 
 const RuleTemplate = mongoose.model('RuleTemplate', ruleTemplateSchema);
 

@@ -1,6 +1,7 @@
 const foodService = require("../services/food.service");
 const imageSearchService = require("../services/imageSearch.service");
 const { asyncHandler } = require("../middlewares/error.middleware");
+const { sendSuccess, sendError } = require("../utils/response.util");
 
 /**
  * @swagger
@@ -91,9 +92,9 @@ const getAllFoods = asyncHandler(async (req, res) => {
     Number(limit)
   );
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     data: result.items,
+    meta: result.meta,
     pagination: result.meta,
   });
 });
@@ -137,8 +138,7 @@ const getFoodById = asyncHandler(async (req, res) => {
     });
   }
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     data: food,
   });
 });
@@ -203,10 +203,13 @@ const getFoodById = asyncHandler(async (req, res) => {
 const createFood = asyncHandler(async (req, res) => {
   const result = await foodService.createFood(req.body, req.user?._id);
 
-  res.status(201).json({
-    success: true,
+  return sendSuccess(res, {
+    statusCode: 201,
     message: "Food created successfully",
     data: result.food,
+    meta: {
+      serverVersion: result.serverVersion,
+    },
     serverVersion: result.serverVersion,
   });
 });
@@ -281,10 +284,12 @@ const updateFood = asyncHandler(async (req, res) => {
     });
   }
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Food updated successfully",
     data: result.food,
+    meta: {
+      serverVersion: result.serverVersion,
+    },
     serverVersion: result.serverVersion,
   });
 });
@@ -337,17 +342,18 @@ const batchUpsertFoods = asyncHandler(async (req, res) => {
   const { foods } = req.body;
 
   if (!Array.isArray(foods) || foods.length === 0) {
-    return res.status(400).json({
-      success: false,
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
       message: "foods array is required and must not be empty",
     });
   }
 
-  const result = await foodService.batchUpsertFoods(foods);
+  const result = await foodService.batchUpsertFoods(foods, req.user?._id);
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Batch operation completed",
+    data: result,
     stats: result,
   });
 });
@@ -386,8 +392,7 @@ const batchUpsertFoods = asyncHandler(async (req, res) => {
 const deleteFood = asyncHandler(async (req, res) => {
   await foodService.deleteFood(req.params.id, req.user._id);
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Food deleted successfully",
   });
 });
@@ -449,8 +454,9 @@ const searchFoodImage = asyncHandler(async (req, res) => {
   const { foodName, useAI = true } = req.body;
 
   if (!foodName) {
-    return res.status(400).json({
-      success: false,
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
       message: "Food name is required",
     });
   }
@@ -459,8 +465,9 @@ const searchFoodImage = asyncHandler(async (req, res) => {
 
   // Check if search failed (rate limit or other errors)
   if (result.error || result.source === "none" || !result.imageUrl) {
-    return res.status(429).json({
-      success: false,
+    return sendError(res, {
+      statusCode: 429,
+      code: "IMAGE_SEARCH_FAILED",
       message:
         result.error ||
         "Image search failed - API rate limit may have been reached. Please try again later.",
@@ -473,8 +480,7 @@ const searchFoodImage = asyncHandler(async (req, res) => {
     });
   }
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Image search completed",
     data: result,
   });

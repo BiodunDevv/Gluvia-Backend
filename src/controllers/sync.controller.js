@@ -1,5 +1,6 @@
 const syncService = require("../services/sync.service");
 const { asyncHandler } = require("../middlewares/error.middleware");
+const { sendSuccess, sendError } = require("../utils/response.util");
 
 /**
  * @swagger
@@ -90,16 +91,17 @@ const uploadMealLogs = asyncHandler(async (req, res) => {
   const userId = req.user.id;
 
   if (!mealLogs || !Array.isArray(mealLogs)) {
-    return res.status(400).json({
-      success: false,
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
       message: "mealLogs array is required",
     });
   }
 
   const results = await syncService.uploadMealLogs(userId, mealLogs);
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
+    data: results,
     message: `${results.added} meal(s) logged successfully`,
     results,
   });
@@ -192,16 +194,17 @@ const uploadGlucoseLogs = asyncHandler(async (req, res) => {
   const userId = req.user.id;
 
   if (!glucoseLogs || !Array.isArray(glucoseLogs)) {
-    return res.status(400).json({
-      success: false,
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
       message: "glucoseLogs array is required",
     });
   }
 
   const results = await syncService.uploadGlucoseLogs(userId, glucoseLogs);
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
+    data: results,
     message: `${results.added} glucose reading(s) logged successfully`,
     results,
   });
@@ -251,8 +254,9 @@ const getDeltaUpdates = asyncHandler(async (req, res) => {
   const { clientVersion } = req.query;
 
   if (!clientVersion) {
-    return res.status(400).json({
-      success: false,
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
       message: "clientVersion query parameter is required",
     });
   }
@@ -260,12 +264,27 @@ const getDeltaUpdates = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const result = await syncService.getUpdates(userId, Number(clientVersion));
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
+    data: {
+      clientVersion: Number(clientVersion),
+      serverVersion: result.serverVersion,
+      foodsChanged: result.foodsChanged,
+      rulesChanged: result.rulesChanged,
+      requiresFullSync: result.requiresFullSync,
+      reason: result.reason,
+    },
+    meta: {
+      clientVersion: Number(clientVersion),
+      serverVersion: result.serverVersion,
+      requiresFullSync: result.requiresFullSync,
+      reason: result.reason,
+    },
     serverVersion: result.serverVersion,
     clientVersion: Number(clientVersion),
     foodsChanged: result.foodsChanged,
     rulesChanged: result.rulesChanged,
+    requiresFullSync: result.requiresFullSync,
+    reason: result.reason,
   });
 });
 
@@ -308,8 +327,15 @@ const getFullSync = asyncHandler(async (req, res) => {
   const userId = req.user.id;
   const result = await syncService.getFullSync(userId);
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
+    data: {
+      foods: result.foods,
+      rules: result.rules,
+      serverVersion: result.serverVersion,
+    },
+    meta: {
+      serverVersion: result.serverVersion,
+    },
     serverVersion: result.serverVersion,
     foods: result.foods,
     rules: result.rules,
@@ -542,8 +568,15 @@ const getUserAggregations = asyncHandler(async (req, res) => {
     syncService.getUserGlucoseLogs(userId, { from, to, page, limit }),
   ]);
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
+    data: {
+      mealLogs: mealLogs.logs,
+      glucoseLogs: glucoseLogs.logs,
+    },
+    meta: {
+      meals: mealLogs.meta,
+      glucose: glucoseLogs.meta,
+    },
     mealLogs: mealLogs.logs,
     glucoseLogs: glucoseLogs.logs,
     meta: {

@@ -1,5 +1,8 @@
 const userService = require("../services/user.service");
 const { asyncHandler } = require("../middlewares/error.middleware");
+const { sendSuccess } = require("../utils/response.util");
+const settingsService = require("../services/settings.service");
+const { t } = require("../utils/i18n.util");
 
 /**
  * @swagger
@@ -49,13 +52,22 @@ const { asyncHandler } = require("../middlewares/error.middleware");
  */
 const exportData = asyncHandler(async (req, res) => {
   const data = await userService.exportUserData(req.userId);
-  res.json({
-    success: true,
-    message: "User data exported successfully",
+
+  return sendSuccess(res, {
+    message: t("user_export_success", "english"),
     data,
+  });
+});
+
+const getMobileAppSettings = asyncHandler(async (_req, res) => {
+  const settings = await settingsService.getAppSettings();
+
+  return sendSuccess(res, {
+    data: settings,
   });
 });
 
 module.exports = {
   exportData,
+  getMobileAppSettings,
 };

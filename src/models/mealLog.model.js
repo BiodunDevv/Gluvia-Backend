@@ -50,9 +50,8 @@ const mealLogSchema = new mongoose.Schema(
     },
     clientGeneratedId: {
       type: String,
-      unique: true,
-      sparse: true,
-      index: true,
+      required: true,
+      trim: true,
     },
   },
   {
@@ -62,6 +61,11 @@ const mealLogSchema = new mongoose.Schema(
 
 // Compound index for efficient queries
 mealLogSchema.index({ userId: 1, createdAt: -1 });
+mealLogSchema.index({ userId: 1, timestamp: -1 });
+mealLogSchema.index(
+  { userId: 1, clientGeneratedId: 1 },
+  { unique: true, sparse: false }
+);
 
 const MealLog = mongoose.model("MealLog", mealLogSchema);
 

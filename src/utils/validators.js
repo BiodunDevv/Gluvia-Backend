@@ -226,29 +226,64 @@ const syncUploadSchema = z.object({
     meals: z
       .array(
         z.object({
-          entries: z.array(
-            z.object({
-              foodId: z.string(),
-              portionName: z.string().optional(),
-              grams: z.number().min(0),
-              carbs_g: z.number().min(0).optional(),
-            })
-          ),
-          clientGeneratedId: z.string().optional(),
+          entries: z
+            .array(
+              z.object({
+                foodId: z.string(),
+                portionName: z.string().optional(),
+                portionSize: z.string().optional(),
+                grams: z.number().min(0).optional(),
+                quantity: z.number().min(0).optional(),
+                carbs_g: z.number().min(0).optional(),
+              })
+            )
+            .optional(),
+          foods: z
+            .array(
+              z.object({
+                foodId: z.string(),
+                portionName: z.string().optional(),
+                portionSize: z.string().optional(),
+                grams: z.number().min(0).optional(),
+                quantity: z.number().min(0).optional(),
+                carbs_g: z.number().min(0).optional(),
+              })
+            )
+            .optional(),
+          clientGeneratedId: z.string().min(1),
           createdAt: z.string().datetime().optional(),
+          timestamp: z.string().datetime().optional(),
         })
-      )
+      ).refine((meal) => {
+        return (
+          (Array.isArray(meal.entries) && meal.entries.length > 0) ||
+          (Array.isArray(meal.foods) && meal.foods.length > 0)
+        );
+      }, "Meal log must include entries or foods")
       .optional(),
     glucose: z
       .array(
         z.object({
-          valueMgDl: z.number().min(0),
-          type: z.enum(["fasting", "postprandial", "random"]),
-          clientGeneratedId: z.string().optional(),
+          valueMgDl: z.number().min(0).optional(),
+          value: z.number().min(0).optional(),
+          type: z.enum([
+            "fasting",
+            "before_meal",
+            "after_meal",
+            "bedtime",
+            "random",
+            "2hr_post_meal",
+            "postprandial",
+          ]),
+          unit: z.enum(["mg/dL", "mmol/L"]).optional(),
+          clientGeneratedId: z.string().min(1),
           timestamp: z.string().datetime().optional(),
+          createdAt: z.string().datetime().optional(),
           notes: z.string().optional(),
         })
-      )
+      ).refine((glucose) => glucose.valueMgDl !== undefined || glucose.value !== undefined, {
+        message: "Glucose log must include valueMgDl or value",
+      })
       .optional(),
   }),
   clientVersion: z.number().int().min(0).optional(),

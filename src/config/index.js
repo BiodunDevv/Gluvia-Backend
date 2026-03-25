@@ -39,11 +39,37 @@ const config = {
     password: process.env.ADMIN_PASSWORD,
   },
 
-  // Rate limiting
+  groq: {
+    apiKey: process.env.GROQ_API_KEY,
+    model: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
+    baseUrl:
+      process.env.GROQ_BASE_URL ||
+      "https://api.groq.com/openai/v1/chat/completions",
+  },
+
+  azureTranslator: {
+    apiKey:
+      process.env.AZURE_TRANSLATOR_API_KEY ||
+      process.env.EXPO_PUBLIC_TRANSLATOR_API_KEY,
+    endpoint:
+      process.env.AZURE_TRANSLATOR_ENDPOINT ||
+      process.env.EXPO_PUBLIC_TRANSLATOR_ENDPOINT,
+    region:
+      process.env.AZURE_TRANSLATOR_REGION ||
+      process.env.EXPO_PUBLIC_TRANSLATOR_REGION,
+  },
+
+  expo: {
+    pushUrl:
+      process.env.EXPO_PUSH_URL || "https://exp.host/--/api/v2/push/send",
+  },
+
   rateLimit: {
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 60000,
     max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
   },
+
+  maintenanceMode: process.env.MAINTENANCE_MODE || "false",
 
   // Frontend URL
   frontendUrl: process.env.FRONTEND_URL || "http://localhost:3000",

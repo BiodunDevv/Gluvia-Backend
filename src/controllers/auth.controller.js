@@ -1,6 +1,8 @@
 const authService = require("../services/auth.service");
 const userService = require("../services/user.service");
 const { asyncHandler } = require("../middlewares/error.middleware");
+const { sendSuccess, sendError } = require("../utils/response.util");
+const { t } = require("../utils/i18n.util");
 
 /**
  * @swagger
@@ -119,9 +121,9 @@ const { asyncHandler } = require("../middlewares/error.middleware");
 const register = asyncHandler(async (req, res) => {
   const result = await authService.register(req.body);
 
-  res.status(201).json({
-    success: true,
-    message: "User registered successfully",
+  return sendSuccess(res, {
+    statusCode: 201,
+    message: t("auth_register_success", "english"),
     data: {
       user: result.user,
       token: result.token,
@@ -240,9 +242,8 @@ const register = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res) => {
   const result = await authService.login(req.body);
 
-  res.json({
-    success: true,
-    message: "Login successful",
+  return sendSuccess(res, {
+    message: t("auth_login_success", "english"),
     data: {
       user: result.user,
       token: result.token,
@@ -275,9 +276,8 @@ const login = asyncHandler(async (req, res) => {
 const logout = asyncHandler(async (req, res) => {
   await authService.logout(req.userId, req.jti, req.body.deviceId);
 
-  res.json({
-    success: true,
-    message: "Logged out successfully",
+  return sendSuccess(res, {
+    message: t("auth_logout_success", "english"),
     data: null,
   });
 });
@@ -307,9 +307,8 @@ const logout = asyncHandler(async (req, res) => {
 const passwordResetRequest = asyncHandler(async (req, res) => {
   await authService.requestPasswordReset(req.body.email);
 
-  res.json({
-    success: true,
-    message: "If the email exists, a password reset link has been sent",
+  return sendSuccess(res, {
+    message: t("auth_password_reset_request_success", "english"),
     data: null,
   });
 });
@@ -344,9 +343,8 @@ const passwordResetRequest = asyncHandler(async (req, res) => {
 const passwordReset = asyncHandler(async (req, res) => {
   await authService.resetPassword(req.body.resetToken, req.body.newPassword);
 
-  res.json({
-    success: true,
-    message: "Password reset successful",
+  return sendSuccess(res, {
+    message: t("auth_password_reset_success", "english"),
     data: null,
   });
 });
@@ -394,7 +392,7 @@ const passwordReset = asyncHandler(async (req, res) => {
  *                           example: "+1234567890"
  *                         role:
  *                           type: string
- *                           enum: [user, admin, health_worker]
+ *                           enum: [user, admin]
  *                           example: user
  *                         profile:
  *                           type: object
@@ -494,9 +492,8 @@ const passwordReset = asyncHandler(async (req, res) => {
 const getMe = asyncHandler(async (req, res) => {
   const user = await authService.getUserProfile(req.userId);
 
-  res.json({
-    success: true,
-    message: "Profile retrieved successfully",
+  return sendSuccess(res, {
+    message: t("auth_profile_retrieved_success", "english"),
     data: { user },
   });
 });
@@ -658,9 +655,8 @@ const getMe = asyncHandler(async (req, res) => {
 const updateMe = asyncHandler(async (req, res) => {
   const user = await authService.updateUserProfile(req.userId, req.body);
 
-  res.json({
-    success: true,
-    message: "Profile updated successfully",
+  return sendSuccess(res, {
+    message: t("auth_profile_updated_success", "english"),
     data: { user },
   });
 });
@@ -733,9 +729,10 @@ const updateMe = asyncHandler(async (req, res) => {
  */
 const uploadPhoto = asyncHandler(async (req, res) => {
   if (!req.file) {
-    return res.status(400).json({
-      success: false,
-      message: "No image file provided",
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
+      message: t("auth_photo_missing", "english"),
     });
   }
 
@@ -744,9 +741,8 @@ const uploadPhoto = asyncHandler(async (req, res) => {
     req.file.buffer
   );
 
-  res.json({
-    success: true,
-    message: "Profile photo uploaded successfully",
+  return sendSuccess(res, {
+    message: t("auth_photo_uploaded_success", "english"),
     data: result,
   });
 });
@@ -782,9 +778,8 @@ const uploadPhoto = asyncHandler(async (req, res) => {
 const deleteAccount = asyncHandler(async (req, res) => {
   await userService.deleteUserAccount(req.userId);
 
-  res.json({
-    success: true,
-    message: "Account deleted successfully",
+  return sendSuccess(res, {
+    message: t("auth_account_deleted_success", "english"),
   });
 });
 

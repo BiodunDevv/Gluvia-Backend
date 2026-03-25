@@ -32,6 +32,33 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  */
 async function updateFoodImage(food) {
   try {
+    const existingMatch = await FoodItem.findOne({
+      _id: { $ne: food._id },
+      localName: food.localName,
+      imageUrl: { $exists: true, $ne: null, $ne: "" },
+    })
+      .select("imageUrl")
+      .lean();
+
+    if (existingMatch?.imageUrl) {
+      await FoodItem.findByIdAndUpdate(
+        food._id,
+        {
+          imageUrl: existingMatch.imageUrl,
+          $inc: { version: 1 },
+        },
+        { new: true }
+      );
+      console.log(`\n⏭️  Skipped search for: ${food.localName}`);
+      console.log(`   Reused existing backend image`);
+      return {
+        success: true,
+        skippedSearch: true,
+        food: food.localName,
+        imageUrl: existingMatch.imageUrl,
+      };
+    }
+
     console.log(`\n🔍 Searching image for: ${food.localName}`);
 
     const imageUrl = await fetchFoodImage(food.localName, USE_AI);

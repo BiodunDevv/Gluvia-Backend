@@ -10,12 +10,14 @@ const config = require('../config');
 const generateToken = (payload) => {
   const jti = uuidv4();
   const iat = Math.floor(Date.now() / 1000);
+  const iatMs = Date.now();
   
   const tokenPayload = {
     sub: payload.sub,
     role: payload.role,
     jti,
     iat,
+    iatMs,
   };
   
   const token = jwt.sign(tokenPayload, config.jwt.secret, {

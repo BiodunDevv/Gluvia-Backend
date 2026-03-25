@@ -1,5 +1,6 @@
 const pino = require("pino");
 const config = require("../config");
+const { sendError } = require("../utils/response.util");
 
 const logger = pino({
   level: config.env === "production" ? "info" : "debug",
@@ -20,37 +21,16 @@ const logger = pino({
  * Error handling middleware
  */
 const errorHandler = (err, req, res, next) => {
-  // Enhanced console logging for mobile debugging
-  console.log("\n" + "🚨".repeat(40));
-  console.log("❌ ERROR OCCURRED");
-  console.log("🚨".repeat(40));
-  console.log(`📱 Endpoint: ${req.method} ${req.url}`);
-  console.log(`🌐 Origin: ${req.headers.origin || "No origin"}`);
-  console.log(`📍 IP: ${req.ip || req.connection.remoteAddress}`);
-  console.log(`🔴 Error Name: ${err.name}`);
-  console.log(`💬 Error Message: ${err.message}`);
-
-  if (req.body && Object.keys(req.body).length > 0) {
-    console.log("📦 Request Body:", JSON.stringify(req.body, null, 2));
-  }
-
-  if (err.stack) {
-    console.log("📚 Stack Trace:");
-    console.log(err.stack);
-  }
-  console.log("🚨".repeat(40) + "\n");
-
   // Log error
   logger.error(
     {
-      err,
-      req: {
-        method: req.method,
-        url: req.url,
-        userId: req.userId,
-        body: req.body,
-        headers: req.headers,
-      },
+      code: err.code,
+      name: err.name,
+      message: err.message,
+      statusCode: err.statusCode,
+      method: req.method,
+      url: req.url,
+      userId: req.userId,
     },
     "Request error"
   );
@@ -86,18 +66,22 @@ const errorHandler = (err, req, res, next) => {
     statusCode = 401;
   }
 
-  res.status(statusCode).json({ error });
+  return sendError(res, {
+    statusCode,
+    code: error.code,
+    message: error.message,
+    details: error.details,
+  });
 };
 
 /**
  * 404 handler
  */
 const notFoundHandler = (req, res) => {
-  res.status(404).json({
-    error: {
-      code: "NOT_FOUND",
-      message: "Route not found",
-    },
+  return sendError(res, {
+    statusCode: 404,
+    code: "NOT_FOUND",
+    message: "Route not found",
   });
 };
 

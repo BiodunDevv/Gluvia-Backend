@@ -7,7 +7,10 @@ const {
 } = require("../utils/hash.util");
 const { generateToken } = require("../utils/jwt.util");
 const emailService = require("./email.service");
+const notificationService = require("./notification.service");
 const config = require("../config");
+const { t } = require("../utils/i18n.util");
+const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
 
 /**
  * Register a new user (only for regular users, not admins)
@@ -19,11 +22,12 @@ const register = async ({
   phone,
   deviceId,
   consent,
+  language,
 }) => {
   // Check if user already exists
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ email }).select("_id").lean();
   if (existingUser) {
-    throw new Error("Email already registered");
+    throw new Error(t("auth_email_registered", "english"));
   }
 
   // Hash password
@@ -47,12 +51,29 @@ const register = async ({
     role: user.role,
   });
 
+  user.lastLoginAt = new Date();
+  await user.save();
+
   // Send welcome email
   try {
     await emailService.sendWelcomeEmail(user.email, user.name || "User");
   } catch (error) {
     console.error("Failed to send welcome email:", error.message);
   }
+
+  await notificationService
+    .createNotification({
+      userId: user._id,
+      type: "system",
+      title: "Welcome to Gluvia AI",
+      body: "Your account is ready. Complete your profile and sync foods to start getting meal guidance.",
+      data: { route: "/(tabs)/profile" },
+      dedupeKey: notificationService.buildDedupeKey(
+        "welcome",
+        user._id.toString()
+      ),
+    })
+    .catch(() => {});
 
   return {
     user,
@@ -64,13 +85,13 @@ const register = async ({
 /**
  * Login user
  */
-const login = async ({ email, password, deviceId }) => {
+const login = async ({ email, password, deviceId, language }) => {
   // Find user
-  const user = await User.findOne({ email, deleted: false });
+  const user = await User.findOne({ email, deleted: false }).select(
+    "email passwordHash role name phone profile consent lastLoginAt deleted createdAt updatedAt"
+  );
   if (!user) {
-    const error = new Error(
-      "Account not found. Please check your email or register a new account."
-    );
+    const error = new Error(t("auth_account_not_found", "english"));
     error.code = "ACCOUNT_NOT_FOUND";
     throw error;
   }
@@ -78,9 +99,7 @@ const login = async ({ email, password, deviceId }) => {
   // Compare password
   const isValid = await comparePassword(password, user.passwordHash);
   if (!isValid) {
-    const error = new Error(
-      "Invalid password. Please check your password and try again."
-    );
+    const error = new Error(t("auth_invalid_password", "english"));
     error.code = "INVALID_PASSWORD";
     throw error;
   }
@@ -90,6 +109,9 @@ const login = async ({ email, password, deviceId }) => {
     sub: user._id.toString(),
     role: user.role,
   });
+
+  user.lastLoginAt = new Date();
+  await user.save();
 
   return {
     user,
@@ -102,21 +124,15 @@ const login = async ({ email, password, deviceId }) => {
  * Logout user (revoke token)
  */
 const logout = async (userId, jti, deviceId) => {
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).select("_id");
   if (!user) {
-    throw new Error("User not found");
+    throw new Error(t("auth_user_not_found", "english"));
   }
-
-  // Add jti to revoked tokens
-  const decoded = require("jsonwebtoken").decode(jti);
-  const expiresAt = decoded
-    ? new Date(decoded.exp * 1000)
-    : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
   await RevokedToken.create({
     jti,
     userId,
-    expiresAt,
+    expiresAt: new Date(Date.now() + THIRTY_DAYS_MS),
     reason: "logout",
   });
 
@@ -127,7 +143,9 @@ const logout = async (userId, jti, deviceId) => {
  * Request password reset
  */
 const requestPasswordReset = async (email) => {
-  const user = await User.findOne({ email, deleted: false });
+  const user = await User.findOne({ email, deleted: false }).select(
+    "_id email name role profile passwordResetToken passwordResetExpires deleted"
+  );
   if (!user) {
     // Don't reveal if email exists
     return { ok: true };
@@ -152,7 +170,24 @@ const requestPasswordReset = async (email) => {
     );
   } catch (error) {
     console.error("Failed to send password reset email:", error.message);
-    throw new Error("Failed to send reset email");
+    throw new Error(t("auth_reset_email_failed", "english"));
+  }
+
+  if (user.role === "user") {
+    await notificationService
+      .createNotification({
+        userId: user._id,
+        type: "system",
+        title: "Password reset requested",
+        body: "A password reset request was started for your account. If this was not you, secure your email and account immediately.",
+        data: { route: "/notifications" },
+        dedupeKey: notificationService.buildDedupeKey(
+          "password_reset_requested",
+          user._id.toString(),
+          new Date().toISOString().slice(0, 13)
+        ),
+      })
+      .catch(() => {});
   }
 
   return { ok: true };
@@ -179,7 +214,7 @@ const resetPassword = async (resetToken, newPassword) => {
   }
 
   if (!user) {
-    throw new Error("Invalid or expired reset token");
+    throw new Error(t("auth_reset_token_invalid", "english"));
   }
 
   // Update password
@@ -191,28 +226,70 @@ const resetPassword = async (resetToken, newPassword) => {
   // Revoke all active tokens for this user
   await revokeAllUserTokens(user._id);
 
+  if (user.role === "user") {
+    await notificationService
+      .createNotification({
+        userId: user._id,
+        type: "system",
+        title: "Password updated",
+        body: "Your account password was changed successfully.",
+        data: { route: "/notifications" },
+        dedupeKey: notificationService.buildDedupeKey(
+          "password_updated",
+          user._id.toString(),
+          new Date().toISOString().slice(0, 13)
+        ),
+      })
+      .catch(() => {});
+  }
+
   return { ok: true };
 };
 
 /**
  * Check if token is revoked
  */
-const isTokenRevoked = async (jti) => {
-  const revoked = await RevokedToken.findOne({ jti });
-  return !!revoked;
+const isTokenRevoked = async (jti, userId, tokenIssuedAtMs) => {
+  const exactRevocation = await RevokedToken.findOne({ jti }).select("_id").lean();
+  if (exactRevocation) {
+    return true;
+  }
+
+  if (!userId) {
+    return false;
+  }
+
+  const globalRevocation = await RevokedToken.findOne({
+    jti: `user_${userId}_all`,
+  })
+    .sort({ createdAt: -1 })
+    .select("createdAt")
+    .lean();
+
+  if (!globalRevocation) {
+    return false;
+  }
+
+  const issuedAt =
+    typeof tokenIssuedAtMs === "number" && Number.isFinite(tokenIssuedAtMs)
+      ? tokenIssuedAtMs
+      : 0;
+  const revokedAt = new Date(globalRevocation.createdAt).getTime();
+
+  return issuedAt > 0 && issuedAt <= revokedAt;
 };
 
 /**
  * Revoke all tokens for a user
  */
 const revokeAllUserTokens = async (userId) => {
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).select("_id");
   if (!user) {
     throw new Error("User not found");
   }
 
   // Revoke all tokens for this user by setting a revocation timestamp
-  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+  const expiresAt = new Date(Date.now() + THIRTY_DAYS_MS);
 
   await RevokedToken.create({
     jti: `user_${userId}_all`,
@@ -228,7 +305,7 @@ const revokeAllUserTokens = async (userId) => {
  * Get user profile by ID
  */
 const getUserProfile = async (userId) => {
-  const user = await User.findById(userId).select("-passwordHash");
+  const user = await User.findById(userId).select("-passwordHash -__v");
   if (!user) {
     throw new Error("User not found");
   }
@@ -258,7 +335,7 @@ const updateUserProfile = async (userId, updateData) => {
   // Handle nested profile updates
   if (updates.profile && typeof updates.profile === "object") {
     // If profile is being updated, merge with existing profile
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("profile");
     if (!user) {
       throw new Error("User not found");
     }
@@ -283,7 +360,7 @@ const updateUserProfile = async (userId, updateData) => {
     const existingUser = await User.findOne({
       email: updates.email,
       _id: { $ne: userId },
-    });
+    }).select("_id").lean();
     if (existingUser) {
       throw new Error("Email already in use");
     }
@@ -313,7 +390,7 @@ const updateUserProfile = async (userId, updateData) => {
  */
 const createAdmin = async ({ email, password, name, phone }) => {
   // Check if user already exists
-  const existingUser = await User.findOne({ email });
+  const existingUser = await User.findOne({ email }).select("_id").lean();
   if (existingUser) {
     throw new Error("Email already registered");
   }
@@ -329,9 +406,35 @@ const createAdmin = async ({ email, password, name, phone }) => {
     phone,
     role: "admin",
     consent: { accepted: true, timestamp: new Date() },
+    profile: {
+      language: "english",
+    },
   });
 
   return user;
+};
+
+const createUser = async ({ email, password, name, phone, role = "user" }) => {
+  const existingUser = await User.findOne({ email }).select("_id").lean();
+  if (existingUser) {
+    throw new Error("Email already registered");
+  }
+
+  const passwordHash = await hashPassword(password);
+
+  const normalizedRole = role === "admin" ? "admin" : "user";
+
+  return User.create({
+    email,
+    passwordHash,
+    name,
+    phone,
+    role: normalizedRole,
+    consent: { accepted: true, timestamp: new Date() },
+    profile: {
+      language: "english",
+    },
+  });
 };
 
 module.exports = {
@@ -345,4 +448,5 @@ module.exports = {
   getUserProfile,
   updateUserProfile,
   createAdmin,
+  createUser,
 };

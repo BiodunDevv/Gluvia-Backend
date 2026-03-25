@@ -5,7 +5,7 @@ const cloudinaryService = require('./cloudinary.service');
  * Get user profile
  */
 const getUserProfile = async (userId) => {
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).select("-passwordHash -__v");
   if (!user) {
     throw new Error('User not found');
   }
@@ -77,22 +77,19 @@ const uploadProfilePhoto = async (userId, fileBuffer) => {
  * Export user data (NDPR compliance)
  */
 const exportUserData = async (userId) => {
-  const user = await User.findById(userId).lean();
+  const MealLog = require('../models/mealLog.model');
+  const GlucoseLog = require('../models/glucoseLog.model');
+  const SyncCheckpoint = require('../models/syncCheckpoint.model');
+  const [user, mealLogs, glucoseLogs, syncCheckpoint] = await Promise.all([
+    User.findById(userId).select("-passwordHash -__v").lean(),
+    MealLog.find({ userId }).lean(),
+    GlucoseLog.find({ userId }).lean(),
+    SyncCheckpoint.findOne({ userId }).lean(),
+  ]);
+
   if (!user) {
     throw new Error('User not found');
   }
-
-  // Get all user's meal logs
-  const MealLog = require('../models/mealLog.model');
-  const mealLogs = await MealLog.find({ userId }).lean();
-
-  // Get all user's glucose logs
-  const GlucoseLog = require('../models/glucoseLog.model');
-  const glucoseLogs = await GlucoseLog.find({ userId }).lean();
-
-  // Get sync checkpoint
-  const SyncCheckpoint = require('../models/syncCheckpoint.model');
-  const syncCheckpoint = await SyncCheckpoint.findOne({ userId }).lean();
 
   return {
     user,

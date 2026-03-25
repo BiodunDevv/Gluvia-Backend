@@ -1,5 +1,16 @@
 const syncService = require("../services/sync.service");
 const { asyncHandler } = require("../middlewares/error.middleware");
+const { sendSuccess, sendError } = require("../utils/response.util");
+const { t } = require("../utils/i18n.util");
+const {
+  explainMealRecommendation: explainMealRecommendationWithAI,
+  getChatConversationList,
+  getChatConversation: getChatConversationById,
+  deleteChatConversation,
+  clearChatConversations,
+  chatWithAssistant: chatWithAssistantService,
+  createTextChunks,
+} = require("../services/ai.service");
 
 /**
  * @swagger
@@ -82,17 +93,19 @@ const getUserNutritionReport = asyncHandler(async (req, res) => {
   const { from, to } = req.query;
 
   if (!from || !to) {
-    return res.status(400).json({
-      success: false,
-      message: "from and to query parameters are required",
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
+      message: t("report_range_required", "english"),
     });
   }
 
   // Authorization: user can only view their own report unless admin
   if (req.user.role !== "admin" && req.user.id !== userId) {
-    return res.status(403).json({
-      success: false,
-      message: "You are not authorized to view this report",
+    return sendError(res, {
+      statusCode: 403,
+      code: "FORBIDDEN",
+      message: t("report_forbidden", "english"),
     });
   }
 
@@ -119,10 +132,10 @@ const getUserNutritionReport = asyncHandler(async (req, res) => {
   if (mealLogs.length > 0) {
     const totals = mealLogs.reduce(
       (acc, meal) => ({
-        calories: acc.calories + (meal.totalNutrients?.calories || 0),
-        carbs: acc.carbs + (meal.totalNutrients?.carbohydrates || 0),
-        protein: acc.protein + (meal.totalNutrients?.protein || 0),
-        fat: acc.fat + (meal.totalNutrients?.fat || 0),
+        calories: acc.calories + (meal.calculatedTotals?.calories || 0),
+        carbs: acc.carbs + (meal.calculatedTotals?.carbs || 0),
+        protein: acc.protein + (meal.calculatedTotals?.protein || 0),
+        fat: acc.fat + (meal.calculatedTotals?.fat || 0),
       }),
       { calories: 0, carbs: 0, protein: 0, fat: 0 }
     );
@@ -134,12 +147,14 @@ const getUserNutritionReport = asyncHandler(async (req, res) => {
   }
 
   if (glucoseLogs.length > 0) {
-    const totalGlucose = glucoseLogs.reduce((sum, log) => sum + log.value, 0);
+    const totalGlucose = glucoseLogs.reduce(
+      (sum, log) => sum + (log.valueMgDl || log.value || 0),
+      0
+    );
     stats.avgGlucose = Math.round(totalGlucose / glucoseLogs.length);
   }
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     data: {
       mealLogs,
       glucoseLogs,
@@ -148,6 +163,136 @@ const getUserNutritionReport = asyncHandler(async (req, res) => {
   });
 });
 
+const explainMealRecommendation = asyncHandler(async (req, res) => {
+  const {
+    mealType,
+    selectedFoods = [],
+    maxCarbsAllowed,
+    lastGlucose,
+    alerts = [],
+    tips = [],
+    profile = req.user?.profile || {},
+  } = req.body || {};
+
+  if (!mealType || !Array.isArray(selectedFoods) || selectedFoods.length === 0) {
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
+      message: t("validation_meal_explanation_required", "english"),
+    });
+  }
+
+  const explanation = await explainMealRecommendationWithAI({
+    mealType,
+    selectedFoods,
+    maxCarbsAllowed,
+    lastGlucose,
+    alerts,
+    tips,
+    profile,
+  });
+
+  return sendSuccess(res, {
+    data: explanation,
+  });
+});
+
+const getChatConversations = asyncHandler(async (req, res) => {
+  const conversations = await getChatConversationList(req.user._id);
+
+  return sendSuccess(res, {
+    data: conversations,
+  });
+});
+
+const getChatConversation = asyncHandler(async (req, res) => {
+  const conversation = await getChatConversationById(req.user._id, req.params.id);
+
+  return sendSuccess(res, {
+    data: conversation,
+  });
+});
+
+const removeChatConversation = asyncHandler(async (req, res) => {
+  const result = await deleteChatConversation(req.user._id, req.params.id);
+
+  return sendSuccess(res, {
+    data: result,
+  });
+});
+
+const removeAllChatConversations = asyncHandler(async (req, res) => {
+  const result = await clearChatConversations(req.user._id);
+
+  return sendSuccess(res, {
+    data: result,
+  });
+});
+
+const chatWithAssistant = asyncHandler(async (req, res) => {
+  const result = await chatWithAssistantService({
+    user: req.user,
+    message: req.body?.message,
+    conversationId: req.body?.conversationId,
+  });
+
+  return sendSuccess(res, {
+    data: result,
+  });
+});
+
+const streamChatWithAssistant = asyncHandler(async (req, res) => {
+  const result = await chatWithAssistantService({
+    user: req.user,
+    message: req.body?.message,
+    conversationId: req.body?.conversationId,
+  });
+
+  const chunks =
+    result?.message?.chunks && result.message.chunks.length > 0
+      ? result.message.chunks
+      : createTextChunks(result?.message?.content || "");
+
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
+  res.setHeader("Connection", "keep-alive");
+
+  if (typeof res.flushHeaders === "function") {
+    res.flushHeaders();
+  }
+
+  res.write(
+    `event: conversation\ndata: ${JSON.stringify({
+      conversation: result.conversation,
+      language: "english",
+    })}\n\n`
+  );
+
+  chunks.forEach((chunk, index) => {
+    res.write(
+      `event: chunk\ndata: ${JSON.stringify({
+        index,
+        content: chunk,
+      })}\n\n`
+    );
+  });
+
+  res.write(
+    `event: done\ndata: ${JSON.stringify({
+      status: t("chat_stream_done", "english"),
+      message: result.message,
+    })}\n\n`
+  );
+  res.end();
+});
+
 module.exports = {
   getUserNutritionReport,
+  explainMealRecommendation,
+  getChatConversations,
+  getChatConversation,
+  removeChatConversation,
+  removeAllChatConversations,
+  chatWithAssistant,
+  streamChatWithAssistant,
 };

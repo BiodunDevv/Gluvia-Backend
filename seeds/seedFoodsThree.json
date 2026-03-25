@@ -1,0 +1,354 @@
+[
+  {
+    "localName": "Oatmeal Porridge",
+    "canonicalName": "Rolled Oats Porridge",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 68,
+      "carbs_g": 12,
+      "protein_g": 2.4,
+      "fat_g": 1.4,
+      "fibre_g": 1.7,
+      "gi": 55
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 18 },
+      { "name": "Medium bowl", "grams": 220, "carbs_g": 26.4 },
+      { "name": "Large bowl", "grams": 300, "carbs_g": 36 }
+    ],
+    "affordability": "low",
+    "tags": ["breakfast", "whole-grain", "high-fibre", "diabetes-friendly", "oats"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Brown Rice",
+    "canonicalName": "Whole Grain Brown Rice",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 123,
+      "carbs_g": 25.6,
+      "protein_g": 2.7,
+      "fat_g": 1,
+      "fibre_g": 1.8,
+      "gi": 50
+    },
+    "portionSizes": [
+      { "name": "Small plate", "grams": 120, "carbs_g": 30.7 },
+      { "name": "Medium plate", "grams": 180, "carbs_g": 46.1 },
+      { "name": "Large plate", "grams": 250, "carbs_g": 64 }
+    ],
+    "affordability": "medium",
+    "tags": ["whole-grain", "rice", "diabetes-friendly", "low-gi"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Moi Moi",
+    "canonicalName": "Steamed Bean Pudding",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 152,
+      "carbs_g": 14,
+      "protein_g": 8.5,
+      "fat_g": 7.2,
+      "fibre_g": 4.3,
+      "gi": 42
+    },
+    "portionSizes": [
+      { "name": "1 wrap", "grams": 100, "carbs_g": 14 },
+      { "name": "2 wraps", "grams": 180, "carbs_g": 25.2 },
+      { "name": "Party portion", "grams": 250, "carbs_g": 35 }
+    ],
+    "affordability": "low",
+    "tags": ["beans", "protein", "high-fibre", "diabetes-friendly", "breakfast"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Boiled Beans",
+    "canonicalName": "Plain Cooked Beans",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 127,
+      "carbs_g": 22.8,
+      "protein_g": 8.7,
+      "fat_g": 0.5,
+      "fibre_g": 6.4,
+      "gi": 31
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 120, "carbs_g": 27.4 },
+      { "name": "Medium bowl", "grams": 180, "carbs_g": 41 },
+      { "name": "Large bowl", "grams": 250, "carbs_g": 57 }
+    ],
+    "affordability": "low",
+    "tags": ["beans", "protein", "high-fibre", "diabetes-friendly", "budget"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Okra Soup",
+    "canonicalName": "Nigerian Okra Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 90,
+      "carbs_g": 8.5,
+      "protein_g": 5.5,
+      "fat_g": 4.2,
+      "fibre_g": 4.1,
+      "gi": 20
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 12.8 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 21.3 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 29.8 }
+    ],
+    "affordability": "medium",
+    "tags": ["soup", "vegetable", "low-gi", "high-fibre", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Ugu Soup",
+    "canonicalName": "Fluted Pumpkin Leaf Soup",
+    "category": "Soups & Stews",
+    "nutrients": {
+      "calories": 98,
+      "carbs_g": 7,
+      "protein_g": 6.8,
+      "fat_g": 4.8,
+      "fibre_g": 3.9,
+      "gi": 18
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 150, "carbs_g": 10.5 },
+      { "name": "Medium bowl", "grams": 250, "carbs_g": 17.5 },
+      { "name": "Large bowl", "grams": 350, "carbs_g": 24.5 }
+    ],
+    "affordability": "medium",
+    "tags": ["soup", "vegetable", "low-gi", "diabetes-friendly", "high-fibre"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Grilled Tilapia",
+    "canonicalName": "Grilled Tilapia Fish",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 128,
+      "carbs_g": 0,
+      "protein_g": 26,
+      "fat_g": 2.7,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "Half fish", "grams": 120, "carbs_g": 0 },
+      { "name": "1 fish", "grams": 200, "carbs_g": 0 },
+      { "name": "Large serving", "grams": 280, "carbs_g": 0 }
+    ],
+    "affordability": "medium",
+    "tags": ["fish", "protein", "low-carb", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Boiled Egg",
+    "canonicalName": "Hard-Boiled Egg",
+    "category": "Protein Foods",
+    "nutrients": {
+      "calories": 155,
+      "carbs_g": 1.1,
+      "protein_g": 13,
+      "fat_g": 11,
+      "fibre_g": 0,
+      "gi": 0
+    },
+    "portionSizes": [
+      { "name": "1 egg", "grams": 50, "carbs_g": 0.6 },
+      { "name": "2 eggs", "grams": 100, "carbs_g": 1.1 },
+      { "name": "3 eggs", "grams": 150, "carbs_g": 1.7 }
+    ],
+    "affordability": "low",
+    "tags": ["egg", "protein", "low-carb", "breakfast", "budget"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Avocado Pear",
+    "canonicalName": "Avocado",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 160,
+      "carbs_g": 8.5,
+      "protein_g": 2,
+      "fat_g": 14.7,
+      "fibre_g": 6.7,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Quarter fruit", "grams": 50, "carbs_g": 4.3 },
+      { "name": "Half fruit", "grams": 100, "carbs_g": 8.5 },
+      { "name": "1 fruit", "grams": 180, "carbs_g": 15.3 }
+    ],
+    "affordability": "medium",
+    "tags": ["healthy-fat", "fruit", "high-fibre", "low-gi", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Cucumber Salad",
+    "canonicalName": "Fresh Cucumber Salad",
+    "category": "Salads",
+    "nutrients": {
+      "calories": 22,
+      "carbs_g": 4.3,
+      "protein_g": 1,
+      "fat_g": 0.2,
+      "fibre_g": 1.1,
+      "gi": 15
+    },
+    "portionSizes": [
+      { "name": "Side bowl", "grams": 100, "carbs_g": 4.3 },
+      { "name": "Medium bowl", "grams": 160, "carbs_g": 6.9 },
+      { "name": "Large bowl", "grams": 220, "carbs_g": 9.5 }
+    ],
+    "affordability": "low",
+    "tags": ["salad", "vegetable", "low-gi", "low-carb", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Apple",
+    "canonicalName": "Fresh Apple",
+    "category": "Fruits & Vegetables",
+    "nutrients": {
+      "calories": 52,
+      "carbs_g": 14,
+      "protein_g": 0.3,
+      "fat_g": 0.2,
+      "fibre_g": 2.4,
+      "gi": 36
+    },
+    "portionSizes": [
+      { "name": "Small apple", "grams": 100, "carbs_g": 14 },
+      { "name": "Medium apple", "grams": 150, "carbs_g": 21 },
+      { "name": "Large apple", "grams": 200, "carbs_g": 28 }
+    ],
+    "affordability": "medium",
+    "tags": ["fruit", "snack", "low-gi", "high-fibre", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Plain Greek Yogurt",
+    "canonicalName": "Unsweetened Greek Yogurt",
+    "category": "Dairy",
+    "nutrients": {
+      "calories": 73,
+      "carbs_g": 3.9,
+      "protein_g": 10,
+      "fat_g": 0.4,
+      "fibre_g": 0,
+      "gi": 11
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 100, "carbs_g": 3.9 },
+      { "name": "Regular cup", "grams": 150, "carbs_g": 5.9 },
+      { "name": "Large cup", "grams": 200, "carbs_g": 7.8 }
+    ],
+    "affordability": "high",
+    "tags": ["dairy", "protein", "low-carb", "diabetes-friendly", "breakfast"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Unsweetened Soy Milk",
+    "canonicalName": "Plain Soy Milk",
+    "category": "Beverages",
+    "nutrients": {
+      "calories": 45,
+      "carbs_g": 1.5,
+      "protein_g": 3.5,
+      "fat_g": 2.2,
+      "fibre_g": 0.6,
+      "gi": 30
+    },
+    "portionSizes": [
+      { "name": "Small glass", "grams": 150, "carbs_g": 2.3 },
+      { "name": "1 glass", "grams": 250, "carbs_g": 3.8 },
+      { "name": "Large glass", "grams": 350, "carbs_g": 5.3 }
+    ],
+    "affordability": "medium",
+    "tags": ["drink", "protein", "low-carb", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Roasted Groundnuts",
+    "canonicalName": "Dry Roasted Peanuts",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 585,
+      "carbs_g": 21,
+      "protein_g": 24,
+      "fat_g": 49,
+      "fibre_g": 8.4,
+      "gi": 14
+    },
+    "portionSizes": [
+      { "name": "Small handful", "grams": 25, "carbs_g": 5.3 },
+      { "name": "Medium handful", "grams": 40, "carbs_g": 8.4 },
+      { "name": "Large handful", "grams": 60, "carbs_g": 12.6 }
+    ],
+    "affordability": "low",
+    "tags": ["nuts", "snack", "protein", "healthy-fat", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Carrot Sticks",
+    "canonicalName": "Fresh Carrot Sticks",
+    "category": "Snacks",
+    "nutrients": {
+      "calories": 41,
+      "carbs_g": 10,
+      "protein_g": 0.9,
+      "fat_g": 0.2,
+      "fibre_g": 2.8,
+      "gi": 39
+    },
+    "portionSizes": [
+      { "name": "Small cup", "grams": 80, "carbs_g": 8 },
+      { "name": "Medium cup", "grams": 120, "carbs_g": 12 },
+      { "name": "Large cup", "grams": 180, "carbs_g": 18 }
+    ],
+    "affordability": "low",
+    "tags": ["vegetable", "snack", "low-gi", "high-fibre", "diabetes-friendly"],
+    "source": "validated",
+    "version": 1
+  },
+  {
+    "localName": "Beans and Corn Mix",
+    "canonicalName": "Adalu",
+    "category": "Grains & Staples",
+    "nutrients": {
+      "calories": 135,
+      "carbs_g": 23,
+      "protein_g": 6.2,
+      "fat_g": 2,
+      "fibre_g": 5.1,
+      "gi": 47
+    },
+    "portionSizes": [
+      { "name": "Small bowl", "grams": 120, "carbs_g": 27.6 },
+      { "name": "Medium bowl", "grams": 180, "carbs_g": 41.4 },
+      { "name": "Large bowl", "grams": 250, "carbs_g": 57.5 }
+    ],
+    "affordability": "low",
+    "tags": ["beans", "corn", "high-fibre", "diabetes-friendly", "budget"],
+    "source": "validated",
+    "version": 1
+  }
+]

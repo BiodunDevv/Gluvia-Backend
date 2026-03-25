@@ -1,3 +1,5 @@
+const { sendError } = require("../utils/response.util");
+
 /**
  * Check if user has required role(s)
  * @param  {...string} roles - Allowed roles
@@ -5,20 +7,18 @@
 const requireRole = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
-      return res.status(401).json({
-        error: {
-          code: 'UNAUTHORIZED',
-          message: 'Authentication required',
-        },
+      return sendError(res, {
+        statusCode: 401,
+        code: "UNAUTHORIZED",
+        message: "Authentication required",
       });
     }
 
     if (!roles.includes(req.userRole)) {
-      return res.status(403).json({
-        error: {
-          code: 'FORBIDDEN',
-          message: 'Insufficient permissions',
-        },
+      return sendError(res, {
+        statusCode: 403,
+        code: "FORBIDDEN",
+        message: "Insufficient permissions",
       });
     }
 
@@ -31,13 +31,8 @@ const requireRole = (...roles) => {
  */
 const requireAdmin = requireRole('admin');
 
-/**
- * Admin or health worker access
- */
-const requireAdminOrHealthWorker = requireRole('admin', 'health_worker');
-
 module.exports = {
   requireRole,
   requireAdmin,
-  requireAdminOrHealthWorker,
+  requireAdminOrHealthWorker: requireAdmin,
 };

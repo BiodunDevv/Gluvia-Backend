@@ -13,11 +13,43 @@ router.post(
   requireAdmin,
   adminController.runInitialSeed
 );
+router.get("/seed/preview", authenticate, requireAdmin, adminController.getSeedPreview);
+router.post("/seed", authenticate, requireAdmin, adminController.runSelectiveSeed);
 router.post(
   "/revoke-user-tokens",
   authenticate,
   requireAdmin,
   adminController.revokeUserTokens
+);
+router.get(
+  "/maintenance-mode",
+  authenticate,
+  requireAdmin,
+  adminController.getMaintenanceMode
+);
+router.get(
+  "/app-settings",
+  authenticate,
+  requireAdmin,
+  adminController.getAppSettings
+);
+router.post(
+  "/maintenance-mode",
+  authenticate,
+  requireAdmin,
+  adminController.setMaintenanceMode
+);
+router.post(
+  "/app-settings",
+  authenticate,
+  requireAdmin,
+  adminController.setAppSettings
+);
+router.post(
+  "/notifications/broadcast",
+  authenticate,
+  requireAdmin,
+  adminController.broadcastNotification
 );
 router.get("/audit", authenticate, requireAdmin, adminController.getAuditLogs);
 
@@ -63,6 +95,12 @@ router.post(
 
 // Regular user management
 router.get("/users", authenticate, requireAdmin, adminController.fetchAllUsers);
+router.get(
+  "/users/search",
+  authenticate,
+  requireAdmin,
+  adminController.searchUsers
+);
 router.post("/users", authenticate, requireAdmin, adminController.createUser);
 router.get(
   "/users/stats",

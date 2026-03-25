@@ -1,5 +1,6 @@
 const ruleService = require("../services/rule.service");
 const { asyncHandler } = require("../middlewares/error.middleware");
+const { sendSuccess } = require("../utils/response.util");
 
 /**
  * @swagger
@@ -33,9 +34,13 @@ const { asyncHandler } = require("../middlewares/error.middleware");
 const getAllRules = asyncHandler(async (req, res) => {
   const rules = await ruleService.getAllRules();
 
-  res.json({
-    success: true,
-    data: rules,
+  return sendSuccess(res, {
+    data: rules.items,
+    meta: {
+      serverVersion: rules.serverVersion,
+    },
+    rules: rules.items,
+    serverVersion: rules.serverVersion,
   });
 });
 
@@ -78,8 +83,7 @@ const getRuleBySlug = asyncHandler(async (req, res) => {
     });
   }
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     data: rule,
   });
 });
@@ -134,12 +138,13 @@ const getRuleBySlug = asyncHandler(async (req, res) => {
  *         description: Invalid input or slug already exists
  */
 const createRule = asyncHandler(async (req, res) => {
-  const rule = await ruleService.createRule(req.body);
+  const rule = await ruleService.createRule(req.body, req.user?._id);
 
-  res.status(201).json({
-    success: true,
+  return sendSuccess(res, {
+    statusCode: 201,
     message: "Rule template created successfully",
     data: rule,
+    serverVersion: rule.serverVersion,
   });
 });
 
@@ -192,7 +197,7 @@ const createRule = asyncHandler(async (req, res) => {
  *         description: Rule not found
  */
 const updateRule = asyncHandler(async (req, res) => {
-  const rule = await ruleService.updateRule(req.params.slug, req.body);
+  const rule = await ruleService.updateRule(req.params.slug, req.body, req.user?._id);
 
   if (!rule) {
     return res.status(404).json({
@@ -201,10 +206,10 @@ const updateRule = asyncHandler(async (req, res) => {
     });
   }
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Rule template updated successfully",
     data: rule,
+    serverVersion: rule.serverVersion,
   });
 });
 
@@ -240,7 +245,7 @@ const updateRule = asyncHandler(async (req, res) => {
  *         description: Rule not found
  */
 const deleteRule = asyncHandler(async (req, res) => {
-  const result = await ruleService.deleteRule(req.params.slug);
+  const result = await ruleService.deleteRule(req.params.slug, req.user?._id);
 
   if (!result) {
     return res.status(404).json({
@@ -249,9 +254,10 @@ const deleteRule = asyncHandler(async (req, res) => {
     });
   }
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Rule template deleted successfully",
+    data: result,
+    serverVersion: result.serverVersion,
   });
 });
 
@@ -262,4 +268,3 @@ module.exports = {
   updateRule,
   deleteRule,
 };
-

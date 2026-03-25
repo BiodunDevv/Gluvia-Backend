@@ -3,12 +3,11 @@ const adminService = require("../services/admin.service");
 const auditService = require("../services/audit.service");
 const emailService = require("../services/email.service");
 const { asyncHandler } = require("../middlewares/error.middleware");
-const { exec } = require("child_process");
-const { promisify } = require("util");
-const path = require("path");
 const config = require("../config");
-
-const execAsync = promisify(exec);
+const { sendSuccess, sendError } = require("../utils/response.util");
+const notificationService = require("../services/notification.service");
+const settingsService = require("../services/settings.service");
+const seedService = require("../services/seed.service");
 
 /**
  * @swagger
@@ -44,31 +43,60 @@ const execAsync = promisify(exec);
  *         description: Seed script execution failed
  */
 const runInitialSeed = asyncHandler(async (req, res) => {
-  const seedPath = path.join(__dirname, "../../seeds/seedInitial.js");
+  const result = await seedService.runSelectiveSeed({
+    targets: ["foods", "rules", "config"],
+    destructive: false,
+    createdBy: req.user._id,
+  });
 
-  try {
-    const { stdout, stderr } = await execAsync(`node "${seedPath}"`);
+  await auditService.logAudit({
+    action: "seed_initial_executed",
+    who: req.user._id,
+    payload: result,
+  });
 
-    await auditService.logAudit({
-      action: "seed_initial_executed",
-      who: req.user._id,
-      payload: { output: stdout },
-    });
+  return sendSuccess(res, {
+    message: "Seed completed successfully",
+    data: result,
+  });
+});
 
-    res.json({
-      success: true,
-      message: "Seed script executed successfully",
-      output: stdout || stderr,
-    });
-  } catch (error) {
-    await auditService.logAudit({
-      action: "seed_initial_failed",
-      who: req.user._id,
-      payload: { error: error.message },
-    });
+const runSelectiveSeed = asyncHandler(async (req, res) => {
+  const {
+    targets = seedService.DEFAULT_TARGETS,
+    destructive = false,
+    includeImages = false,
+  } =
+    req.body || {};
 
-    throw error;
-  }
+  const result = await seedService.runSelectiveSeed({
+    targets,
+    destructive: Boolean(destructive),
+    createdBy: req.user._id,
+    includeImages: Boolean(includeImages),
+  });
+
+  await auditService.logAudit({
+    action: "seed_job_executed",
+    who: req.user._id,
+    payload: result,
+  });
+
+  return sendSuccess(res, {
+    message: result.success
+      ? "Seed job completed"
+      : "Seed job completed with partial issues",
+    data: result,
+  });
+});
+
+const getSeedPreview = asyncHandler(async (_req, res) => {
+  const preview = await seedService.getSeedPreview();
+
+  return sendSuccess(res, {
+    data: preview,
+    message: "Seed preview loaded",
+  });
 });
 
 /**
@@ -108,11 +136,12 @@ const runInitialSeed = asyncHandler(async (req, res) => {
  *         description: Invalid userId
  */
 const revokeUserTokens = asyncHandler(async (req, res) => {
-  const { userId } = req.body;
+  const { userId, reason } = req.body;
 
   if (!userId) {
-    return res.status(400).json({
-      success: false,
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
       message: "userId is required",
     });
   }
@@ -126,12 +155,26 @@ const revokeUserTokens = asyncHandler(async (req, res) => {
       collection: "User",
       id: userId,
     },
-    payload: { revokedBy: req.user.email },
+    payload: { revokedBy: req.user.email, reason: reason || "Admin action" },
   });
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
+    data: null,
     message: `All tokens revoked for user ${userId}`,
+  });
+});
+
+const searchUsers = asyncHandler(async (req, res) => {
+  const { q = "", limit = 10 } = req.query;
+  const users = await adminService.searchUsers(q, Number(limit));
+
+  return sendSuccess(res, {
+    data: users,
+    meta: {
+      query: String(q || ""),
+      limit: Number(limit) || 10,
+      count: users.length,
+    },
   });
 });
 
@@ -195,9 +238,9 @@ const getAuditLogs = asyncHandler(async (req, res) => {
     Number(limit)
   );
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     data: result.data,
+    meta: result.pagination,
     pagination: result.pagination,
   });
 });
@@ -277,8 +320,8 @@ const createAdmin = asyncHandler(async (req, res) => {
     payload: { email: admin.email, createdBy: req.user.email },
   });
 
-  res.status(201).json({
-    success: true,
+  return sendSuccess(res, {
+    statusCode: 201,
     message: "Admin user created successfully. Password reset email sent.",
     data: { admin, resetToken },
   });
@@ -300,8 +343,7 @@ const createAdmin = asyncHandler(async (req, res) => {
 const listAdmins = asyncHandler(async (req, res) => {
   const admins = await adminService.getAllAdmins();
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Admins retrieved successfully",
     data: {
       admins,
@@ -334,8 +376,7 @@ const listAdmins = asyncHandler(async (req, res) => {
 const getAdminById = asyncHandler(async (req, res) => {
   const admin = await adminService.getAdminById(req.params.adminId);
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Admin details retrieved successfully",
     data: { admin },
   });
@@ -387,8 +428,7 @@ const updateAdmin = asyncHandler(async (req, res) => {
     payload: { updates: req.body, updatedBy: req.user.email },
   });
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Admin updated successfully",
     data: { admin },
   });
@@ -419,11 +459,11 @@ const updateAdmin = asyncHandler(async (req, res) => {
  */
 const deactivateAdmin = asyncHandler(async (req, res) => {
   // Prevent self-deactivation
-  if (req.params.adminId === req.userId) {
-    return res.status(400).json({
-      success: false,
+  if (req.params.adminId === String(req.user.id)) {
+    return sendError(res, {
+      statusCode: 400,
+      code: "INVALID_OPERATION",
       message: "Cannot deactivate your own account",
-      data: null,
     });
   }
 
@@ -439,8 +479,7 @@ const deactivateAdmin = asyncHandler(async (req, res) => {
     payload: { deactivatedBy: req.user.email },
   });
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Admin deactivated successfully",
     data: null,
   });
@@ -480,8 +519,7 @@ const activateAdmin = asyncHandler(async (req, res) => {
     payload: { activatedBy: req.user.email },
   });
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Admin reactivated successfully",
     data: null,
   });
@@ -536,8 +574,7 @@ const resetAdminPassword = asyncHandler(async (req, res) => {
     payload: { initiatedBy: req.user.email, emailSent: true },
   });
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Password reset email sent to admin.",
     data: { resetToken },
   });
@@ -559,8 +596,7 @@ const resetAdminPassword = asyncHandler(async (req, res) => {
 const getAdminStats = asyncHandler(async (req, res) => {
   const stats = await adminService.getAdminStats();
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Admin statistics retrieved successfully",
     data: { stats },
   });
@@ -586,8 +622,7 @@ const getAdminStats = asyncHandler(async (req, res) => {
 const fetchAllUsers = asyncHandler(async (req, res) => {
   const users = await adminService.getAllUsers();
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "Users retrieved successfully",
     data: {
       users,
@@ -620,8 +655,7 @@ const fetchAllUsers = asyncHandler(async (req, res) => {
 const getUserById = asyncHandler(async (req, res) => {
   const user = await adminService.getUserById(req.params.userId);
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "User details retrieved successfully",
     data: { user },
   });
@@ -663,7 +697,7 @@ const getUserById = asyncHandler(async (req, res) => {
  *                 example: "+2348012345678"
  *               role:
  *                 type: string
- *                 enum: [user, health_worker]
+ *                 enum: [user]
  *                 default: user
  *     responses:
  *       201:
@@ -675,14 +709,14 @@ const createUser = asyncHandler(async (req, res) => {
   // Ensure role is not admin (only createAdmin should create admins)
   const userData = { ...req.body };
   if (userData.role === "admin") {
-    return res.status(400).json({
-      success: false,
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
       message: "Use /admin/admins endpoint to create admin users",
-      data: null,
     });
   }
 
-  const user = await authService.register(userData);
+  const user = await authService.createUser(userData);
 
   await auditService.logAudit({
     action: "user_created_by_admin",
@@ -694,8 +728,8 @@ const createUser = asyncHandler(async (req, res) => {
     payload: { email: user.email, createdBy: req.user.email },
   });
 
-  res.status(201).json({
-    success: true,
+  return sendSuccess(res, {
+    statusCode: 201,
     message: "User created successfully",
     data: { user },
   });
@@ -730,7 +764,7 @@ const createUser = asyncHandler(async (req, res) => {
  *                 type: string
  *               role:
  *                 type: string
- *                 enum: [user, health_worker]
+ *                 enum: [user]
  *     responses:
  *       200:
  *         description: User updated successfully
@@ -750,10 +784,111 @@ const updateUser = asyncHandler(async (req, res) => {
     payload: { updates: req.body, updatedBy: req.user.email },
   });
 
-  res.json({
-    success: true,
+  return sendSuccess(res, {
     message: "User updated successfully",
     data: { user },
+  });
+});
+
+const setMaintenanceMode = asyncHandler(async (req, res) => {
+  const { enabled, message } = req.body;
+
+  if (typeof enabled !== "boolean") {
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
+      message: "enabled must be a boolean",
+    });
+  }
+
+  const settings = await settingsService.setMaintenanceMode(enabled, message);
+
+  await auditService.logAudit({
+    action: enabled ? "maintenance_enabled" : "maintenance_disabled",
+    who: req.user._id,
+    payload: settings,
+  });
+
+  return sendSuccess(res, {
+    data: settings,
+    message: enabled ? "Maintenance mode enabled" : "Maintenance mode disabled",
+  });
+});
+
+const getMaintenanceMode = asyncHandler(async (_req, res) => {
+  const settings = await settingsService.getMaintenanceSettings(
+    config.maintenanceMode
+  );
+
+  return sendSuccess(res, { data: settings });
+});
+
+const getAppSettings = asyncHandler(async (_req, res) => {
+  const settings = await settingsService.getAppSettings();
+
+  return sendSuccess(res, { data: settings });
+});
+
+const setAppSettings = asyncHandler(async (req, res) => {
+  const { supportPhone, googleFormLink } = req.body;
+
+  if (!supportPhone || !String(supportPhone).trim()) {
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
+      message: "supportPhone is required",
+    });
+  }
+
+  if (
+    googleFormLink &&
+    !/^https?:\/\/.+/i.test(String(googleFormLink).trim())
+  ) {
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
+      message: "googleFormLink must be a valid http or https URL",
+    });
+  }
+
+  const settings = await settingsService.setAppSettings({
+    supportPhone,
+    googleFormLink,
+  });
+
+  await auditService.logAudit({
+    action: "app_settings_updated",
+    who: req.user._id,
+    payload: settings,
+  });
+
+  return sendSuccess(res, {
+    data: settings,
+    message: "App settings updated successfully",
+  });
+});
+
+const broadcastNotification = asyncHandler(async (req, res) => {
+  const { title, body, data } = req.body;
+
+  if (!title || !body) {
+    return sendError(res, {
+      statusCode: 400,
+      code: "VALIDATION_ERROR",
+      message: "title and body are required",
+    });
+  }
+
+  const result = await notificationService.broadcastAdminNotification({
+    title,
+    body,
+    data,
+    actorId: req.user._id,
+  });
+
+  return sendSuccess(res, {
+    data: result,
+    message: "Notification broadcast completed",
   });
 });
 
@@ -1197,7 +1332,15 @@ const getActivityHeatmap = asyncHandler(async (req, res) => {
 
 module.exports = {
   runInitialSeed,
+  getSeedPreview,
+  runSelectiveSeed,
   revokeUserTokens,
+  searchUsers,
+  getMaintenanceMode,
+  setMaintenanceMode,
+  getAppSettings,
+  setAppSettings,
+  broadcastNotification,
   getAuditLogs,
   createAdmin,
   listAdmins,

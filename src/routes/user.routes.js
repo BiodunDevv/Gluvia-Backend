@@ -5,5 +5,6 @@ const { authenticate } = require("../middlewares/auth.middleware");
 
 // NDPR Compliance - Data export
 router.get("/export", authenticate, userController.exportData);
+router.get("/app-settings", authenticate, userController.getMobileAppSettings);
 
 module.exports = router;

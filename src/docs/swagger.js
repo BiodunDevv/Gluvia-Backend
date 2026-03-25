@@ -52,7 +52,7 @@ const options = {
             _id: { type: "string" },
             email: { type: "string" },
             name: { type: "string" },
-            role: { type: "string", enum: ["user", "admin", "health_worker"] },
+            role: { type: "string", enum: ["user", "admin"] },
             profile: { type: "object" },
             createdAt: { type: "string", format: "date-time" },
           },

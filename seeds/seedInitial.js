@@ -15,6 +15,7 @@ const config = require("../src/config");
 const foodsData = [
   ...require("./seedFoods.json"),
   ...require("./seedFoodsTwo.json"),
+  ...require("./seedFoodsThree.json"),
 ];
 const rulesData = [
   ...require("./seedRules.json"),
@@ -57,6 +58,33 @@ const seedInitial = async () => {
       });
       console.log("✅ Initialized serverVersion to 1");
     }
+
+    await Promise.all([
+      Config.findOneAndUpdate(
+        { key: "maintenanceMode" },
+        { value: false },
+        { upsert: true, new: true }
+      ),
+      Config.findOneAndUpdate(
+        { key: "maintenanceMessage" },
+        {
+          value:
+            "Gluvia AI is temporarily unavailable for maintenance. Please try again later.",
+        },
+        { upsert: true, new: true }
+      ),
+      Config.findOneAndUpdate(
+        { key: "supportPhone" },
+        { value: "+2348000000000" },
+        { upsert: true, new: true }
+      ),
+      Config.findOneAndUpdate(
+        { key: "googleFormLink" },
+        { value: "https://forms.gle/exampleGluviaSupportForm" },
+        { upsert: true, new: true }
+      ),
+    ]);
+    console.log("✅ Seeded default app settings");
 
     // Ensure at least one admin exists
     const admin = await User.findOne({ role: "admin" }).sort({ createdAt: 1 });

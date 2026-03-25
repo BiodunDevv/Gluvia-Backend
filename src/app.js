@@ -6,10 +6,11 @@ const config = require("./config");
 const {
   errorHandler,
   notFoundHandler,
-  logger,
 } = require("./middlewares/error.middleware");
 const { generalLimiter } = require("./middlewares/rateLimit.middleware");
 const swaggerAuth = require("./middlewares/swaggerAuth.middleware");
+const { maintenanceGuard } = require("./middlewares/maintenance.middleware");
+const { optionalAuth } = require("./middlewares/auth.middleware");
 
 // Import routes
 const authRoutes = require("./routes/auth.routes");
@@ -19,6 +20,8 @@ const ruleRoutes = require("./routes/rule.routes");
 const syncRoutes = require("./routes/sync.routes");
 const adminRoutes = require("./routes/admin.routes");
 const reportRoutes = require("./routes/report.routes");
+const notificationRoutes = require("./routes/notification.routes");
+const { getMaintenanceSettings } = require("./services/settings.service");
 
 // Initialize express app
 const app = express();
@@ -46,78 +49,25 @@ app.use(mongoSanitize());
 // Rate limiting
 app.use(generalLimiter);
 
-// Enhanced request logging for debugging mobile app
+// Request timing hook without terminal request logging
 app.use((req, res, next) => {
-  const startTime = Date.now();
-
-  // Log incoming request
-  console.log("\n" + "=".repeat(80));
-  console.log(
-    `📱 [${new Date().toLocaleTimeString()}] ${req.method} ${req.url}`
-  );
-  console.log(`🌐 Origin: ${req.headers.origin || "No origin"}`);
-  console.log(`📍 IP: ${req.ip || req.connection.remoteAddress}`);
-
-  if (req.body && Object.keys(req.body).length > 0) {
-    console.log("📦 Request Body:", JSON.stringify(req.body, null, 2));
-  }
-
-  if (req.query && Object.keys(req.query).length > 0) {
-    console.log("🔍 Query Params:", req.query);
-  }
-
-  if (req.headers.authorization) {
-    console.log("🔑 Auth: Bearer token present");
-  }
-
-  // Log response
-  const originalSend = res.send;
-  res.send = function (data) {
-    const duration = Date.now() - startTime;
-    console.log(`⏱️  Response Time: ${duration}ms`);
-    console.log(`📤 Status: ${res.statusCode}`);
-
-    if (res.statusCode >= 400) {
-      console.log("❌ Error Response:", data);
-    } else {
-      console.log("✅ Success");
-      // Parse and show response body for successful requests
-      try {
-        const responseBody = typeof data === "string" ? JSON.parse(data) : data;
-        console.log("📨 Response Body:", JSON.stringify(responseBody, null, 2));
-      } catch (e) {
-        // If not JSON, show raw data (truncated if too long)
-        const dataStr = String(data);
-        console.log(
-          "📨 Response:",
-          dataStr.length > 500 ? dataStr.substring(0, 500) + "..." : dataStr
-        );
-      }
-    }
-    console.log("=".repeat(80) + "\n");
-
-    originalSend.call(this, data);
-  };
-
-  logger.info(
-    {
-      method: req.method,
-      url: req.url,
-      userId: req.userId,
-    },
-    "Incoming request"
-  );
   next();
 });
 
 // Health check
-app.get("/health", (req, res) => {
+app.get("/health", async (req, res) => {
+  const maintenance = await getMaintenanceSettings(config.maintenanceMode);
   res.json({
     status: "ok",
     timestamp: new Date().toISOString(),
     environment: config.env,
+    maintenanceMode: maintenance.enabled,
+    maintenanceMessage: maintenance.message,
   });
 });
+
+app.use(optionalAuth);
+app.use(maintenanceGuard);
 
 // API routes
 app.use("/auth", authRoutes);
@@ -127,6 +77,7 @@ app.use("/rules", ruleRoutes);
 app.use("/sync", syncRoutes);
 app.use("/admin", adminRoutes);
 app.use("/reports", reportRoutes);
+app.use("/notifications", notificationRoutes);
 
 // Swagger documentation (will be configured separately)
 const swaggerSetup = require("./docs/swagger");

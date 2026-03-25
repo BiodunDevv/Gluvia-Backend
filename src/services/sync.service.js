@@ -2,97 +2,208 @@ const MealLog = require("../models/mealLog.model");
 const GlucoseLog = require("../models/glucoseLog.model");
 const SyncCheckpoint = require("../models/syncCheckpoint.model");
 const FoodItem = require("../models/food.model");
+const RuleTemplate = require("../models/ruleTemplate.model");
 const { isProcessed, markProcessed } = require("../utils/idempotency.util");
 const { getFoodsChangedSince, getServerVersion } = require("./food.service");
 const { getRulesChangedSince } = require("./rule.service");
+const notificationService = require("./notification.service");
+
+const MAX_FUTURE_SKEW_MS = 5 * 60 * 1000;
+const MIN_GLUCOSE_MGDL = 20;
+const MAX_GLUCOSE_MGDL = 600;
+
+const createValidationError = (message, details) => {
+  const error = new Error(message);
+  error.statusCode = 400;
+  error.code = "VALIDATION_ERROR";
+  if (details !== undefined) {
+    error.details = details;
+  }
+  return error;
+};
+
+const normalizeEventTimestamp = (value, fieldName = "timestamp") => {
+  const resolved = value ? new Date(value) : new Date();
+
+  if (Number.isNaN(resolved.getTime())) {
+    throw createValidationError(`Invalid ${fieldName}`, { field: fieldName });
+  }
+
+  if (resolved.getTime() > Date.now() + MAX_FUTURE_SKEW_MS) {
+    throw createValidationError(`${fieldName} cannot be in the future`, {
+      field: fieldName,
+    });
+  }
+
+  return resolved;
+};
+
+const normalizeMealPayload = async (meal) => {
+  if (!meal?.clientGeneratedId?.trim()) {
+    throw createValidationError("clientGeneratedId is required", {
+      field: "clientGeneratedId",
+    });
+  }
+
+  const rawEntries = Array.isArray(meal.entries)
+    ? meal.entries
+    : Array.isArray(meal.foods)
+      ? meal.foods
+      : [];
+
+  if (rawEntries.length === 0) {
+    throw createValidationError("Meal log must include at least one entry", {
+      field: "entries",
+    });
+  }
+
+  const entryFoodIds = [
+    ...new Set(
+      rawEntries
+        .map((entry) => entry?.foodId)
+        .filter((foodId) => typeof foodId === "string" && foodId.trim())
+    ),
+  ];
+
+  if (entryFoodIds.length !== rawEntries.length) {
+    throw createValidationError("Each meal entry must include a foodId", {
+      field: "entries",
+    });
+  }
+
+  const foods = await FoodItem.find({
+    _id: { $in: entryFoodIds },
+    deleted: false,
+  }).lean();
+
+  const foodMap = new Map(foods.map((food) => [String(food._id), food]));
+  const missingFoodIds = entryFoodIds.filter((foodId) => !foodMap.has(foodId));
+
+  if (missingFoodIds.length > 0) {
+    throw createValidationError("Meal log references invalid foods", {
+      field: "entries",
+      foodIds: missingFoodIds,
+    });
+  }
+
+  const totals = { calories: 0, carbs: 0, protein: 0, fibre: 0 };
+  const entries = rawEntries.map((entry) => {
+    const food = foodMap.get(String(entry.foodId));
+    const quantity =
+      Number.isFinite(entry.quantity) && entry.quantity > 0 ? entry.quantity : 1;
+
+    let grams =
+      Number.isFinite(entry.grams) && entry.grams > 0 ? entry.grams : null;
+    let portionName = entry.portionName || entry.portionSize || null;
+
+    if (!grams) {
+      const matchedPortion = food.portionSizes?.find(
+        (portion) =>
+          portion.name === entry.portionName || portion.name === entry.portionSize
+      );
+
+      if (matchedPortion) {
+        grams = matchedPortion.grams * quantity;
+        portionName = matchedPortion.name;
+      }
+    }
+
+    if (!grams || grams <= 0) {
+      throw createValidationError("Meal entry must include a valid portion size", {
+        field: "entries",
+        foodId: entry.foodId,
+      });
+    }
+
+    const multiplier = grams / 100;
+    const carbs = (food.nutrients?.carbs_g || 0) * multiplier;
+
+    totals.calories += (food.nutrients?.calories || 0) * multiplier;
+    totals.carbs += carbs;
+    totals.protein += (food.nutrients?.protein_g || 0) * multiplier;
+    totals.fibre += (food.nutrients?.fibre_g || 0) * multiplier;
+
+    return {
+      foodId: food._id,
+      portionName,
+      portionSize: portionName,
+      grams,
+      quantity,
+      carbs_g: carbs,
+    };
+  });
+
+  return {
+    clientGeneratedId: meal.clientGeneratedId.trim(),
+    mealType: meal.mealType || "snack",
+    entries,
+    calculatedTotals: totals,
+    notes: meal.notes,
+    timestamp: normalizeEventTimestamp(meal.timestamp || meal.createdAt),
+  };
+};
+
+const normalizeGlucosePayload = (glucose) => {
+  if (!glucose?.clientGeneratedId?.trim()) {
+    throw createValidationError("clientGeneratedId is required", {
+      field: "clientGeneratedId",
+    });
+  }
+
+  let valueMgDl = Number.isFinite(glucose.valueMgDl)
+    ? glucose.valueMgDl
+    : glucose.value;
+
+  if (!Number.isFinite(valueMgDl)) {
+    throw createValidationError("Glucose value is required", {
+      field: "valueMgDl",
+    });
+  }
+
+  if (glucose.unit === "mmol/L") {
+    valueMgDl = Math.round(valueMgDl * 18);
+  }
+
+  if (valueMgDl < MIN_GLUCOSE_MGDL || valueMgDl > MAX_GLUCOSE_MGDL) {
+    throw createValidationError("Glucose value is outside the supported range", {
+      field: "valueMgDl",
+      min: MIN_GLUCOSE_MGDL,
+      max: MAX_GLUCOSE_MGDL,
+    });
+  }
+
+  return {
+    clientGeneratedId: glucose.clientGeneratedId.trim(),
+    valueMgDl,
+    unit: glucose.unit || "mg/dL",
+    type: glucose.type,
+    timestamp: normalizeEventTimestamp(glucose.timestamp || glucose.createdAt),
+    notes: glucose.notes,
+    mealRelated: Boolean(glucose.mealRelated),
+    mealLogId: glucose.mealLogId,
+    symptoms: Array.isArray(glucose.symptoms) ? glucose.symptoms : [],
+  };
+};
+
+const mapDuplicateError = (error) =>
+  error?.code === 11000 || error?.name === "MongoServerError";
+
+const mapMealLogForClient = (log) => ({
+  ...log,
+  foods: log.entries,
+});
+
+const mapGlucoseLogForClient = (log) => ({
+  ...log,
+  value: log.valueMgDl,
+});
 
 /**
  * Upload logs from client (sync endpoint)
  */
 const uploadLogs = async (userId, { logs, clientVersion, lastSyncAt }) => {
-  const results = {
-    mealsAdded: 0,
-    glucoseAdded: 0,
-    duplicatesSkipped: 0,
-  };
-
-  // Process meal logs
-  if (logs.meals && logs.meals.length > 0) {
-    for (const meal of logs.meals) {
-      // Check idempotency
-      if (meal.clientGeneratedId && isProcessed(meal.clientGeneratedId)) {
-        results.duplicatesSkipped++;
-        continue;
-      }
-
-      try {
-        // Calculate totals
-        const totals = {
-          calories: 0,
-          carbs: 0,
-          protein: 0,
-          fibre: 0,
-        };
-
-        for (const entry of meal.entries) {
-          const food = await FoodItem.findById(entry.foodId);
-          if (food) {
-            const multiplier = entry.grams / 100; // Nutrients are per 100g
-            totals.calories += (food.nutrients.calories || 0) * multiplier;
-            totals.carbs += (food.nutrients.carbs_g || 0) * multiplier;
-            totals.protein += (food.nutrients.protein_g || 0) * multiplier;
-            totals.fibre += (food.nutrients.fibre_g || 0) * multiplier;
-          }
-        }
-
-        await MealLog.create({
-          userId,
-          entries: meal.entries,
-          calculatedTotals: totals,
-          clientGeneratedId: meal.clientGeneratedId,
-          createdAt: meal.createdAt || new Date(),
-        });
-
-        if (meal.clientGeneratedId) {
-          markProcessed(meal.clientGeneratedId);
-        }
-
-        results.mealsAdded++;
-      } catch (error) {
-        console.error("Error saving meal log:", error.message);
-      }
-    }
-  }
-
-  // Process glucose logs
-  if (logs.glucose && logs.glucose.length > 0) {
-    for (const glucose of logs.glucose) {
-      // Check idempotency
-      if (glucose.clientGeneratedId && isProcessed(glucose.clientGeneratedId)) {
-        results.duplicatesSkipped++;
-        continue;
-      }
-
-      try {
-        await GlucoseLog.create({
-          userId,
-          valueMgDl: glucose.valueMgDl,
-          type: glucose.type,
-          timestamp: glucose.timestamp || new Date(),
-          notes: glucose.notes,
-          clientGeneratedId: glucose.clientGeneratedId,
-        });
-
-        if (glucose.clientGeneratedId) {
-          markProcessed(glucose.clientGeneratedId);
-        }
-
-        results.glucoseAdded++;
-      } catch (error) {
-        console.error("Error saving glucose log:", error.message);
-      }
-    }
-  }
+  const mealResults = await uploadMealLogs(userId, logs?.meals || []);
+  const glucoseResults = await uploadGlucoseLogs(userId, logs?.glucose || []);
 
   // Update sync checkpoint
   const serverVersion = await getServerVersion();
@@ -113,7 +224,12 @@ const uploadLogs = async (userId, { logs, clientVersion, lastSyncAt }) => {
 
   return {
     accepted: true,
-    results,
+    results: {
+      mealsAdded: mealResults.added,
+      glucoseAdded: glucoseResults.added,
+      duplicatesSkipped: mealResults.duplicates + glucoseResults.duplicates,
+      errors: [...mealResults.errors, ...glucoseResults.errors],
+    },
     serverVersion,
     foodsChanged,
     rulesChanged,
@@ -125,6 +241,26 @@ const uploadLogs = async (userId, { logs, clientVersion, lastSyncAt }) => {
  */
 const getUpdates = async (userId, clientVersion = 0) => {
   const serverVersion = await getServerVersion();
+
+  if (!Number.isInteger(clientVersion) || clientVersion < 0) {
+    return {
+      foodsChanged: [],
+      rulesChanged: [],
+      serverVersion,
+      requiresFullSync: true,
+      reason: "invalid_client_version",
+    };
+  }
+
+  if (clientVersion > serverVersion) {
+    return {
+      foodsChanged: [],
+      rulesChanged: [],
+      serverVersion,
+      requiresFullSync: true,
+      reason: "client_version_ahead_of_server",
+    };
+  }
 
   // Get changed items
   const foodsChanged = await getFoodsChangedSince(clientVersion);
@@ -145,6 +281,7 @@ const getUpdates = async (userId, clientVersion = 0) => {
     foodsChanged,
     rulesChanged,
     serverVersion,
+    requiresFullSync: false,
   };
 };
 
@@ -153,8 +290,12 @@ const getUpdates = async (userId, clientVersion = 0) => {
  */
 const getFullSync = async (userId) => {
   const [foods, rules, serverVersion] = await Promise.all([
-    FoodItem.find({ deleted: false }).lean(),
-    require("../models/ruleTemplate.model").find({ deleted: false }).lean(),
+    FoodItem.find({ deleted: false })
+      .select("-__v")
+      .lean(),
+    RuleTemplate.find({ deleted: false })
+      .select("-__v")
+      .lean(),
     getServerVersion(),
   ]);
 
@@ -183,25 +324,60 @@ const getUserMealLogs = async (userId, { from, to, page = 1, limit = 50 }) => {
   const query = { userId };
 
   if (from || to) {
-    query.createdAt = {};
-    if (from) query.createdAt.$gte = new Date(from);
-    if (to) query.createdAt.$lte = new Date(to);
+    query.timestamp = {};
+    if (from) query.timestamp.$gte = new Date(from);
+    if (to) query.timestamp.$lte = new Date(to);
   }
 
   const skip = (page - 1) * limit;
 
   const [logs, total] = await Promise.all([
     MealLog.find(query)
-      .sort({ createdAt: -1 })
+      .sort({ timestamp: -1, createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate("entries.foodId", "localName category")
+      .select("-__v")
       .lean(),
     MealLog.countDocuments(query),
   ]);
 
+  const foodIds = [
+    ...new Set(
+      logs.flatMap((log) =>
+        (log.entries || [])
+          .map((entry) => entry?.foodId)
+          .filter(Boolean)
+          .map((foodId) => String(foodId))
+      )
+    ),
+  ];
+  const foods =
+    foodIds.length > 0
+      ? await FoodItem.find({ _id: { $in: foodIds } })
+          .select("localName category")
+          .lean()
+      : [];
+  const foodMap = new Map(foods.map((food) => [String(food._id), food]));
+
+  const hydratedLogs = logs.map((log) => ({
+    ...log,
+    entries: (log.entries || []).map((entry) => {
+      const food = foodMap.get(String(entry.foodId));
+      return {
+        ...entry,
+        foodId: food
+          ? {
+              _id: entry.foodId,
+              localName: food.localName,
+              category: food.category,
+            }
+          : entry.foodId,
+      };
+    }),
+  }));
+
   return {
-    logs,
+    logs: hydratedLogs.map(mapMealLogForClient),
     meta: {
       page,
       limit,
@@ -230,7 +406,7 @@ const getUserGlucoseLogs = async (
 
   const [logs, total] = await Promise.all([
     GlucoseLog.find(query)
-      .sort({ timestamp: -1 })
+      .sort({ timestamp: -1, createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .lean(),
@@ -238,7 +414,7 @@ const getUserGlucoseLogs = async (
   ]);
 
   return {
-    logs,
+    logs: logs.map(mapGlucoseLogForClient),
     meta: {
       page,
       limit,
@@ -263,71 +439,51 @@ const uploadMealLogs = async (userId, mealLogs) => {
   }
 
   for (const meal of mealLogs) {
-    // Check idempotency
-    if (meal.clientGeneratedId) {
-      const existing = await MealLog.findOne({
-        clientGeneratedId: meal.clientGeneratedId,
-      });
-      if (existing) {
-        results.duplicates++;
-        continue;
-      }
+    if (meal?.clientGeneratedId && isProcessed(`${userId}:${meal.clientGeneratedId}`)) {
+      results.duplicates++;
+      continue;
     }
 
     try {
-      // Calculate totals from foods
-      const totals = { calories: 0, carbs: 0, protein: 0, fibre: 0 };
-      const entries = [];
-
-      if (meal.foods && meal.foods.length > 0) {
-        for (const foodEntry of meal.foods) {
-          const food = await FoodItem.findById(foodEntry.foodId);
-          if (food) {
-            // Find portion size or use default
-            let grams = 100;
-            const portion = food.portionSizes?.find(
-              (p) => p.name === foodEntry.portionSize
-            );
-            if (portion) {
-              grams = portion.grams * (foodEntry.quantity || 1);
-            }
-
-            const multiplier = grams / 100;
-            totals.calories += (food.nutrients?.calories || 0) * multiplier;
-            totals.carbs += (food.nutrients?.carbs_g || 0) * multiplier;
-            totals.protein += (food.nutrients?.protein_g || 0) * multiplier;
-            totals.fibre += (food.nutrients?.fibre_g || 0) * multiplier;
-
-            entries.push({
-              foodId: food._id,
-              portionName: foodEntry.portionSize,
-              portionSize: foodEntry.portionSize,
-              grams,
-              quantity: foodEntry.quantity || 1,
-              carbs_g: (food.nutrients?.carbs_g || 0) * multiplier,
-            });
-          }
-        }
-      }
+      const normalizedMeal = await normalizeMealPayload(meal);
 
       await MealLog.create({
         userId,
-        mealType: meal.mealType || "snack",
-        entries,
-        calculatedTotals: totals,
-        notes: meal.notes,
-        timestamp: meal.timestamp || new Date(),
-        clientGeneratedId: meal.clientGeneratedId,
+        ...normalizedMeal,
       });
 
       results.added++;
+      markProcessed(`${userId}:${normalizedMeal.clientGeneratedId}`);
     } catch (error) {
-      console.error("Error saving meal log:", error.message);
+      if (mapDuplicateError(error)) {
+        results.duplicates++;
+        continue;
+      }
+
       results.errors.push({
         clientGeneratedId: meal.clientGeneratedId,
         error: error.message,
+        code: error.code || "MEAL_LOG_ERROR",
       });
     }
+  }
+
+  if (results.added > 0) {
+    await notificationService.createNotification({
+      userId,
+      type: "meal",
+      title: "Meal logged",
+      body:
+        results.added === 1
+          ? "Your meal was saved successfully."
+          : `${results.added} meals were saved successfully.`,
+      data: { added: results.added },
+      dedupeKey: notificationService.buildDedupeKey(
+        "meal_upload",
+        userId.toString(),
+        mealLogs.map((meal) => meal.clientGeneratedId).filter(Boolean).sort().join(",")
+      ),
+    });
   }
 
   return results;
@@ -348,45 +504,58 @@ const uploadGlucoseLogs = async (userId, glucoseLogs) => {
   }
 
   for (const glucose of glucoseLogs) {
-    // Check idempotency
-    if (glucose.clientGeneratedId) {
-      const existing = await GlucoseLog.findOne({
-        clientGeneratedId: glucose.clientGeneratedId,
-      });
-      if (existing) {
-        results.duplicates++;
-        continue;
-      }
+    if (
+      glucose?.clientGeneratedId &&
+      isProcessed(`${userId}:${glucose.clientGeneratedId}`)
+    ) {
+      results.duplicates++;
+      continue;
     }
 
     try {
-      // Convert value if needed (mmol/L to mg/dL)
-      let valueMgDl = glucose.value;
-      if (glucose.unit === "mmol/L") {
-        valueMgDl = Math.round(glucose.value * 18);
-      }
+      const normalizedGlucose = normalizeGlucosePayload(glucose);
 
       await GlucoseLog.create({
         userId,
-        valueMgDl,
-        unit: glucose.unit || "mg/dL",
-        type: glucose.type,
-        timestamp: glucose.timestamp || new Date(),
-        notes: glucose.notes,
-        mealRelated: glucose.mealRelated || false,
-        mealLogId: glucose.mealLogId,
-        symptoms: glucose.symptoms || [],
-        clientGeneratedId: glucose.clientGeneratedId,
+        ...normalizedGlucose,
       });
 
       results.added++;
+      markProcessed(`${userId}:${normalizedGlucose.clientGeneratedId}`);
     } catch (error) {
-      console.error("Error saving glucose log:", error.message);
+      if (mapDuplicateError(error)) {
+        results.duplicates++;
+        continue;
+      }
+
       results.errors.push({
         clientGeneratedId: glucose.clientGeneratedId,
         error: error.message,
+        code: error.code || "GLUCOSE_LOG_ERROR",
       });
     }
+  }
+
+  if (results.added > 0) {
+    await notificationService.createNotification({
+      userId,
+      type: "glucose",
+      title: "Glucose reading saved",
+      body:
+        results.added === 1
+          ? "Your glucose reading was saved successfully."
+          : `${results.added} glucose readings were saved successfully.`,
+      data: { added: results.added },
+      dedupeKey: notificationService.buildDedupeKey(
+        "glucose_upload",
+        userId.toString(),
+        glucoseLogs
+          .map((glucose) => glucose.clientGeneratedId)
+          .filter(Boolean)
+          .sort()
+          .join(",")
+      ),
+    });
   }
 
   return results;
