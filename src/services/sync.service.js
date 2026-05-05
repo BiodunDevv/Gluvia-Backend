@@ -7,6 +7,7 @@ const { isProcessed, markProcessed } = require("../utils/idempotency.util");
 const { getFoodsChangedSince, getServerVersion } = require("./food.service");
 const { getRulesChangedSince } = require("./rule.service");
 const notificationService = require("./notification.service");
+const mongoose = require("mongoose");
 
 const MAX_FUTURE_SKEW_MS = 5 * 60 * 1000;
 const MIN_GLUCOSE_MGDL = 20;
@@ -60,7 +61,7 @@ const normalizeMealPayload = async (meal) => {
   const entryFoodIds = [
     ...new Set(
       rawEntries
-        .map((entry) => entry?.foodId)
+        .map((entry) => entry?.foodId || entry?._id)
         .filter((foodId) => typeof foodId === "string" && foodId.trim())
     ),
   ];
@@ -71,8 +72,12 @@ const normalizeMealPayload = async (meal) => {
     });
   }
 
+  const validFoodIds = entryFoodIds.filter((foodId) =>
+    mongoose.Types.ObjectId.isValid(foodId)
+  );
+
   const foods = await FoodItem.find({
-    _id: { $in: entryFoodIds },
+    _id: { $in: validFoodIds },
     deleted: false,
   }).lean();
 
@@ -88,7 +93,19 @@ const normalizeMealPayload = async (meal) => {
 
   const totals = { calories: 0, carbs: 0, protein: 0, fibre: 0 };
   const entries = rawEntries.map((entry) => {
-    const food = foodMap.get(String(entry.foodId));
+    const foodId = entry.foodId || entry._id;
+    const food = foodMap.get(String(foodId));
+    const snapshotName =
+      entry.localName || entry.foodName || entry.name || entry.canonicalName;
+
+    if (!food) {
+      throw createValidationError("Meal log references invalid foods", {
+        field: "entries",
+        foodId,
+        foodName: snapshotName,
+      });
+    }
+
     const quantity =
       Number.isFinite(entry.quantity) && entry.quantity > 0 ? entry.quantity : 1;
 
@@ -111,7 +128,7 @@ const normalizeMealPayload = async (meal) => {
     if (!grams || grams <= 0) {
       throw createValidationError("Meal entry must include a valid portion size", {
         field: "entries",
-        foodId: entry.foodId,
+        foodId,
       });
     }
 
@@ -125,6 +142,9 @@ const normalizeMealPayload = async (meal) => {
 
     return {
       foodId: food._id,
+      localName: food.localName || snapshotName,
+      canonicalName: food.canonicalName,
+      category: food.category,
       portionName,
       portionSize: portionName,
       grams,
@@ -368,10 +388,16 @@ const getUserMealLogs = async (userId, { from, to, page = 1, limit = 50 }) => {
         foodId: food
           ? {
               _id: entry.foodId,
-              localName: food.localName,
-              category: food.category,
+              localName: food.localName || entry.localName,
+              canonicalName: food.canonicalName || entry.canonicalName,
+              category: food.category || entry.category,
             }
-          : entry.foodId,
+          : {
+              _id: entry.foodId,
+              localName: entry.localName || entry.canonicalName || "Food item",
+              canonicalName: entry.canonicalName,
+              category: entry.category || "Food",
+            },
       };
     }),
   }));

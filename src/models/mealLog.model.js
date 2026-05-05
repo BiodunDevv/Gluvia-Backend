@@ -7,6 +7,9 @@ const mealEntrySchema = new mongoose.Schema(
       ref: "FoodItem",
       required: true,
     },
+    localName: String,
+    canonicalName: String,
+    category: String,
     portionName: String,
     portionSize: String,
     grams: {

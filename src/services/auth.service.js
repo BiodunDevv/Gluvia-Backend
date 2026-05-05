@@ -129,12 +129,17 @@ const logout = async (userId, jti, deviceId) => {
     throw new Error(t("auth_user_not_found", "english"));
   }
 
-  await RevokedToken.create({
-    jti,
-    userId,
-    expiresAt: new Date(Date.now() + THIRTY_DAYS_MS),
-    reason: "logout",
-  });
+  await RevokedToken.findOneAndUpdate(
+    { jti },
+    {
+      $set: {
+        userId,
+        expiresAt: new Date(Date.now() + THIRTY_DAYS_MS),
+        reason: "logout",
+      },
+    },
+    { upsert: true, new: true }
+  );
 
   return { ok: true };
 };
@@ -280,7 +285,9 @@ const isTokenRevoked = async (jti, userId, tokenIssuedAtMs) => {
 };
 
 /**
- * Revoke all tokens for a user
+ * Revoke all tokens for a user.
+ * Uses upsert so re-calling (e.g. on account deletion) never throws a
+ * duplicate-key error — it simply refreshes the expiry timestamp.
  */
 const revokeAllUserTokens = async (userId) => {
   const user = await User.findById(userId).select("_id");
@@ -288,15 +295,19 @@ const revokeAllUserTokens = async (userId) => {
     throw new Error("User not found");
   }
 
-  // Revoke all tokens for this user by setting a revocation timestamp
   const expiresAt = new Date(Date.now() + THIRTY_DAYS_MS);
 
-  await RevokedToken.create({
-    jti: `user_${userId}_all`,
-    userId,
-    expiresAt,
-    reason: "admin_revoke_all",
-  });
+  await RevokedToken.findOneAndUpdate(
+    { jti: `user_${userId}_all` },
+    {
+      $set: {
+        userId,
+        expiresAt,
+        reason: "admin_revoke_all",
+      },
+    },
+    { upsert: true, new: true }
+  );
 
   return { ok: true };
 };
