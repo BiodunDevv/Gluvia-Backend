@@ -18,7 +18,7 @@ const aiMessageSchema = new mongoose.Schema(
     },
     source: {
       type: String,
-      default: "groq",
+      default: "azure",
     },
     safeFallbackUsed: {
       type: Boolean,

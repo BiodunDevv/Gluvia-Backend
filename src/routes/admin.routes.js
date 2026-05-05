@@ -53,6 +53,32 @@ router.post(
 );
 router.get("/audit", authenticate, requireAdmin, adminController.getAuditLogs);
 
+// Account deletion review
+router.get(
+  "/account-deletion-requests",
+  authenticate,
+  requireAdmin,
+  adminController.listAccountDeletionRequests
+);
+router.get(
+  "/account-deletion-requests/:requestId",
+  authenticate,
+  requireAdmin,
+  adminController.getAccountDeletionRequest
+);
+router.post(
+  "/account-deletion-requests/:requestId/approve",
+  authenticate,
+  requireAdmin,
+  adminController.approveAccountDeletionRequest
+);
+router.post(
+  "/account-deletion-requests/:requestId/cancel",
+  authenticate,
+  requireAdmin,
+  adminController.cancelAccountDeletionRequest
+);
+
 // Admin user management
 router.post("/admins", authenticate, requireAdmin, adminController.createAdmin);
 router.get("/admins", authenticate, requireAdmin, adminController.listAdmins);

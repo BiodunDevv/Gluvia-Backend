@@ -1,4 +1,5 @@
 const foodService = require("../services/food.service");
+const { generateAndSaveFood } = require("../services/ai.service");
 const imageSearchService = require("../services/imageSearch.service");
 const { asyncHandler } = require("../middlewares/error.middleware");
 const { sendSuccess, sendError } = require("../utils/response.util");
@@ -486,6 +487,18 @@ const searchFoodImage = asyncHandler(async (req, res) => {
   });
 });
 
+const aiGenerateFood = asyncHandler(async (req, res) => {
+  const { name } = req.body || {};
+  if (!name || typeof name !== "string" || !name.trim()) {
+    return sendError(res, { statusCode: 400, code: "VALIDATION_ERROR", message: "Food name is required" });
+  }
+  const food = await generateAndSaveFood(name.trim());
+  if (!food) {
+    return sendError(res, { statusCode: 422, code: "GENERATION_FAILED", message: "Could not generate food data" });
+  }
+  return sendSuccess(res, { data: food });
+});
+
 module.exports = {
   getAllFoods,
   getFoodById,
@@ -494,4 +507,5 @@ module.exports = {
   batchUpsertFoods,
   deleteFood,
   searchFoodImage,
+  aiGenerateFood,
 };

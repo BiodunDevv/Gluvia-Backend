@@ -88,7 +88,7 @@ const { sendSuccess, sendError } = require("../utils/response.util");
  */
 const uploadMealLogs = asyncHandler(async (req, res) => {
   const { mealLogs } = req.body;
-  const userId = req.user.id;
+  const userId = req.userId;
 
   if (!mealLogs || !Array.isArray(mealLogs)) {
     return sendError(res, {
@@ -191,7 +191,7 @@ const uploadMealLogs = asyncHandler(async (req, res) => {
  */
 const uploadGlucoseLogs = asyncHandler(async (req, res) => {
   const { glucoseLogs } = req.body;
-  const userId = req.user.id;
+  const userId = req.userId;
 
   if (!glucoseLogs || !Array.isArray(glucoseLogs)) {
     return sendError(res, {
@@ -261,7 +261,7 @@ const getDeltaUpdates = asyncHandler(async (req, res) => {
     });
   }
 
-  const userId = req.user.id;
+  const userId = req.userId;
   const result = await syncService.getUpdates(userId, Number(clientVersion));
 
   return sendSuccess(res, {
@@ -324,7 +324,7 @@ const getDeltaUpdates = asyncHandler(async (req, res) => {
  *                       type: object
  */
 const getFullSync = asyncHandler(async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.userId;
   const result = await syncService.getFullSync(userId);
 
   return sendSuccess(res, {
@@ -561,7 +561,7 @@ const getFullSync = asyncHandler(async (req, res) => {
  */
 const getUserAggregations = asyncHandler(async (req, res) => {
   const { from, to, page = 1, limit = 50 } = req.query;
-  const userId = req.user.id;
+  const userId = req.userId;
 
   const [mealLogs, glucoseLogs] = await Promise.all([
     syncService.getUserMealLogs(userId, { from, to, page, limit }),

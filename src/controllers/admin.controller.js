@@ -8,6 +8,7 @@ const { sendSuccess, sendError } = require("../utils/response.util");
 const notificationService = require("../services/notification.service");
 const settingsService = require("../services/settings.service");
 const seedService = require("../services/seed.service");
+const accountDeletionService = require("../services/accountDeletion.service");
 
 /**
  * @swagger
@@ -459,7 +460,7 @@ const updateAdmin = asyncHandler(async (req, res) => {
  */
 const deactivateAdmin = asyncHandler(async (req, res) => {
   // Prevent self-deactivation
-  if (req.params.adminId === String(req.user.id)) {
+  if (req.params.adminId === String(req.userId)) {
     return sendError(res, {
       statusCode: 400,
       code: "INVALID_OPERATION",
@@ -1330,6 +1331,164 @@ const getActivityHeatmap = asyncHandler(async (req, res) => {
   });
 });
 
+/**
+ * @swagger
+ * /admin/account-deletion-requests:
+ *   get:
+ *     summary: List account deletion requests [ADMIN ONLY]
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [all, verification_sent, pending_admin_review, approved_scheduled, completed, cancelled, expired]
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Account deletion requests loaded
+ */
+const listAccountDeletionRequests = asyncHandler(async (req, res) => {
+  const result = await accountDeletionService.listAdminRequests({
+    status: req.query.status,
+    page: req.query.page,
+    limit: req.query.limit,
+  });
+
+  return sendSuccess(res, {
+    data: result.requests,
+    meta: result.pagination,
+    message: "Account deletion requests loaded",
+  });
+});
+
+/**
+ * @swagger
+ * /admin/account-deletion-requests/{requestId}:
+ *   get:
+ *     summary: Get account deletion request details [ADMIN ONLY]
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: requestId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Account deletion request loaded
+ */
+const getAccountDeletionRequest = asyncHandler(async (req, res) => {
+  const request = await accountDeletionService.getAdminRequestById(
+    req.params.requestId
+  );
+
+  return sendSuccess(res, {
+    data: request,
+    message: "Account deletion request loaded",
+  });
+});
+
+/**
+ * @swagger
+ * /admin/account-deletion-requests/{requestId}/approve:
+ *   post:
+ *     summary: Approve an account deletion request [ADMIN ONLY]
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: requestId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [schedule]
+ *             properties:
+ *               schedule:
+ *                 type: string
+ *                 enum: [immediate, 15_days, 30_days]
+ *               adminNotes:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Account deletion approved
+ */
+const approveAccountDeletionRequest = asyncHandler(async (req, res) => {
+  const request = await accountDeletionService.approveDeletionRequest(
+    req.params.requestId,
+    {
+      schedule: req.body.schedule,
+      adminNotes: req.body.adminNotes,
+    },
+    req.user
+  );
+
+  return sendSuccess(res, {
+    data: request,
+    message:
+      req.body.schedule === "immediate"
+        ? "Account deleted immediately"
+        : "Account deletion scheduled",
+  });
+});
+
+/**
+ * @swagger
+ * /admin/account-deletion-requests/{requestId}/cancel:
+ *   post:
+ *     summary: Cancel an account deletion request [ADMIN ONLY]
+ *     tags: [Admin]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: requestId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               reason:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Account deletion request cancelled
+ */
+const cancelAccountDeletionRequest = asyncHandler(async (req, res) => {
+  const request = await accountDeletionService.adminCancelDeletionRequest(
+    req.params.requestId,
+    { reason: req.body.reason },
+    req.user
+  );
+
+  return sendSuccess(res, {
+    data: request,
+    message: "Account deletion request cancelled",
+  });
+});
+
 module.exports = {
   runInitialSeed,
   getSeedPreview,
@@ -1367,4 +1526,8 @@ module.exports = {
   getUserEngagement,
   getRecentUsers,
   getActivityHeatmap,
+  listAccountDeletionRequests,
+  getAccountDeletionRequest,
+  approveAccountDeletionRequest,
+  cancelAccountDeletionRequest,
 };

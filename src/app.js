@@ -21,6 +21,7 @@ const syncRoutes = require("./routes/sync.routes");
 const adminRoutes = require("./routes/admin.routes");
 const reportRoutes = require("./routes/report.routes");
 const notificationRoutes = require("./routes/notification.routes");
+const privacyRoutes = require("./routes/privacy.routes");
 const { getMaintenanceSettings } = require("./services/settings.service");
 
 // Initialize express app
@@ -78,6 +79,7 @@ app.use("/sync", syncRoutes);
 app.use("/admin", adminRoutes);
 app.use("/reports", reportRoutes);
 app.use("/notifications", notificationRoutes);
+app.use("/privacy", privacyRoutes);
 
 // Swagger documentation (will be configured separately)
 const swaggerSetup = require("./docs/swagger");

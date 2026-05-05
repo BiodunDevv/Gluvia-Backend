@@ -60,10 +60,11 @@ const errorHandler = (err, req, res, next) => {
     statusCode = 409;
     error.code = "DUPLICATE_ERROR";
     error.message = "Resource already exists";
-  } else if (err.code === "ACCOUNT_NOT_FOUND") {
-    statusCode = 404;
-  } else if (err.code === "INVALID_PASSWORD") {
+  } else if (err.code === "ACCOUNT_NOT_FOUND" || err.code === "INVALID_PASSWORD") {
+    // Always 401 — never reveal whether the account exists (security best practice)
     statusCode = 401;
+    error.code = "INVALID_CREDENTIALS";
+    error.message = "Invalid email or password";
   }
 
   return sendError(res, {

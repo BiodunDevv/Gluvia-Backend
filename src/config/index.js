@@ -39,12 +39,14 @@ const config = {
     password: process.env.ADMIN_PASSWORD,
   },
 
-  groq: {
-    apiKey: process.env.GROQ_API_KEY,
-    model: process.env.GROQ_MODEL || "llama-3.1-8b-instant",
-    baseUrl:
-      process.env.GROQ_BASE_URL ||
-      "https://api.groq.com/openai/v1/chat/completions",
+  // Azure OpenAI — used for AI chat and meal explanation
+  azureOpenAI: {
+    endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+    apiKey: process.env.AZURE_OPENAI_API_KEY,
+    deploymentName: process.env.AZURE_OPENAI_DEPLOYMENT_NAME,
+    modelName: process.env.AZURE_OPENAI_MODEL_NAME || "gpt-4.1-mini",
+    apiVersion: process.env.AZURE_OPENAI_API_VERSION || "2024-04-01-preview",
+    maxTokens: parseInt(process.env.AZURE_OPENAI_MAX_TOKENS, 10) || 1600,
   },
 
   azureTranslator: {

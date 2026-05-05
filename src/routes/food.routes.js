@@ -15,6 +15,7 @@ router.get("/:id", foodController.getFoodById);
 
 // Authenticated routes
 router.post("/search-image", authenticate, foodController.searchFoodImage);
+router.post("/ai-generate", authenticate, foodController.aiGenerateFood);
 
 // Admin routes
 router.post(

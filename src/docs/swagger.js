@@ -88,6 +88,32 @@ const options = {
             version: { type: "number" },
           },
         },
+        AccountDeletionRequest: {
+          type: "object",
+          properties: {
+            id: { type: "string" },
+            email: { type: "string" },
+            status: {
+              type: "string",
+              enum: [
+                "verification_sent",
+                "pending_admin_review",
+                "approved_scheduled",
+                "completed",
+                "cancelled",
+                "expired",
+              ],
+            },
+            scheduleOption: {
+              type: "string",
+              enum: ["immediate", "15_days", "30_days"],
+            },
+            requestedAt: { type: "string", format: "date-time" },
+            scheduledDeletionAt: { type: "string", format: "date-time" },
+            completedAt: { type: "string", format: "date-time" },
+            cancelledAt: { type: "string", format: "date-time" },
+          },
+        },
       },
     },
     security: [],
@@ -101,6 +127,7 @@ const options = {
       { name: "Rules", description: "Rule template management" },
       { name: "Sync", description: "Offline sync endpoints" },
       { name: "Reports", description: "Reports and analytics" },
+      { name: "Privacy", description: "Privacy and account deletion requests" },
       {
         name: "Admin",
         description: "Admin-only operations (requires admin role)",

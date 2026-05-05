@@ -9,6 +9,7 @@ const {
   deleteChatConversation,
   clearChatConversations,
   chatWithAssistant: chatWithAssistantService,
+  streamChatWithAssistant: streamChatWithAssistantService,
   createTextChunks,
 } = require("../services/ai.service");
 
@@ -101,7 +102,7 @@ const getUserNutritionReport = asyncHandler(async (req, res) => {
   }
 
   // Authorization: user can only view their own report unless admin
-  if (req.user.role !== "admin" && req.user.id !== userId) {
+  if (req.user.role !== "admin" && req.userId !== userId) {
     return sendError(res, {
       statusCode: 403,
       code: "FORBIDDEN",
@@ -241,50 +242,41 @@ const chatWithAssistant = asyncHandler(async (req, res) => {
   });
 });
 
-const streamChatWithAssistant = asyncHandler(async (req, res) => {
-  const result = await chatWithAssistantService({
-    user: req.user,
-    message: req.body?.message,
-    conversationId: req.body?.conversationId,
-  });
-
-  const chunks =
-    result?.message?.chunks && result.message.chunks.length > 0
-      ? result.message.chunks
-      : createTextChunks(result?.message?.content || "");
-
+const streamChatWithAssistant = async (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache, no-transform");
   res.setHeader("Connection", "keep-alive");
+  res.setHeader("X-Accel-Buffering", "no");
 
   if (typeof res.flushHeaders === "function") {
     res.flushHeaders();
   }
 
-  res.write(
-    `event: conversation\ndata: ${JSON.stringify({
-      conversation: result.conversation,
-      language: "english",
-    })}\n\n`
-  );
+  const sendEvent = (event, data) => {
+    try {
+      res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+      if (typeof res.flush === "function") res.flush();
+    } catch {}
+  };
 
-  chunks.forEach((chunk, index) => {
-    res.write(
-      `event: chunk\ndata: ${JSON.stringify({
-        index,
-        content: chunk,
-      })}\n\n`
-    );
-  });
+  try {
+    await streamChatWithAssistantService({
+      user: req.user,
+      message: req.body?.message,
+      conversationId: req.body?.conversationId,
+      onConversation: (conversation) => sendEvent("conversation", { conversation }),
+      onToken: (token) => sendEvent("chunk", { content: token }),
+      onDone: (message) => sendEvent("done", { message }),
+    });
+  } catch (error) {
+    sendEvent("error", {
+      code: error.code || "STREAM_ERROR",
+      message: error.message || "Stream failed",
+    });
+  }
 
-  res.write(
-    `event: done\ndata: ${JSON.stringify({
-      status: t("chat_stream_done", "english"),
-      message: result.message,
-    })}\n\n`
-  );
   res.end();
-});
+};
 
 module.exports = {
   getUserNutritionReport,

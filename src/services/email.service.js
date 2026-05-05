@@ -176,6 +176,73 @@ const sendAdminCreatedEmail = async (to, name, email, createdBy, resetUrl) => {
   });
 };
 
+const sendAccountDeletionCodeEmail = async (to, code, expiresInMinutes) => {
+  const htmlContent = await renderTemplate("account_deletion_code", {
+    code,
+    expiresInMinutes,
+  });
+
+  return sendEmail({
+    to,
+    subject: "Verify your Gluvia AI account deletion request",
+    htmlContent,
+    textContent: `Your Gluvia AI account deletion code is ${code}. It expires in ${expiresInMinutes} minutes.`,
+  });
+};
+
+const sendAccountDeletionReceivedEmail = async (to, name) => {
+  const htmlContent = await renderTemplate("account_deletion_received", {
+    name,
+  });
+
+  return sendEmail({
+    to,
+    subject: "Gluvia AI account deletion request received",
+    htmlContent,
+    textContent:
+      "Your Gluvia AI account deletion request has been received and is waiting for admin review.",
+  });
+};
+
+const sendAccountDeletionScheduledEmail = async (to, scheduledDeletionAt) => {
+  const formattedDate = new Date(scheduledDeletionAt).toLocaleString();
+  const htmlContent = await renderTemplate("account_deletion_scheduled", {
+    scheduledDeletionAt: formattedDate,
+  });
+
+  return sendEmail({
+    to,
+    subject: "Gluvia AI account deletion scheduled",
+    htmlContent,
+    textContent: `Your Gluvia AI account deletion has been scheduled for ${formattedDate}.`,
+  });
+};
+
+const sendAccountDeletionCompletedEmail = async (to) => {
+  const htmlContent = await renderTemplate("account_deletion_completed", {});
+
+  return sendEmail({
+    to,
+    subject: "Gluvia AI account deletion completed",
+    htmlContent,
+    textContent:
+      "Your Gluvia AI account and associated app data have been deleted.",
+  });
+};
+
+const sendAccountDeletionCancelledEmail = async (to, reason) => {
+  const htmlContent = await renderTemplate("account_deletion_cancelled", {
+    reason,
+  });
+
+  return sendEmail({
+    to,
+    subject: "Gluvia AI account deletion request cancelled",
+    htmlContent,
+    textContent: `Your Gluvia AI account deletion request was cancelled. ${reason || ""}`,
+  });
+};
+
 module.exports = {
   sendEmail,
   renderTemplate,
@@ -184,4 +251,9 @@ module.exports = {
   sendAdminNotifyEmail,
   sendSyncFailedEmail,
   sendAdminCreatedEmail,
+  sendAccountDeletionCodeEmail,
+  sendAccountDeletionReceivedEmail,
+  sendAccountDeletionScheduledEmail,
+  sendAccountDeletionCompletedEmail,
+  sendAccountDeletionCancelledEmail,
 };

@@ -3,6 +3,7 @@ const app = require("./app");
 const config = require("./config");
 const { logger } = require("./middlewares/error.middleware");
 const { startHeartbeat, stopHeartbeat } = require("./services/heartbeat.service");
+const accountDeletionService = require("./services/accountDeletion.service");
 const os = require("os");
 
 // Get local IP address
@@ -34,6 +35,14 @@ const connectDB = async () => {
 const startServer = async () => {
   await connectDB();
   startHeartbeat();
+  accountDeletionService.processDueDeletionRequests().catch((error) => {
+    logger.error("Initial account deletion processing failed:", error);
+  });
+  const accountDeletionInterval = setInterval(() => {
+    accountDeletionService.processDueDeletionRequests().catch((error) => {
+      logger.error("Scheduled account deletion processing failed:", error);
+    });
+  }, 15 * 60 * 1000);
 
   const server = app.listen(config.port, () => {
     const localIP = getLocalIPAddress();
@@ -72,6 +81,7 @@ const startServer = async () => {
     server.close(async () => {
       logger.info("HTTP server closed");
       stopHeartbeat();
+      clearInterval(accountDeletionInterval);
 
       try {
         await mongoose.connection.close();

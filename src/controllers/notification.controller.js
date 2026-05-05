@@ -5,7 +5,7 @@ const notificationService = require("../services/notification.service");
 const listMyNotifications = asyncHandler(async (req, res) => {
   const { page = 1, limit = 20 } = req.query;
   const result = await notificationService.listNotifications(
-    req.user.id,
+    req.userId,
     Number(page),
     Number(limit)
   );
@@ -18,7 +18,7 @@ const listMyNotifications = asyncHandler(async (req, res) => {
 
 const getMyNotification = asyncHandler(async (req, res) => {
   const notification = await notificationService.getNotificationById(
-    req.user.id,
+    req.userId,
     req.params.notificationId
   );
 
@@ -27,7 +27,7 @@ const getMyNotification = asyncHandler(async (req, res) => {
 
 const markMyNotificationRead = asyncHandler(async (req, res) => {
   const notification = await notificationService.markNotificationRead(
-    req.user.id,
+    req.userId,
     req.params.notificationId
   );
 
@@ -46,7 +46,7 @@ const registerDeviceToken = asyncHandler(async (req, res) => {
   }
 
   const record = await notificationService.registerDeviceToken({
-    userId: req.user.id,
+    userId: req.userId,
     deviceId,
     token,
     platform,
@@ -54,14 +54,14 @@ const registerDeviceToken = asyncHandler(async (req, res) => {
 
   if (announceLogin) {
     await notificationService.createNotification({
-      userId: req.user.id,
+      userId: req.userId,
       type: "system",
       title: "Login detected",
       body: "You just signed in to your Gluvia AI account.",
       data: {},
       dedupeKey: notificationService.buildDedupeKey(
         "login_detected",
-        req.user.id,
+        req.userId,
         deviceId,
         req.jti || "session"
       ),
@@ -83,7 +83,7 @@ const unregisterDeviceToken = asyncHandler(async (req, res) => {
   }
 
   const result = await notificationService.unregisterDeviceToken({
-    userId: req.user.id,
+    userId: req.userId,
     deviceId,
   });
 
