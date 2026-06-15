@@ -372,17 +372,17 @@ const getDashboardOverview = async () => {
   const userStatsPromise = User.aggregate([
     {
       $facet: {
-        totalUsers: [{ $match: { role: { $ne: "admin" } } }, { $count: "count" }],
+        totalUsers: [{ $match: { role: { $ne: "admin" }, deleted: { $ne: true } } }, { $count: "count" }],
         activeUsers: [
-          { $match: { role: { $ne: "admin" }, lastLoginAt: { $gte: sevenDaysAgo } } },
+          { $match: { role: { $ne: "admin" }, deleted: { $ne: true }, lastLoginAt: { $gte: sevenDaysAgo } } },
           { $count: "count" },
         ],
         newUsersLast30Days: [
-          { $match: { role: { $ne: "admin" }, createdAt: { $gte: thirtyDaysAgo } } },
+          { $match: { role: { $ne: "admin" }, deleted: { $ne: true }, createdAt: { $gte: thirtyDaysAgo } } },
           { $count: "count" },
         ],
         newUsersLast7Days: [
-          { $match: { role: { $ne: "admin" }, createdAt: { $gte: sevenDaysAgo } } },
+          { $match: { role: { $ne: "admin" }, deleted: { $ne: true }, createdAt: { $gte: sevenDaysAgo } } },
           { $count: "count" },
         ],
         totalAdmins: [{ $match: { role: "admin" } }, { $count: "count" }],
@@ -415,8 +415,8 @@ const getDashboardOverview = async () => {
       {
         $facet: {
           total: [{ $count: "count" }],
-          last24h: [{ $match: { createdAt: { $gte: twentyFourHoursAgo } } }, { $count: "count" }],
-          last7Days: [{ $match: { createdAt: { $gte: sevenDaysAgo } } }, { $count: "count" }],
+          last24h: [{ $match: { timestamp: { $gte: twentyFourHoursAgo } } }, { $count: "count" }],
+          last7Days: [{ $match: { timestamp: { $gte: sevenDaysAgo } } }, { $count: "count" }],
         },
       },
     ]),
@@ -520,7 +520,8 @@ const getUserGrowthChart = async (days = 30) => {
     {
       $match: {
         role: { $ne: "admin" },
-        createdAt: { $gte: startDate },
+        deleted: { $ne: true },
+        createdAt: { $gte: startDate, $lte: endDate },
       },
     },
     {
@@ -575,13 +576,13 @@ const getMealLogsChart = async (days = 30) => {
   const mealLogs = await MealLog.aggregate([
     {
       $match: {
-        createdAt: { $gte: startDate },
+        timestamp: { $gte: startDate, $lte: endDate },
       },
     },
     {
       $group: {
         _id: {
-          $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+          $dateToString: { format: "%Y-%m-%d", date: "$timestamp" },
         },
         count: { $sum: 1 },
       },
@@ -629,7 +630,7 @@ const getGlucoseLogsChart = async (days = 30) => {
   const glucoseLogs = await GlucoseLog.aggregate([
     {
       $match: {
-        timestamp: { $gte: startDate },
+        timestamp: { $gte: startDate, $lte: endDate },
       },
     },
     {
@@ -856,7 +857,7 @@ const getUserEngagement = async () => {
  * Get recent user registrations
  */
 const getRecentUsers = async (limit = 10) => {
-  const users = await User.find({ role: { $ne: "admin" } })
+  const users = await User.find({ role: { $ne: "admin" }, deleted: { $ne: true } })
     .select("name email createdAt lastLoginAt profile.diabetesType deleted")
     .sort({ createdAt: -1 })
     .limit(limit)
@@ -864,12 +865,12 @@ const getRecentUsers = async (limit = 10) => {
 
   return users.map((user) => ({
     _id: user._id,
-    name: user.name,
+    name: user.name || "Unnamed User",
     email: user.email,
     createdAt: user.createdAt,
-    diabetesType: user.profile?.diabetesType,
-    isActive: !user.deleted,
-    lastLoginAt: user.lastLoginAt,
+    diabetesType: user.profile?.diabetesType || null,
+    isActive: true,
+    lastLoginAt: user.lastLoginAt || null,
   }));
 };
 
@@ -884,14 +885,14 @@ const getActivityHeatmap = async (days = 7) => {
   const activityData = await MealLog.aggregate([
     {
       $match: {
-        createdAt: { $gte: startDate },
+        timestamp: { $gte: startDate },
       },
     },
     {
       $group: {
         _id: {
-          dayOfWeek: { $dayOfWeek: "$createdAt" },
-          hour: { $hour: "$createdAt" },
+          dayOfWeek: { $dayOfWeek: "$timestamp" },
+          hour: { $hour: "$timestamp" },
         },
         count: { $sum: 1 },
       },

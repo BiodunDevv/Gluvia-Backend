@@ -852,6 +852,32 @@
     "version": 1
   },
   {
+    "slug": "glycemic-load-warning",
+    "title": "High Glycemic Load Warning",
+    "type": "alert",
+    "definition": {
+      "inputBindings": ["food.carbs_g", "food.gi", "user.diabetesType"],
+      "logic": [
+        {
+          "when": "(food.carbs_g * food.gi / 100) > 20",
+          "then": { "alert": "high_gl", "severity": "high", "reasonScore": 88 }
+        },
+        {
+          "when": "(food.carbs_g * food.gi / 100) > 10 && (food.carbs_g * food.gi / 100) <= 20",
+          "then": { "alert": "medium_gl", "severity": "medium", "reasonScore": 55 }
+        },
+        {
+          "when": "default",
+          "then": { "alert": "low_gl", "severity": "low", "reasonScore": 25 }
+        }
+      ],
+      "priority": 91
+    },
+    "nlTemplate": "This food has a {{alert}} glycemic load. High GL foods cause larger real-world blood sugar rises than GI alone suggests. Consider reducing your portion size or pairing with protein and fiber.",
+    "appliesTo": ["all"],
+    "version": 1
+  },
+  {
     "slug": "local-seasonal-foods",
     "title": "Local and Seasonal Food Priority",
     "type": "scoring",
