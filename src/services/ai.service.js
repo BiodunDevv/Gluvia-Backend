@@ -1083,7 +1083,7 @@ const generateAndSaveFood = async (foodName) => {
     "gi": <glycemic index number 1-100 or null if unknown>
   },
   "portionSizes": [
-    { "name": "1 serving", "grams": <number> }
+    { "name": "1 serving", "grams": <number>, "carbs_g": <carbs per portion in grams> }
   ],
   "affordability": "<low|medium|high>",
   "tags": ["<relevant tag>"]
@@ -1125,7 +1125,11 @@ Output ONLY valid JSON. No markdown, no explanation.`;
         fibre_g: Number(data.nutrients.fibre_g) || 0,
         gi: data.nutrients.gi != null ? Number(data.nutrients.gi) : null,
       },
-      portionSizes: data.portionSizes || [{ name: "1 serving", grams: 100 }],
+      portionSizes: (data.portionSizes || [{ name: "1 serving", grams: 100 }]).map((p) => ({
+        name: p.name || "1 serving",
+        grams: Number(p.grams) || 100,
+        ...(p.carbs_g != null && { carbs_g: Number(p.carbs_g) }),
+      })),
       affordability: data.affordability || "medium",
       tags: data.tags || [],
       source: "estimated",
